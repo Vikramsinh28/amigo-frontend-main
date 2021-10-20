@@ -1,0 +1,77 @@
+<div class="save-paper-section">
+    <div class="question-list-filter">
+        <div class="row">
+            <div class="col-md-7 col-lg-6 col-xl-5">
+                <app-common-grade-subject [config]="config" [filterType]="'Paper-List'"></app-common-grade-subject>
+            </div>
+            <div class="col-md-5 filter">
+                <button id='refresh' mat-button  (click)='loadPapers()' color="blue">
+                    <i class="fas fa-search"></i> &nbsp; Search</button>
+                <button mat-button color="orange" (click)="clearFilter()"><i class="fas fa-undo"></i> &nbsp; Reset</button>
+            </div>
+        </div>
+    </div>
+    <table mat-table [dataSource]="paperDataSource" multiTemplateDataRows class="common-table" matSort>
+
+        <!-- Test Paper Name Column -->
+        <ng-container matColumnDef="paperName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Test Paper Name</th>
+            <td mat-cell *matCellDef="let row" data-title="Test Paper Name: ">{{ row.paperName }}</td>
+        </ng-container>
+
+        <!-- Chapters Column -->
+        <ng-container matColumnDef="chapters">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Chapters</th>
+            <td mat-cell *matCellDef="let row" data-title="Chapters: " matTooltip="{{ row.chapters }}">
+                {{ (row.chapters.length > 2) ? (row.chapters | slice:0:3)+' . . .' : (row.chapters)}}
+            </td>
+        </ng-container>
+
+        <!-- Topics Column -->
+        <ng-container matColumnDef="topics">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Topics</th>
+            <td mat-cell *matCellDef="let row" data-title="Topics: " matTooltip="{{ row.topics }}">
+                {{ (row.topics.length > 2) ? (row.topics | slice:0:3)+' . . .' : (row.topics)}}
+            <td>
+        </ng-container>
+
+        <!-- Is Frozen Column -->
+        <ng-container matColumnDef="isFrozen">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Frozen</th>
+            <td mat-cell *matCellDef="let row" data-title="Frozen??: ">{{ row.isFrozen?'Yes':'No' }}</td>
+        </ng-container>
+
+        <!-- Last Modified Date Column -->
+        <ng-container matColumnDef="modifiedDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Modified Date</th>
+            <td mat-cell *matCellDef="let row" data-title="Modified Date: ">{{ row.modifiedDate | date:dateFormat }}</td>
+        </ng-container>
+
+        <!-- Last Modified User Column -->
+        <ng-container matColumnDef="modifiedUser">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Modified By</th>
+            <td mat-cell *matCellDef="let row" data-title="Modified By: ">{{ row.modifiedUser }}</td>
+        </ng-container>
+
+        <!-- Paper Preview Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="mat-column-delete">
+                <button id='actionRow' mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action Icon">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <mat-menu #menu="matMenu" class="menu-items">
+                    <button mat-menu-item (click)="displayPaperPreview(row)"><i class="far fa-eye"></i> &nbsp; Paper Preview</button>
+                    <button mat-menu-item (click)="customizePdfDownload(row)"><i class="fas fa-download"></i> &nbsp; Download</button>
+                    <button mat-menu-item (click)="editQuestion(row)"><i class="far fa-edit"></i> {{ row.isFrozen?'&nbsp; View':'&nbsp; Edit' }}</button>
+                    <button mat-menu-item (click)="deleteQuestion(row, row.paperName)"><i class="far fa-trash-alt"></i> &nbsp; Delete</button>
+                </mat-menu>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let element; columns: columnsToDisplay" class="element-row"></tr>
+
+    </table>
+    <mat-paginator pageSize=10 showFirstLastButtons></mat-paginator>
+</div>

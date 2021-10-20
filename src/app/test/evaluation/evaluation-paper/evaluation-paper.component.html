@@ -1,0 +1,351 @@
+<div class="paper-for-student">
+   <div class="row" *ngIf="isLoaded && mode=='Teacher'">
+      <div class="col-lg-10">
+         <div class="col-12 text-center">
+            <h5>Sutdent Name/Roll No: {{studentName}}/{{rollNo}}</h5>
+         </div>
+         <div class="col-12 text-center margin-section">
+            <h5 *ngIf="evaluated!='red_bg'">Total Marks Obtained: {{studentMark}} / {{totalMark}}</h5>
+            <h5 *ngIf="evaluated=='red_bg'">Total Marks Obtained: - / {{totalMark}}</h5>
+         </div>
+      </div>
+   </div>
+   <div class="row" *ngIf="isLoaded && mode=='Student'">
+      <div class="col-12 text-center">
+         <h2>{{testPaperName}}</h2>
+      </div>
+      <div class="col-sm-5">
+         <h5>Duration: {{examDuration}} mins</h5>
+      </div>
+      <div class="col-sm-7">
+         <h5 class="total-mark">Total Marks Obtained: {{studentMark}} / {{totalMark}}</h5>
+      </div>
+      <div class="col-12">
+         <h5>Subject: {{subject}}</h5>
+      </div>
+   </div>
+   <div class="paper-overflow">
+      <form [formGroup]="testPaperForm" *ngIf="answerPaper">
+         <div class="exam-instructions" *ngIf="isLoaded && mode == 'Teacher'" >
+            <strong class="d-block" *ngIf="testDetails.instructions">General Instructions</strong>
+            <p *ngIf="testDetails.instructions">{{testDetails.instructions}}</p>
+         </div>
+         <div class="question-wrap" *ngFor="let question of answerPaper; let i=index">
+            <div [ngSwitch]="true">
+               <div *ngSwitchCase="question.qb_question_type_id === 2">
+                  <div class="form-group row" formGroupName="{{'q_' + question.student_exam_answer_id}}">
+                     <div class="col-md-9 col-xl-10">
+                        <div class="question-control d-flex flex-row">
+                           <h5 class="qno">({{question.position}}) </h5>
+                           <div class="w-100">
+                              <h5 class="d-block"  [appMath]="question.question_text"></h5>
+                              <div class="answer-image" *ngIf="question.question_attachment !== null">
+                                 <img alt="Answer Image" [src]="question.question_attachment[0].data" (click)="open(question.question_attachment[0].data)"
+                                    *ngIf="question.question_attachment[0].type == 'image'">
+                                 <a [href]="question.question_attachment[0].data"
+                                    [download]="question.question_attachment[0].fileName"
+                                    *ngIf="question.question_attachment[0].type == 'doc'">{{question.question_attachment[0].fileName}}</a>
+                              </div>
+                              <div *ngFor="let anwr of question.objective_answers; let a=index">
+                                 <div class="d-flex w-100 option-wrap">
+                                    <div class="option-alert" [ngClass]="{'answer-success': (anwr.isCorrect == true)}">
+                                    <div class="custom-control custom-radio">
+                                       <input type="radio" class="custom-control-input" id="q{{question.position}}_{{a}}"
+                                          name="o{{question.position}}" value="{{a+1}}" [checked]="((a+1) ==  question.answer)"
+                                          readonly />
+                                       <label class="custom-control-label" for="q{{question.position}}_{{a}}">
+                                          <span [appMath]="anwr.optionText"></span>
+                                       </label>
+                                    </div>
+                                 </div>
+                                    <div class="your-answer d-flex text-success"
+                                       *ngIf="(((a+1) ==  question.answer) && (anwr.isCorrect == true))"><i
+                                          class="fas fa-check-circle align-self-center"></i></div>
+                                    <div class="your-answer d-flex text-danger"
+                                       *ngIf="((anwr.isCorrect == false) &&  ((a+1) ==  question.answer))">
+                                       <i class="fas fa-times-circle align-self-center"></i></div>
+                                 </div>
+                              </div>
+                              <div class="feedback" *ngIf="mode == 'Student' && question.teacher_feedback">
+                                 <p><strong>Feedback:</strong><br>{{question.teacher_feedback}}</p>
+                              </div>
+                              <div class="white-box" *ngIf="isLoaded == true && mode == 'Teacher'">
+                                 <mat-form-field class="textarea-bg w-100">
+                                    <textarea matInput placeholder="Feedback:" id="feedback" rows="3"
+                                       formControlName='feedback'></textarea>
+                                 </mat-form-field>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="offset-2 offset-sm-1 offset-md-0 col-10 col-sm-11 col-md-3 col-xl-2" *ngIf="mode == 'Student'">
+                        <div class="row">
+                           <p  class="fill-text"><strong>Result:</strong>
+                              {{question.teacher_marks != '' ? (question.teacher_eval_result == '1' ? 'Correct' : 'Incorrect') : (question.sys_eval_result == '1' ? 'Correct' : 'Incorrect')}}
+                           </p>
+                        </div>
+                        <div class="row obtained-marks">
+                           <p  class="fill-text"><strong>Obtained Marks:</strong></p>
+                           <p>{{question.teacher_eval_marks != '' ? question.teacher_eval_marks : question.sys_eval_marks}} / {{question.actual_marks}}</p>
+                        </div>
+                     </div>
+                     <div class="offset-2 offset-sm-1 offset-md-0 col-10 col-sm-11 col-md-3 col-xl-2 no-padding" *ngIf="mode == 'Teacher'">
+                        <div class="row">
+                           <div class="col-4 col-sm-3 col-md-6">
+                              <mat-form-field class="w-100">
+                                 <mat-label>Marks:</mat-label>
+                                 <input matInput #teacher_marks (afterBlur)="updateResult(question.student_exam_answer_id, $event)" formControlName='teacher_marks' [floatOnly] =  "{'mode': 'minMax', 'minVal': 0, 'maxVal': question.actual_marks, 'errorMessage':'Question '+question.position+' can have marks between 0 and '+ question.actual_marks}"
+                                    maxlength="5">
+                              </mat-form-field>
+                           </div>
+                           <div class="col-8 col-sm-9 col-md-6 actual-marks">
+                              <h5>/ [{{question.actual_marks}}]</h5>
+                           </div>
+                        </div>
+                        <mat-checkbox [checked]="(question.teacher_eval_result == '1'? 'true' : 'false')"
+                           formControlName='teacher_eval_result' #teacher_eval_result_{{question.position}}>
+                           Is Correct?:</mat-checkbox>
+                        <h5 class="system-evaluation">System Evaluation</h5>
+                        <p>Marks : {{question.sys_eval_marks}} </p>
+                     </div>
+                  </div>
+               </div>
+               <div *ngSwitchCase="question.qb_question_type_id === 3">
+                  <div class="form-group row" formGroupName="{{'q_' + question.student_exam_answer_id}}">
+                     <div class="col-md-9 col-xl-10">
+                        <div class="question-control d-flex flex-row">
+                           <h5 class="qno">({{question.position}}) </h5>
+                           <div class="w-100">
+                              <h5 class="d-block"  [appMath]="question.question_text"></h5>
+                              <div class="answer-image" *ngIf="question.question_attachment !== null">
+                                 <img alt="Answer Image" [src]="question.question_attachment[0].data" (click)="open(question.question_attachment[0].data)"
+                                    *ngIf="question.question_attachment[0].type == 'image'">
+                                 <a [href]="question.question_attachment[0].data"
+                                    [download]="question.question_attachment[0].fileName"
+                                    *ngIf="question.question_attachment[0].type == 'doc'">{{question.question_attachment[0].fileName}}</a>
+                              </div>
+                              <div *ngFor="let anwr of question.objective_answers; let b=index">
+                                 <div class="d-inline-flex w-100 option-wrap">
+                                    <div class="option-alert" [ngClass]="{'answer-success': (anwr.isCorrect == true)}">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="q{{question.position}}_{{b}}"
+                                          value="{{b+1}}" [checked]="(question.answer.split(',')[b] ===  'true')" readonly />
+                                       <label class="custom-control-label"
+                                          for="q{{question.position}}_{{b}}"><span [appMath]="anwr.optionText"></span></label>
+                                    </div>
+                                 </div>
+                                    <div class="your-answer d-flex text-success"
+                                       *ngIf="((question.answer.split(',')[b] ===  'true') && (anwr.isCorrect == true))">
+                                       <i class="fas fa-check-circle align-self-center"></i></div>
+                                    <div class="your-answer d-flex text-danger"
+                                       *ngIf="((anwr.isCorrect == false) &&  (question.answer.split(',')[b] ===  'true'))">
+                                       <i class="fas fa-times-circle align-self-center"></i></div>
+                                 </div>
+                              </div>
+                              <div class="feedback" *ngIf="mode == 'Student' && question.teacher_feedback">
+                                 <p><strong>Feedback:</strong><br>{{question.teacher_feedback}}</p>
+                              </div>
+                              <div class="white-box" *ngIf="isLoaded == true && mode == 'Teacher'">
+                                 <mat-form-field class="textarea-bg w-100">
+                                    <textarea matInput placeholder="Feedback:" id="feedback" rows="3"
+                                       formControlName='feedback'></textarea>
+                                 </mat-form-field>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="offset-2 offset-sm-1 offset-md-0 col-10 col-sm-11 col-md-3 col-xl-2" *ngIf="mode == 'Student'">
+                        <div class="row">
+                           <p  class="fill-text"><strong>Result:</strong>
+                              {{question.teacher_marks != '' ? (question.teacher_eval_result == '1' ? 'Correct' : 'Incorrect') : (question.sys_eval_result == '1' ? 'Correct' : 'Incorrect')}}
+                           </p>
+                        </div>
+                        <div class="row obtained-marks">
+                           <p  class="fill-text"><strong>Obtained Marks:</strong></p>
+                           <p>{{question.teacher_eval_marks != '' ? question.teacher_eval_marks : question.sys_eval_marks}} / {{question.actual_marks}}</p>
+                        </div>
+                     </div>
+                     <div class="offset-2 offset-sm-1 offset-md-0 col-10 col-sm-11 col-md-3 col-xl-2 no-padding" *ngIf="mode == 'Teacher'">
+                        <div class="row">
+                           <div class="col-4 col-sm-3 col-md-6">
+                              <mat-form-field class="w-100">
+                                 <mat-label>Marks:</mat-label>
+                                 <input matInput #teacher_marks (afterBlur)="updateResult(question.student_exam_answer_id, $event)" formControlName='teacher_marks' [floatOnly] =  "{'mode': 'minMax', 'minVal': 0, 'maxVal': question.actual_marks, 'errorMessage':'Question '+question.position+' can have marks between 0 and '+ question.actual_marks}"
+                                    maxlength="5">
+                              </mat-form-field>
+                           </div>
+                           <div class="col-8 col-sm-9 col-md-6 actual-marks">
+                              <h5>/ [{{question.actual_marks}}]</h5>
+                           </div>
+                        </div>
+                        <mat-checkbox [checked]="(question.teacher_eval_result == '1'? 'true' : 'false')"
+                                       formControlName='teacher_eval_result' #teacher_eval_result_{{question.position}}>
+                                       Is Correct?:</mat-checkbox>
+                        <h5 class="system-evaluation">System Evaluation</h5>
+                        <p>Marks : {{question.sys_eval_marks}} </p>
+                     </div>
+                  </div>
+               </div>
+               <div *ngSwitchCase="question.qb_question_type_id === 7">
+                  <div class="form-group row" formGroupName="{{'q_' + question.student_exam_answer_id}}">
+                     <div class="col-md-9 col-xl-10">
+                        <div class="question-control d-flex flex-row">
+                           <h5 class="qno">({{question.position}}) </h5>
+                           <div class="w-100">
+                              <h5 class="d-block"  [appMath]="question.question_text"></h5>
+                              <div class="answer-image" *ngIf="question.question_attachment !== null">
+                                 <img alt="Answer Image" [src]="question.question_attachment[0].data" (click)="open(question.question_attachment[0].data)"
+                                    *ngIf="question.question_attachment[0].type == 'image'">
+                                 <a [href]="question.question_attachment[0].data"
+                                    [download]="question.question_attachment[0].fileName"
+                                    *ngIf="question.question_attachment[0].type == 'doc'">{{question.question_attachment[0].fileName}}</a>
+                              </div>
+                              <div class="fill-in-blank-answer" *ngFor="let anwr of question.objective_answers; let a=index">
+                                 <div class="d-flex">
+                                    <div class="fill-label">
+                                       <!-- <div
+                                          *ngIf="((question.answer.split('~`^')[a]).toLowerCase().trim() ===  question.objective_answers[a].optionText.toLowerCase().trim())">
+                                          <i class="fas fa-check-circle align-self-center text-success"></i><strong class="fill-text"> Given Answer:</strong>
+                                          {{question.answer.split('~`^')[a]}}</div>
+                                       <div
+                                          *ngIf="(question.answer.split('~`^')[a] !=  question.objective_answers[a].optionText)">
+                                          <i class="fas fa-times-circle align-self-center text-danger"></i><strong class="fill-text"> Given Answer:</strong>
+                                          {{question.answer.split('~`^')[a]}}</div> -->
+                                          <div>&nbsp;&nbsp;&nbsp;&nbsp;<strong class="fill-text"> Given Answer:</strong>
+                                             {{question.answer.split('~`^')[a]}}</div>
+                                    </div>
+                                 </div>
+                                 <div class="d-flex">
+                                    <div class="fill-answer">
+                                       <div class="your-answer d-flex text-primary"><i
+                                          class="fas fa-info-circle align-self-center"></i><strong class="fill-text"> Correct Answer:</strong>
+                                       {{question.objective_answers[a].optionText}}</div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="feedback" *ngIf="mode == 'Student' && question.teacher_feedback">
+                                 <p><strong>Feedback:</strong><br>{{question.teacher_feedback}}</p>
+                              </div>
+                              <div class="white-box" *ngIf="isLoaded == true && mode == 'Teacher'">
+                                 <mat-form-field class="textarea-bg w-100">
+                                    <textarea matInput placeholder="Feedback:" id="feedback" rows="3"
+                                       formControlName='feedback'></textarea>
+                                 </mat-form-field>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="offset-2 offset-sm-1 offset-md-0 col-10 col-sm-11 col-md-3 col-xl-2" *ngIf="mode == 'Student'">
+                        <div class="row">
+                           <p  class="fill-text"><strong>Result:</strong>
+                              {{question.teacher_marks != '' ? (question.teacher_eval_result == '1' ? 'Correct' : 'Incorrect') : (question.sys_eval_result == '1' ? 'Correct' : 'Incorrect')}}
+                           </p>
+                        </div>
+                        <div class="row obtained-marks">
+                           <p  class="fill-text"><strong>Obtained Marks:</strong></p>
+                           <p>{{question.teacher_eval_marks != '' ? question.teacher_eval_marks : question.sys_eval_marks}} / {{question.actual_marks}}</p>
+                        </div>
+                     </div>
+                     <div class="offset-2 offset-sm-1 offset-md-0 col-10 col-sm-11 col-md-3 col-xl-2 no-padding" *ngIf="mode == 'Teacher'">
+                        <div class="row">
+                           <div class="col-4 col-sm-3 col-md-6">
+                              <mat-form-field class="w-100">
+                                 <mat-label>Marks:</mat-label>
+                                 <input matInput #teacher_marks (afterBlur)="updateResult(question.student_exam_answer_id, $event)" formControlName='teacher_marks' [floatOnly] =  "{'mode': 'minMax', 'minVal': 0, 'maxVal': question.actual_marks, 'errorMessage':'Question '+question.position+' can have marks between 0 and '+ question.actual_marks}"
+                                       maxlength="5">
+                              </mat-form-field>
+                           </div>
+                           <div class="col-8 col-sm-9 col-md-6 actual-marks">
+                              <h5>/ [{{question.actual_marks}}]</h5>
+                           </div>
+                        </div>
+                        <mat-checkbox [checked]="(question.teacher_eval_result == '1'? 'true' : 'false')"
+                                    formControlName='teacher_eval_result' #teacher_eval_result_{{question.position}}>
+                                    Is Correct?:</mat-checkbox>
+                        <h5 class="system-evaluation">System Evaluation</h5>
+                        <p>Marks : {{question.sys_eval_marks}} </p>
+                     </div>
+                  </div>
+               </div>
+               <div
+                  *ngSwitchCase="question.qb_question_type_id === 4 || question.qb_question_type_id === 5 || question.qb_question_type_id === 6">
+                  <div class="form-group row" formGroupName="{{'q_' + question.student_exam_answer_id}}">
+                     <div class="col-md-9 col-xl-10">
+                        <div class="question-control d-flex flex-row">
+                           <h5 class="qno">({{question.position}}) </h5>
+                           <div class="w-100">
+                              <h5 class="d-block"  [appMath]="question.question_text"></h5>
+                              <div class="answer-image" *ngIf="question.question_attachment !== null">
+                                 <img alt="Answer Image" [src]="question.question_attachment[0].data" (click)="open(question.question_attachment[0].data)"
+                                    *ngIf="question.question_attachment[0].type == 'image'">
+                                 <a [href]="question.question_attachment[0].data"
+                                    [download]="question.question_attachment[0].fileName"
+                                    *ngIf="question.question_attachment[0].type == 'doc'">{{question.question_attachment[0].fileName}}</a>
+                              </div>
+                              <p #comment><strong>Answer:</strong><br>{{question.answer}}</p>
+                              <div *ngFor="let image of question.answer_attachment; let a=index">
+                                 <div class="answer-image"
+                                    *ngIf="question.answer_attachment !== null && question.answer_attachment.length > 0">
+                                    <img alt="question Image" [src]="question.answer_attachment[a].data" (click)="open(question.answer_attachment[a].data)"
+                                       *ngIf="question.answer_attachment[a].type == 'image'">
+                                    <a [href]="question.answer_attachment[a].data"
+                                       [download]="question.answer_attachment[a].fileName"
+                                       *ngIf="question.answer_attachment[a].type == 'doc'">{{question.answer_attachment[a].fileName}}</a>
+                                 </div>
+                              </div>
+                              <div class="feedback" *ngIf="mode == 'Student' && question.teacher_feedback">
+                                 <p><strong>Feedback:</strong><br>{{question.teacher_feedback}}</p>
+                              </div>
+                              <div class="white-box" *ngIf="isLoaded == true && mode == 'Teacher'">
+                                 <mat-form-field class="textarea-bg w-100">
+                                    <textarea matInput placeholder="Feedback:" id="feedback" rows="3"
+                                       formControlName='feedback'></textarea>
+                                 </mat-form-field>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="offset-2 offset-sm-1 offset-md-0 col-10 col-sm-11 col-md-3 col-xl-2" *ngIf="mode == 'Student'">
+                        <div class="row">
+                              <p  class="fill-text"><strong>Result:</strong>
+                                 {{question.teacher_marks != '' ? (question.teacher_eval_result == '1' ? 'Correct' : 'Incorrect') : (question.sys_eval_result == '1' ? 'Correct' : 'Incorrect')}}
+                              </p>
+                        </div>
+                        <div class="row obtained-marks">
+                           <p  class="fill-text"><strong>Obtained Marks:</strong></p>
+                           <p>{{question.teacher_eval_marks != '' ? question.teacher_eval_marks : question.sys_eval_marks}} / {{question.actual_marks}}</p>
+                        </div>
+                     </div>
+                     <div class="offset-2 offset-sm-1 offset-md-0 col-10 col-sm-11 col-md-3 col-xl-2 no-padding" *ngIf="mode == 'Teacher'">
+                        <div class="row">
+                           <div class="col-4 col-sm-3 col-md-6">
+                              <mat-form-field class="w-100">
+                                 <mat-label>Marks:</mat-label>
+                                 <input matInput #teacher_marks (afterBlur)="updateResult(question.student_exam_answer_id, $event)" formControlName='teacher_marks' [floatOnly] =  "{'mode': 'minMax', 'minVal': 0, 'maxVal': question.actual_marks, 'errorMessage':'Question '+question.position+' can have marks between 0 and '+ question.actual_marks}"
+                                          maxlength="5">
+                              </mat-form-field>
+                           </div>
+                           <div class="col-8 col-sm-9 col-md-6 actual-marks">
+                              <h5>/ [{{question.actual_marks}}]</h5>
+                           </div>
+                        </div>
+                        <mat-checkbox [checked]="(question.teacher_eval_result == '1'? 'true' : 'false')"
+                                       formControlName='teacher_eval_result' #teacher_eval_result_{{question.position}}>
+                                       Is Correct?:</mat-checkbox>
+                     </div>
+                  </div>
+               </div>
+               <div *ngSwitchCaseDefault></div>
+            </div>
+         </div>
+      </form>
+      <div class="col-md-9 col-xl-10 margin">
+         <div class="button-row text-center" *ngIf="isLoaded == true && mode == 'Teacher'">
+            <button mat-raised-button color="blue" (click)="onSubmit()">Save </button>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="side-savedraft" (click)="onSaveDraft()" *ngIf="isLoaded == true && mode == 'Teacher'">
+   <i class="fas fa-save"></i> Save
+</div>

@@ -1,0 +1,26 @@
+<div class="fileuploadbtn">
+    <input [id]="id" class="file-input" multiple type="file" accept={{this.VALID_FILE_EXT}} (click)="reset($event)">
+    <button mat-raised-button color="orange" class="upload-btn">
+        <i class="fas fa-upload"></i> Upload
+    </button>
+</div>
+<span class="text-red" *ngIf="validFiles">( {{validFiles}} )</span>
+<div >
+    <mat-list>
+        <span>Attachment List</span>
+            <table>
+                <tr *ngFor="let f of filterFiles(); let a=index">
+                    <th class="name"><span class="file-name" (click) = "downloadFile(f)" matTooltip="{{f.file.name}}">
+                        {{ (f.file.name.length > 27) ? (f.file.name | slice:0:20) + '..'+(f.file.name | slice:f.file.name.length-4:f.file.name.length) : (f.file.name) }}</span>
+                    </th>
+                    <th>
+                        <button mat-icon-button (click)='deleteDocument(f)'>
+                            <i *ngIf="!f.delete" class="far fa-trash-alt" ></i>
+                        </button>
+                    </th>
+                </tr>
+            </table>
+    </mat-list>
+</div>
+<img [src]="localCompressedURl" height="150px" hidden> <!-- DON'T REMOVE - required to convert compressed file converted to FILE -->
+<img [src]="localUrl" height="200px" hidden> <!-- DON'T REMOVE - required to convert compressed file converted to FILE -->

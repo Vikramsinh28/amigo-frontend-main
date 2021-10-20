@@ -1,0 +1,11 @@
+<h5 mat-dialog-title>Add/Edit Option</h5>
+<div mat-dialog-content>
+  <mat-form-field class="option-text">
+    <mat-label>Option Text</mat-label>
+    <input matInput [(ngModel)]="optionText" tabindex="0">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-between">
+  <button mat-raised-button mat-dialog-close color="orange">Cancel</button>
+  <button mat-raised-button color="blue" (click)="onSubmit()" cdkFocusInitial>Submit</button>
+</div>

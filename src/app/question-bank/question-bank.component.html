@@ -1,0 +1,10 @@
+<div class="blue-border-box">
+    <mat-tab-group #tabGroup dynamicHeight>
+        <mat-tab label={{tab1Label}}>
+            <app-question-bank-list #questionGrid (selected4Edit)="onSelectedForEdit($event)"></app-question-bank-list>
+        </mat-tab>
+        <mat-tab label={{tab2Label}}>
+            <app-question-bank-add-edit (updationDone)="onUpdateDone($event)" [question4Edit]="question4Edit"></app-question-bank-add-edit>
+        </mat-tab>
+    </mat-tab-group>
+</div>

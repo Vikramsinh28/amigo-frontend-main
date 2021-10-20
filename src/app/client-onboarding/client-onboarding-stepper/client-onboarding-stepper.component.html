@@ -1,0 +1,30 @@
+<div class="stepper">
+    <mat-horizontal-stepper #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Years & Terms</ng-template>
+                <app-years-terms-list></app-years-terms-list>
+                <div class="next-step text-right">
+                    <button mat-flat-button matStepperNext color="blue">Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup" label="Grade and Division">
+            <form [formGroup]="secondFormGroup">
+                <app-grade-and-division></app-grade-and-division>
+                <div class="next-step text-right">
+                    <button mat-flat-button matStepperPrevious color="orange">Back</button>
+                    <button mat-flat-button matStepperNext color="blue">Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Done</ng-template>
+            <p>You are now done.</p>
+            <div class="next-step text-right">
+                <button mat-flat-button matStepperPrevious color="orange">Back</button>
+                <button mat-flat-button (click)="stepper.reset()" color="orange"><i class="fas fa-undo"></i> &nbsp; Reset</button>
+            </div>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

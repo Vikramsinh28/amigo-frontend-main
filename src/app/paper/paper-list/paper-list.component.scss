@@ -1,0 +1,21 @@
+.question-list-filter{
+    margin-bottom: 20px;
+}
+.mat-cell{
+    padding-right: 10px;
+}
+table{
+    width: 100% !important;
+}
+
+.filter{
+    button + button{
+    margin-left: 20px;
+    }
+}
+
+@media screen and (max-width: 767px){
+    .filter{
+        text-align: right;
+    }
+}

@@ -1,0 +1,41 @@
+.table-filter{
+    background-color: #fff;
+    position: relative;
+    padding: 20px 20px 4px 20px;
+    border: 1px solid #A7A7A7;
+    border-radius: 16px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    margin-bottom: 30px;
+    ::ng-deep .mat-form-field-label .mat-icon{
+        margin-right: 5px;
+    }
+}
+.button-row{
+    margin-top: 100px;
+    button + button{
+        margin-left: 20px;
+    }
+}
+
+.common-table tr.mat-header-row .mat-header-cell:first-child{
+    padding-right: 15px;
+}
+
+.add-button{
+    float: right;
+    margin-top: 20px;
+}
+
+.margin{
+    margin-top: 20px;
+}
+
+.green{
+    color: green;
+}
+
+.red{
+    color: red;
+}

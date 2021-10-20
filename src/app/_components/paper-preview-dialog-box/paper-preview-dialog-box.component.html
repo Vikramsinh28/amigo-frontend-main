@@ -1,0 +1,10 @@
+<div class="mat-dialog">
+  <h5 mat-dialog-title>Paper Preview</h5>
+  <mat-dialog-content  class="mat-typography" >
+      <app-attachment-preview id="worksheet" [selectedTestPaperName]="attachmentFileName" [grade]="grade" [subject]="subject"
+       [selectedTestPaperId]="selectedTestPaperId" [withAnswers]="withAnswerKey" [isFrozen]="isFrozen" [withMarks]="withMarks" [totalMarks]="totalmarks"></app-attachment-preview>
+  </mat-dialog-content>
+  <mat-dialog-actions class="d-flex justify-content-center">
+    <button mat-raised-button color="orange" [mat-dialog-close]="true" cdkFocusInitial>Close</button>
+  </mat-dialog-actions>
+</div>

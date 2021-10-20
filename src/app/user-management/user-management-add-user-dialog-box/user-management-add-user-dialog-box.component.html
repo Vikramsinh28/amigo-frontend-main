@@ -1,0 +1,17 @@
+<div class="mat-dialog" (keydown.escape)="close($event)">
+    <h5 mat-dialog-title>{{filterType}} {{userType}} 
+        <button mat-icon-button class="close-button" [mat-dialog-close]="true">
+            <mat-icon class="close-icon">close</mat-icon>
+        </button>
+    </h5>
+    <mat-dialog-content class="mat-typography">
+        <div *ngIf="userType==='Student'">
+            <app-student-user-filters [withValidations]="withValidations" [filterType]="filterType" (close)="close($event)">
+            </app-student-user-filters>
+        </div>
+        <div *ngIf="userType==='Employee'">
+            <app-employee-user-filter [withValidations]="withValidations" [filterType]="filterType" (close)="close($event)">
+            </app-employee-user-filter>
+        </div>
+    </mat-dialog-content>
+</div>

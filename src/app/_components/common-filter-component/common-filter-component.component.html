@@ -1,0 +1,84 @@
+<div class="row">
+    <div *ngFor="let filterType of filterList; let i=index" id="common-filter">
+        <div [ngSwitch]="true">
+            <div *ngSwitchCase="filterType === 'Y'">
+                <mat-form-field class="col-lg-4">
+                    <mat-label>Year</mat-label>
+                    <mat-select [(ngModel)]="selectedYear"  required>
+                        <mat-option *ngFor="let year of clientYearList" [value]="year.clientYearId">
+                            {{ year.year }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngSwitchCase="filterType === 'Y_M'">
+                <mat-form-field class="col-lg-4">
+                    <mat-label>Year</mat-label>
+                    <mat-select [(ngModel)]="selectedYear"  required>
+                        <mat-option *ngFor="let year of clientYearList" [value]="year.clientYearId">
+                            {{ year.year }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngSwitchCase="filterType === 'G'">
+                <mat-form-field class="col-lg-4">
+                    <mat-label>Grade</mat-label>
+                    <mat-select [(ngModel)]="selectedGrade"  required>
+                        <mat-option *ngFor="let grd of clientGradeList" [value]="grd.gradeId">
+                            {{grd.grade}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngSwitchCase="filterType === 'G_M'">
+                <mat-form-field class="col-lg-4">
+                    <mat-label>Grade</mat-label>
+                    <mat-select [(ngModel)]="selectedGrade" #select multiple required>
+                        <div class="select-all">
+                            <mat-checkbox >Select All
+                            </mat-checkbox>
+                        </div>
+                        <mat-option  *ngFor="let grd of clientGradeList" [value]="grd.gradeId">
+                            {{grd.grade}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngSwitchCase="filterType === 'D'">
+                <mat-form-field class="col-lg-4">
+                    <mat-label>Division</mat-label>
+                    <mat-select [(ngModel)]="selectedDivision" multiple required>
+                        <mat-option *ngFor="let division of clientDivisionList" [value]="division.gradeDivisionId">
+                            {{ division.division }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngSwitchCase="filterType === 'D_M'">
+                <mat-form-field class="col-lg-4">
+                    <mat-label>Division</mat-label>
+                    <mat-select [(ngModel)]="selectedDivision" multiple required>
+                        <mat-option *ngFor="let division of clientDivisionList" [value]="division.gradeDivisionId">
+                            {{ division.division }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngSwitchCase="filterType === 'Sub'">
+                <mat-form-field class="col-lg-4">
+                    <mat-label>Subject</mat-label>
+                    <mat-select [(ngModel)]="selectedSubject" required>
+                        <mat-option *ngFor="let subject of clientSubjectList" [value]="subject.subjectId">
+                            {{ subject.subjectName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngSwitchCase="filterType === 'Std'">
+
+            </div>
+        </div>
+    </div>
+
+</div>

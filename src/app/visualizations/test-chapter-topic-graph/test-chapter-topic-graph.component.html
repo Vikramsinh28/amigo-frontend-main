@@ -1,0 +1,9 @@
+<div class="row graph">
+    <section id="target" [ngClass]="{'section': show}" #target>
+    </section>
+</div>
+<div class="row close">
+    <button mat-flat-button color="orange" *ngIf="show" (click)="onCancel()" [mat-dialog-close]="true">Close</button>
+    <button mat-flat-button class="download-button" color="blue" (click)="onDownload()" *ngIf="loaded"
+    ><span class="material-icons">get_app</span>Download</button>
+</div>

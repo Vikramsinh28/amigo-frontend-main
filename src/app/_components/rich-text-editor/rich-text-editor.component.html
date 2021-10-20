@@ -1,0 +1,13 @@
+
+
+<!-- <div id="rteEditor" #rteEditor></div> -->
+
+<ckeditor
+    [config]="editorConfig"
+    [editor]="Editor"
+    name="text"
+    [data]="editorData"
+    #editor_{{id}}
+    (change)="change($event)"
+    (ready) = "readyEditor($event)"
+></ckeditor>

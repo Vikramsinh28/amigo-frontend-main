@@ -1,0 +1,72 @@
+<table #completedSort="matSort" mat-table [dataSource]="completedExamDs" matSort class="common-table">
+                <!-- Start Date -->
+                <ng-container matColumnDef="startDateEndDate">
+                    <th mat-header-cell *matHeaderCellDef>Start Date- <br> End Date</th>
+                    <td mat-cell *matCellDef="let element" data-title="Start Date-End Date: ">
+                        {{ element.start_date | date: dateFormat}} -<br> {{ element.end_date | date: dateFormat}}
+                    </td>
+                </ng-container>
+
+                <!-- Exam Taken Date -->
+                <ng-container matColumnDef="examTakenDate">
+                    <th mat-header-cell *matHeaderCellDef>Exam Taken Date</th>
+                    <td mat-cell *matCellDef="let element" data-title="Exam Taken Date: ">
+                        10-08-2021
+                    </td>
+                </ng-container>
+    
+                <!-- Exam Name Column -->
+                <ng-container matColumnDef="examName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Exam Name</th>
+                    <td mat-cell *matCellDef="let element" data-title="Exam Name: ">
+                        {{ element.exam_name }}
+                    </td>
+                </ng-container>
+    
+                <!-- Subject Name Column -->
+                <ng-container matColumnDef="subjectName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+                    <td mat-cell *matCellDef="let element" data-title="Subject Name: ">
+                        {{ element.subject_name }}
+                    </td>
+                </ng-container>
+    
+                <!-- Marks Column -->
+                <ng-container matColumnDef="marks">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"
+                        >Obtained <br />Marks</th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="Marks: ">
+                        <span *ngIf = "element.marks != null; else marksNotDeclared">{{ element.marks }}</span>
+                        <ng-template #marksNotDeclared >N.A.</ng-template>
+                        /{{element.total_marks}}
+                    </td>
+                </ng-container>
+    
+                <!-- View Paper Column -->
+                <ng-container matColumnDef="viewPaper">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"
+                        ></th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="Paper: ">
+                        <span *ngIf = "element.exam_status > 2 && element.marks != null; else marksNotDeclared">
+                            <button mat-stroked-button (click) = "onViewPaper(element)" color="blue-strok">View Paper</button>
+                        </span>
+                        <ng-template #marksNotDeclared >N.A.</ng-template>
+                    </td>
+                </ng-container>
+    
+                <!-- View Report Column -->
+                <ng-container matColumnDef="viewReport">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"
+                        ></th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="Report: ">
+                        <span *ngIf = "element.exam_status > 2 && element.marks != null; else marksNotDeclared">
+                            <button mat-icon-button matTooltip="View Report" (click) = "onViewReport(element)" color="stroked-blue" type="button"><i class="fas fa-chart-bar fa-lg"></i></button>
+                        </span>
+                        <ng-template #marksNotDeclared >N.A.</ng-template>
+                    </td>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="displayedCEColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedCEColumns"></tr>
+</table>
+            <mat-paginator #completedPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>

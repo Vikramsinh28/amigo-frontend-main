@@ -1,0 +1,8 @@
+<h5 mat-dialog-title>{{data.testPaperName}}</h5>
+<mat-dialog-content class="mat-form view-paper-wrap">
+<app-test-chapter-topic-graph #graph [show] = "shown">
+</app-test-chapter-topic-graph>
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-center">
+    <button mat-raised-button mat-dialog-close color="orange">Close</button>
+</mat-dialog-actions>

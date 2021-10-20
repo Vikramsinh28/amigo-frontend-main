@@ -1,0 +1,70 @@
+.blue-border-box {
+    border: 1px solid #0067e3;
+    padding: 20px 30px 30px 20px;
+    border-radius: 16px;
+    margin: 0 30px;
+    margin-bottom: 30px;
+    min-height: 630px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    .head-node-label {
+      padding-top: 12px;
+      color: #0067e3;
+    }
+}
+
+.container-fluid{
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.margin{
+    margin-top: 20px;
+}
+
+.year-label{
+    margin-left: 20px;
+}
+
+.startNewYear{
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.icon{
+    font-size: 25px;
+    color: red;
+}
+
+.navigate-button{
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+@media only screen and (max-width:767px){
+    .mat-row:last-child{
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+}
+
+@media only screen and (max-width:450px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: column;
+  }
+
+  button + button{
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (min-width:450px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+  }
+}

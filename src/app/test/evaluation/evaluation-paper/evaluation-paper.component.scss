@@ -1,0 +1,287 @@
+.paper-for-student{
+    .exam-instructions{
+        margin-bottom: 20px;
+    }
+    .question-control{
+        white-space: pre-line;
+        h5{
+            color:#0067E3;
+        }
+    }
+    .paper-wrap{
+        margin: 30px;
+    }
+    .question-wrap{
+        .answer-success{
+            border-radius: 4px;
+            color:#00d200;
+            font-weight: 600;
+            margin-bottom: 1px;
+        }
+        .answer-image{
+            max-width:100px;
+            margin-bottom: 10px;
+            img{
+                width: 100%;
+                position: relative;
+                z-index: 9;
+            }
+        }
+        .option-wrap {
+            position: relative;
+            .option-alert{
+                width: 50%;
+                padding: 5px 10px 2px 30px;
+                position: relative;
+            }
+            .your-answer{
+                position: absolute;
+                left: 10px;
+                top:8px;
+            }
+        }
+        .fill-in-blank-answer{
+            .your-answer i{
+                margin: 0 5px 0 0;
+            }
+            .fill-label{
+                padding: 6px 10px 0 0;
+            }
+            .fill-answer{
+                width: 95%;
+                ::ng-deep .mat-form-field{
+                    margin-top: -15px;
+                }
+            }
+        }
+        .fill-in-blank-answer + .fill-in-blank-answer{
+            margin-top: 20px;
+        }
+    }
+    .question-wrap{
+        border-top: 1px solid #A7A7A7;
+        margin-top:20px;
+        padding-top: 30px;
+    }
+    .answer-label{
+        margin: 0 0 0 15px;
+    }
+    .your-answer {
+        i{
+            display: flex;
+        }
+    }    
+    .text-primary {
+        color: #004085;
+    }
+    .text-success {
+        color: #0bb932;
+    }
+    .text-danger {
+        color: #F00;
+    }
+    .correct-answer{
+        margin-left: 15px;
+    }
+    img:hover {
+        cursor:zoom-in;
+    }
+    .fill-text{
+        margin-right: 5px;
+    }
+    .obtained-marks{
+        margin-right: 0px;
+    }
+}
+.custom-control {
+    position: relative;
+    z-index: 1;
+    display: block;
+    min-height: 1.5rem;
+    padding-left: 1.5rem;
+    opacity: 0.8;
+    pointer-events: none;
+    .custom-control-input {
+        position: absolute;
+        left: 0;
+        z-index: -1;
+        width: 16px;
+        height: 16px;
+        opacity: 0;
+    }
+    .custom-control-label {
+        position: relative;
+        margin-bottom: 0;
+        vertical-align: top;
+        &:before {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: -1.5rem;
+            display: block;
+            width: 16px;
+            height: 16px;
+            pointer-events: none;
+            background-color: #fff;
+            border: 2px solid #0066E3;
+        }
+        &:after {
+            content: "";
+            position: absolute;
+            display: block;
+        }
+    }
+}
+.custom-radio {
+    .custom-control-input {
+        &:checked~.custom-control-label{
+            &:before {
+                color: #fff;
+                border-color: #0066E3;
+                background-color: #fff;
+            }
+            &:after {
+                background: #181C32;
+                border-radius: 50%;
+                top: 6px;
+                left: -20px;
+                width: 8px;
+                height: 8px;
+            }
+        }
+    }
+    .custom-control-label::before {
+        border-radius: 50%;
+    }
+
+}
+.custom-checkbox {
+    .custom-control-input {
+        &:checked~.custom-control-label{
+            &:before {
+                color: #fff;
+                border-color: #181C32;
+                background-color: #181C32;
+            }
+            &:after {
+                left: -19px;
+                top: 3px;
+                width: 7px;
+                height: 12px;
+                border: solid white;
+                border-width: 0 2px 2px 0;
+                -webkit-transform: rotate(45deg);
+                -ms-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+        }
+    }
+}
+.side-savedraft{
+    position: fixed;
+    right: -55px;
+    top: 50%;
+    transition: 0.3s;
+    padding: 15px;
+    width: 100px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    border-radius: 4px 0 0 4px;
+    background-color:#0066E3;
+    font-size: 14px;
+    margin-top: -27px;
+    cursor: pointer;
+    i{
+        margin-right:10px;
+        font-size: 20px;
+    }
+    &:hover{
+        right: 0;
+    }
+}
+
+.white-box{
+    ::ng-deep .textarea-bg .mat-form-field-flex{
+        background-color: #f7f7f7;
+        padding: 0 10px;
+    }
+    .system-detail{
+        margin-top: 32px;
+    }
+}
+
+@media only screen and (max-width: 767px){
+    .paper-for-student .question-wrap{
+        .question-control{
+            margin-bottom: 20px;
+        }
+        .option-wrap .option-alert{
+            width: 65%;
+        }
+        .white-box{
+            .system-detail{
+                margin-top: 0;
+            }
+        }
+    }
+}
+
+.white-box{
+    .textarea-bg{
+        margin-top: 20px;
+    }
+}
+
+.actual-marks{
+    padding-left: 0px;
+    padding-top: 15px;
+}
+
+.system-evaluation{
+    margin-top: 12px;
+}
+
+.qno{
+    width: 35px;
+    min-width: 35px
+}
+
+.margin{
+    margin-top: 20px;
+}
+
+.feedback{
+    margin-top: 12px;
+}
+
+@media only screen and (max-width: 480px){
+    .paper-for-student .question-wrap .answer-label{
+        font-size: 12px;
+        width: 35%;
+        text-align: right;
+    }
+}
+@media only screen and (min-width:576px) and (max-width:992px){
+    .name{
+        text-align: right;
+    }
+}
+
+@media only screen and (max-width:992px){
+    .margin-section{
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (min-width:992px){
+    .margin-section{
+        margin-top: 40px;
+    }
+}
+
+@media only screen and (min-width:576px){
+    .total-mark{
+        float: right;
+    }
+}

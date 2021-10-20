@@ -1,0 +1,154 @@
+
+
+<div class="student-profile container-fluid">
+  <div class="row">
+    <div class='col-lg-4 col-xl-3 left-col' *ngIf="userRole != 'Student' ">
+      <app-student-search (selectedStudentChanged)="onStudentSelection($event)" [mode]="'student'"></app-student-search>
+    </div>
+    <div [ngClass]="{'col-lg-12': userRole === 'Student','col-lg-8 col-xl-9': userRole !== 'Student' }">
+      <ng-container *ngIf="dataLoaded">
+        <div class="white-box">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-2 col-md-4 d-flex align-self-center">
+                <div class="profile-picture my-auto">
+                  <img *ngIf="!pictureUrl" src="assets/images/profile-picture.jpg"
+                      alt="Profile Picture" (click)="imageCropper('logoGraphic')" matTooltip="Add"/>
+                  <img *ngIf="pictureUrl" [src]="pictureUrl" alt="Profile Picture"
+                      (click)="imageCropper('logoGraphic')" matTooltip="Edit"/>
+                </div>
+              </div>
+              <div class="col-lg-10 col-md-8 border-left">
+                <div class="student-profile-details">
+                  <div class="student-bio">
+                    <h2 *ngIf="dataLoaded">{{studentProfile.first_name}} {{studentProfile.last_name}}</h2>
+                    <p>{{studentProfile.about_me}}</p>
+                  </div>
+                  <div class="row profile-info">
+                    <div class="col-lg-4 d-inline-flex">
+                      <mat-icon class="fas fa-map-marker-alt"></mat-icon>
+                      {{studentProfile.city}}/ {{studentProfile.state}}/ {{studentProfile.country}}
+                    </div>
+                    <div class="col-lg-5 d-inline-flex word-break">
+                      <mat-icon class="far fa-envelope"></mat-icon>
+                      {{studentProfile.email}}
+                    </div>
+                    <div class="col-lg-3 d-inline-flex">
+                      <mat-icon class="fas fa-phone-square-alt"></mat-icon>
+                      {{studentProfile.phone}}
+                    </div>
+                  </div>
+                  <div class="row profile-summary">
+                    <div class="col-lg-12">
+                        <h5>Summary</h5>
+                        <p>{{studentProfile.profile_summary}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button mat-icon-button class="edit-profile-btn" aria-label="Profile Edit" (click)="editStudentBio()"
+              *ngIf="userRole == 'Student'">
+              <mat-icon class="fas fa-pen"></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="profile-accordian">
+          <mat-accordion multi>
+            <mat-expansion-panel [expanded]="false" hideToggle="true" #expandicon1>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Skills & Achievements
+                </mat-panel-title>
+                <i *ngIf="!expandicon1.expanded" class="fas fa-plus align-self-center"></i>
+                <i *ngIf="expandicon1.expanded" class="fas fa-minus align-self-center"></i>
+              </mat-expansion-panel-header>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-xl-9">
+                    <mat-tab-group dynamicHeight>
+                      <mat-tab label="Important Events">
+                        <div class="sa-graph">
+                          <span class="mid-line"></span>
+                          <div class="info-tree">
+                            <div class="year-info d-flex" *ngFor="let y of studentProfile.top2Accomplishments">
+                              <div class="year">{{y.year}}</div>
+                              <div class="year-detail" *ngFor="let r of y.records">
+                                <h4>{{r.title}}</h4>
+                                <p matTooltip={{r.desc}}>
+                                  {{ (r.desc.length > 65) ? (r.desc | slice:0:65) + '..' : (r.desc) }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-tab>
+                      <mat-tab label="All Events">
+                        <app-accomplishment-list class="all-events-table" [mode]="1" [studentId]="studentId"></app-accomplishment-list>
+                      </mat-tab>
+                    </mat-tab-group>
+                  </div>
+                  <div class="col-xl-3">
+                    <div class="profile-list">
+                      <h5>Core Skill List</h5>
+                      <div class="skill-box">
+                        <mat-form-field class="skill-list">
+                          <mat-chip-list #chipList aria-label="Skill selection">
+                            <mat-chip *ngFor="let skill of studentProfile.skills" [selectable]="selectable"
+                              [removable]="removable" (removed)="removeSkill(skill)">
+                              {{ skill.name }}
+                              <mat-icon class="fas fa-times-circle" matChipRemove *ngIf="removable"></mat-icon>
+                            </mat-chip>
+                            <input placeholder="Core Skills..." [matChipInputFor]="chipList"
+                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                              (matChipInputTokenEnd)="addSkillInterest($event, SKILL)" [readOnly]="userRole == 'Teacher' ? 'readonly' : ''"/>
+                          </mat-chip-list>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="profile-list">
+                      <h5>Interest List</h5>
+                      <div class="skill-box">
+                        <mat-form-field class="skill-list">
+                          <mat-chip-list #InterestList aria-label="Interest selection">
+                            <mat-chip *ngFor="let interest of studentProfile.interests" [selectable]="selectable"
+                              [removable]="removable" (removed)="removeInterest(interest)">
+                              {{ interest.name }}
+                              <mat-icon class="fas fa-times-circle" matChipRemove *ngIf="removable"></mat-icon>
+                            </mat-chip>
+                            <input placeholder="Interest Areas..." [matChipInputFor]="InterestList"
+                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                              (matChipInputTokenEnd)="addSkillInterest($event, INTEREST)" [readOnly]="userRole == 'Teacher' ? 'readonly' : ''"/>
+                          </mat-chip-list>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="false" hideToggle="true" #expandicon2>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Academics
+                </mat-panel-title>
+                <i *ngIf="!expandicon2.expanded" class="fas fa-plus align-self-center"></i>
+                <i *ngIf="expandicon2.expanded" class="fas fa-minus align-self-center"></i>
+              </mat-expansion-panel-header>
+              <mat-tab-group>
+                <mat-tab label="Subjects">
+                  <section id="target">
+                  </section>
+                </mat-tab>
+                <mat-tab label="Degree & Certifications">
+                  <app-degree-and-certification [studentId]="studentId"></app-degree-and-certification>
+                </mat-tab>
+              </mat-tab-group>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

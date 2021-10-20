@@ -1,0 +1,13 @@
+::ng-deep .stepper{
+    padding: 0 6px;
+     .mat-horizontal-stepper-header-container{
+        margin-bottom: 30px;
+    }
+    .mat-step-header .mat-step-icon-selected{
+        background-color: #0066E3;
+    }
+    .next-step{
+        margin-top:20px;
+        button + button{margin-left:20px;}
+    }
+}

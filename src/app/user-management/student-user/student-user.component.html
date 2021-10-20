@@ -1,0 +1,91 @@
+<app-student-user-filters [withValidations]="withValidations" [filterType]="filterType"
+  (searchStudent)="searchStudent($event)" (resetData)="clearData($event )"></app-student-user-filters>
+<div>
+  <table mat-table [dataSource]="studentDataSource" matSort class="common-table margin">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(element) : null"
+          [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Register Name Column -->
+    <ng-container matColumnDef="regNo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Reg No. </th>
+      <td mat-cell *matCellDef="let element" data-title="Reg No: "> {{element.regNo}} </td>
+    </ng-container>
+
+    <!-- First Name Column -->
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+      <td mat-cell *matCellDef="let element" data-title="First Name: "> {{element.firstName}} </td>
+    </ng-container>
+
+    <!-- LastName Column -->
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
+      <td mat-cell *matCellDef="let element" data-title="Last Name: "> {{element.lastName}} </td>
+    </ng-container>
+
+    <!-- UserName Column -->
+    <ng-container matColumnDef="userName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
+      <td mat-cell *matCellDef="let element" data-title="User Name: "> {{element.user?.userName}} </td>
+    </ng-container>
+
+    <!-- Current Year -->
+    <ng-container matColumnDef="currentYearGradeDivision">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Current Year<br>Grade-Division </th>
+      <td mat-cell *matCellDef="let element" data-title="Current Year / Grade-Division: "> {{element.academicYear }} {{element.division }} </td>
+    </ng-container>
+
+  
+    <!-- Is Activated Column -->
+    <ng-container matColumnDef="activeState">
+      <th mat-header-cell *matHeaderCellDef class="text-center"> Active Status </th>
+      <td mat-cell class="text-center" *matCellDef="let element;let rowNo = index;" data-title="Active Status: ">
+        <i class="fas fa-circle" [ngClass]="{green: element.user?.userName && element.user.activeState == 1,
+          red: element.user?.userName && element.user.activeState != 1}"></i>
+      </td>
+    </ng-container>
+
+    <!-- Action Column-->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let element" class="mat-column-delete">
+        <button id='actionRow' mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action Icon"
+          (click)="$event.stopPropagation();"><i class="fas fa-ellipsis-v"></i></button>
+          <mat-menu #menu="matMenu" class="menu-items">
+            <button mat-menu-item (click)="editStudent(element, 'View')">
+              <i class="fas fa-info-circle"></i> &nbsp; View Details</button>
+            <button mat-menu-item (click)="editStudent(element, 'Edit')"
+                [disabled]="element.yearOrder < element.currentYearOrder"><i class="far fa-edit"></i> &nbsp; Edit User</button>
+            <button mat-menu-item (click)="resetPassword(element)"><i class="fas fa-key"></i> &nbsp; Reset Password</button>
+            <button mat-menu-item (click)="changeStatus(element)"><i class="fas fa-exchange-alt"></i> &nbsp; Change Status</button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" let i="dataIndex;">
+    </tr>
+  </table>
+</div>
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+<button class="add-button" mat-mini-fab color="blue" aria-label="Add Icon" (click)="createStudent()">
+  <mat-icon class="fas fa-plus"></mat-icon>
+</button>
+<div class="button-row text-center">
+  <button mat-raised-button mat-dialog-close color="blue" (click)="updateStudentActiveState(true, null)"
+    *ngIf="statusType === 1  || statusType === 3">Activate Student</button>
+  <button mat-raised-button mat-dialog-close color="blue" (click)="updateStudentActiveState(false, null)"
+    *ngIf="statusType === 1  || statusType === 2">Deactivate Student</button>
+</div>

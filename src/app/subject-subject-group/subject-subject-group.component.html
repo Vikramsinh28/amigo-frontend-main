@@ -1,0 +1,361 @@
+<div class="container-fluid">
+    <div class="blue-border-box">
+        <div class="row justify-content-center">
+            <div class="col-xl-11">
+                <div class="row">
+                    <!-- Subject Table -->
+                    <div class="col-md-6 col-xl-5">
+                        <div class="row">
+                            <div class="col-8 label">
+                                <h5>Available Subjects</h5>
+                            </div>
+                            <div class="col-4">
+                                <button mat-raised-button class="add-subject" color="blue" (click)="addNewSubject()"><i class="fas fa-plus"></i> Add Subject</button>
+                            </div>
+                        </div>
+                        <div class="row subject-table">
+                            <table mat-table [dataSource]="subjectDataSource" matSort class="common-table">
+                                <!-- Subject Column-->
+                                <ng-container matColumnDef="subject">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="Subject:">
+                                        <div *ngIf="element.openForEdit===true">
+                                            <mat-form-field class="table-field-edit">
+                                                <input type="text" matInput [(ngModel)]="element.subjectName" autoFocus maxlength="255" (keydown.enter)="saveSubject(rowNo, element)" (keydown.escape)="undoInputText(rowNo)"/>
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="element.openForEdit===false" cdkDropList [cdkDropListData]="element"
+                                            (cdkDropListDropped)="drop($event)">
+                                            <button mat-stroked-button color="black-strok" matTooltip="{{ element.subjectName }}"
+                                                cdkDrag>{{ (element.subjectName.length > 18) ? (element.subjectName | slice:0:18) + '..' : (element.subjectName) }}</button>
+                                        </div>
+                                    </td>
+                                </ng-container>
+    
+                                <!-- Category Column-->
+                                <ng-container matColumnDef="category">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="Category:">
+                                        <mat-select [(ngModel)]="element.category" class="table-select" *ngIf="element.openForEdit==true"
+                                            [disabled]="element.openForEdit==false" placeholder="Category">
+                                            <mat-option [value]="cg.category" *ngFor="let cg of subjectCategory">
+                                                <span *ngIf="cg.category==1"><i class="fas fa-graduation-cap select-icon"></i>{{ cg.categoryName }}</span>
+                                                <span *ngIf="cg.category==2"><i class="fas fa-closed-captioning select-icon"></i>{{ cg.categoryName }}</span>
+                                            </mat-option>
+                                        </mat-select>
+                                        <i *ngIf="element.openForEdit==false && element.category==1" matTooltip="Academic" class="fas fa-graduation-cap icon"></i>
+                                        <i *ngIf="element.openForEdit==false && element.category==2" matTooltip="Non-Academic" class="fas fa-closed-captioning icon"></i>
+                                    </td>
+                                </ng-container>
+    
+                                <!-- Edit Column -->
+                                <ng-container matColumnDef="edit-save">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element;let rowNo = index;" class="tbl-col-edit">
+                                        <div *ngIf="element.openForEdit===false">
+                                            <button mat-icon-button aria-label="Edit Icon"
+                                                (click)="editSubject(rowNo, element)">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                        </div>
+                                        <div *ngIf="element.openForEdit===true">
+                                            <button mat-icon-button
+                                                (click)="saveSubject(rowNo, element)"><i class="far fa-save fa-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Delete  Column -->
+                                <ng-container matColumnDef="delete">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <button id="deleteRow" mat-icon-button aria-label="Delete Icon"
+                                            *ngIf="element.subjectId<0"
+                                            (click)="deleteNewlyCreatedSubject(element.subjectId)">
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+    
+                                <tr mat-header-row *matHeaderRowDef="subjectDisplayColumn; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: subjectDisplayColumn" let i="index"></tr>
+                            </table>
+                        </div>
+                        <div class="row margin">
+                            <span>
+                                <strong>Note:</strong> 
+                                <p>To add a new subject in the system, add it to the available subjects list first
+                                    and then to mandatory/optional group.
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Subject Group Table -->
+                    <div class="col-md-6 offset-xl-1">
+                        <div class="row">
+                            <mat-form-field class="col-sm-6 col-md-12 col-lg-5 year-drop">
+                                <mat-label>Academic Year:</mat-label>
+                                <mat-select [(ngModel)]="selectedYear"
+                                    (selectionChange)="onYearSelected(selectedYear)">
+                                    <mat-option [value]="year" *ngFor="let year of clientYear">
+                                        {{ year.year }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="col-sm-6 col-md-12 col-lg-5 offset-lg-2 grade">
+                                <mat-label>Grade:</mat-label>
+                                <mat-select [(ngModel)]="selectedGrade"
+                                    (selectionChange)="onGradeSelected(selectedGrade)">
+                                    <mat-option [value]="grade" *ngFor="let grade of grades">
+                                        {{ grade.grade }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <!-- mandatory Subject Group -->
+                        <div class="row margin">
+                            <h5>Mandatory Groups</h5>
+                            <table mat-table [dataSource]="mandatorySubjectGroupDataSource" matSort
+                                class="common-table group-table">
+                                <!-- Group Code Column-->
+                                <ng-container matColumnDef="groupName">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Group Name</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="Group Name:">
+                                        <div
+                                            *ngIf="element.isGroupNameEditable===true && selectedYear.yearOrder>=currentYear.yearOrder">
+                                            <mat-form-field class="table-field-edit">
+                                                <input type="text" matInput [(ngModel)]="element.groupCode" autoFocus maxlength="255"/>
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="element.isGroupNameEditable===false">
+                                            <mat-label>{{ element.groupCode }}</mat-label>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Edit Group Name Column -->
+                                <ng-container matColumnDef="edit-save-groupName">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element;let rowNo = index;" class="tbl-col-edit">
+                                        <div
+                                            *ngIf="element.isGroupNameEditable===false && selectedYear.yearOrder>=currentYear.yearOrder && element.subjectGroupId>0 && element.countSubjectGroupInUse===0">
+                                            <button mat-icon-button aria-label="Edit Icon"
+                                                (click)="onEditBtnClick(element.subjectGroupId, rowNo,'mandatoryTable', 'groupName')">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                        </div>
+                                        <div
+                                            *ngIf="element.isGroupNameEditable===true && selectedYear.yearOrder>=currentYear.yearOrder && element.subjectGroupId>0 && element.countSubjectGroupInUse===0">
+                                            <button mat-icon-button
+                                                (click)="saveMandatoryGroup(element, rowNo, 'groupName')"><i class="far fa-save fa-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Subject Group Column-->
+                                <ng-container matColumnDef="mandatorySubjects">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Subjects</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="Subjects:">
+                                        <div *ngIf="element.openForEdit===true" class="chips subject-group-col"
+                                            (mouseover)="onRowHover(rowNo, 'mandatoryTable')"
+                                            (mouseout)="onRowHover(null, null)">
+                                            <mat-form-field class="example-chip-list"
+                                                *ngIf="selectedYear.yearOrder>=currentYear.yearOrder">
+                                                <mat-chip-list aria-label="Keywords selection">
+                                                    <div *ngFor="let subject of element.subjectGroupSubjectDetails">
+                                                        <div *ngIf="!subject.isSubjectGroupSubjectDeleted">
+                                                            <mat-chip>
+                                                                {{ subject.subjectName }}
+                                                                <mat-icon class="fas fa-times-circle" matChipRemove
+                                                                    (click)="deleteCompSubjects(rowNo, subject.subjectId)">
+                                                                </mat-icon>
+                                                            </mat-chip>
+                                                        </div>
+                                                    </div>
+                                                </mat-chip-list>
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="element.openForEdit===false" class="chips">
+                                            <mat-form-field class="example-chip-list">
+                                                <mat-chip-list aria-label="Keywords selection">
+                                                    <div *ngFor="let subject of element.subjectGroupSubjectDetails">
+                                                        <div *ngIf="!subject.isSubjectGroupSubjectDeleted">
+                                                            <mat-chip>{{ subject.subjectName }}</mat-chip>
+                                                        </div>
+                                                   </div>
+                                                </mat-chip-list>
+                                            </mat-form-field>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Edit Column -->
+                                <ng-container matColumnDef="edit-save">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element;let rowNo = index;" class="tbl-col-edit" id="edit">
+                                        <div
+                                            *ngIf="element.openForEdit===false && selectedYear.yearOrder>=currentYear.yearOrder && element.countSubjectGroupInUse===0">
+                                            <button mat-icon-button aria-label="Edit Icon"
+                                                (click)="onEditBtnClick(element.subjectGroupId, rowNo,'mandatoryTable', 'group')">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                        </div>
+                                        <div
+                                            *ngIf="element.openForEdit===true && selectedYear.yearOrder>=currentYear.yearOrder && element.countSubjectGroupInUse===0">
+                                            <button mat-icon-button
+                                                (click)="saveMandatoryGroup(element, rowNo, 'group')"><i class="far fa-save fa-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Delete  Column -->
+                                <ng-container matColumnDef="delete">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <button id="deleteRow" mat-icon-button aria-label="Delete Icon"
+                                            *ngIf="selectedYear.yearOrder>=currentYear.yearOrder && element.countSubjectGroupInUse===0">
+                                            <i class="far fa-trash-alt" (click)="deleteGroup(element, 'mandatoryTable')"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="mandatorySubjectGroupDisplayColumn; sticky: true">
+                                </tr>
+                                <tr mat-row *matRowDef="let row = index; columns: mandatorySubjectGroupDisplayColumn"
+                                    let i="index"></tr>
+                            </table>
+                            <div class="col-12 margin center">
+                                <button mat-raised-button color="blue"
+                                    [ngClass]="selectedYear.yearOrder>=currentYear.yearOrder?'btn-visible' : 'btn-hidden'"
+                                    (click)="addNewSubjectGroup('mandatoryTable')"><i class="fas fa-plus"></i> Add Mandatory Group</button>
+                            </div>
+                        </div>
+                        <!-- Optional Subject Group -->
+                        <div class="row margin">
+                            <h5>Optional Groups</h5>
+                            <table mat-table [dataSource]="optionalSubjectGroupDataSource" matSort class="common-table group-table">
+                                <!-- Group Code Column-->
+                                <ng-container matColumnDef="groupName">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Group Name</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="Group Name:">
+                                        <div
+                                            *ngIf="element.isGroupNameEditable===true && selectedYear.yearOrder>=currentYear.yearOrder">
+                                            <mat-form-field class="table-field-edit">
+                                                <input type="text" matInput [(ngModel)]="element.groupCode" autoFocus maxlength="255"/>
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="element.isGroupNameEditable===false">
+                                            <mat-label>{{ element.groupCode }}</mat-label>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Edit Group Name Column -->
+                                <ng-container matColumnDef="edit-save-groupName">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element;let rowNo = index;" class="tbl-col-edit">
+                                        <div
+                                            *ngIf="element.isGroupNameEditable===false && selectedYear.yearOrder>=currentYear.yearOrder && element.subjectGroupId>0 && element.countSubjectGroupInUse===0">
+                                            <button mat-icon-button aria-label="Edit Icon"
+                                                (click)="onEditBtnClick(element.subjectGroupId, rowNo,'optionalTable', 'groupName')">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                        </div>
+                                        <div
+                                            *ngIf="element.isGroupNameEditable===true && selectedYear.yearOrder>=currentYear.yearOrder && element.subjectGroupId>0 && element.countSubjectGroupInUse===0">
+                                            <button mat-icon-button
+                                                (click)="saveOptionalGroup(element, rowNo, 'groupName')"><i class="far fa-save fa-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Subject Group Column-->
+                                <ng-container matColumnDef="optionalSubjects">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Subjects</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="Subjects:">
+                                        <div *ngIf="element.openForEdit===true" class="chips subject-group-col"
+                                            (mouseover)="onRowHover(rowNo, 'optionalTable')"
+                                            (mouseout)="onRowHover(null, null)">
+                                            <mat-form-field class="example-chip-list"
+                                                *ngIf="selectedYear.yearOrder>=currentYear.yearOrder">
+                                                <mat-chip-list aria-label="Keywords selection">
+                                                    <div *ngFor="let subject of element.subjectGroupSubjectDetails">
+                                                        <div *ngIf="!subject.isSubjectGroupSubjectDeleted">
+                                                            <mat-chip>
+                                                                {{ subject.subjectName }}
+                                                                <mat-icon class="fas fa-times-circle" matChipRemove
+                                                                (click)="deleteOptSubjects(rowNo, subject.subjectId)">
+                                                                </mat-icon>
+                                                            </mat-chip>
+                                                        </div>
+                                                    </div>
+                                                </mat-chip-list>
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="element.openForEdit===false" class="chips">
+                                            <mat-form-field class="example-chip-list">
+                                                <mat-chip-list aria-label="Keywords selection">
+                                                    <div *ngFor="let subject of element.subjectGroupSubjectDetails">
+                                                        <div *ngIf="!subject.isSubjectGroupSubjectDeleted">
+                                                            <mat-chip>{{ subject.subjectName }}</mat-chip>
+                                                        </div>
+                                                    </div>
+                                                </mat-chip-list>
+                                            </mat-form-field>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <!-- Edit Column -->
+                                <ng-container matColumnDef="edit-save">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element;let rowNo = index;" class="tbl-col-edit">
+                                        <div
+                                            *ngIf="element.openForEdit===false && selectedYear.yearOrder>=currentYear.yearOrder && element.countSubjectGroupInUse===0">
+                                            <button mat-icon-button aria-label="Edit Icon"
+                                                (click)="onEditBtnClick(element.subjectGroupId, rowNo,'optionalTable', 'group')">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                        </div>
+                                        <div
+                                            *ngIf="element.openForEdit===true && selectedYear.yearOrder>=currentYear.yearOrder && element.countSubjectGroupInUse===0">
+                                            <button mat-icon-button
+                                                (click)="saveOptionalGroup(element, rowNo, 'group')"><i class="far fa-save fa-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Delete  Column -->
+                                <ng-container matColumnDef="delete">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <button id="deleteRow" mat-icon-button aria-label="Delete Icon"
+                                            *ngIf="selectedYear.yearOrder>=currentYear.yearOrder && element.countSubjectGroupInUse===0">
+                                            <i class="far fa-trash-alt" (click)="deleteGroup(element, 'optionalTable')"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="optionalSubjectGroupDisplayColumn; sticky: true">
+                                </tr>
+                                <tr mat-row *matRowDef="let row; columns: optionalSubjectGroupDisplayColumn" let
+                                    i="index"></tr>
+                            </table>
+
+                            <div class="col-12 center margin">
+                                <button mat-raised-button color="blue"
+                                    [ngClass]="selectedYear.yearOrder>=currentYear.yearOrder?'btn-visible' : 'btn-hidden'"
+                                    (click)="addNewSubjectGroup('optionalTable')"><i class="fas fa-plus"></i> Add Optional Group</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 btn-group">
+                    <div class="buttons">
+                        <button mat-raised-button color="blue" (click)="navigateGradeDivision()"><i class="fas fa-arrow-left"></i> Grade & Division</button>
+                        <button mat-raised-button color="blue" (click)="navigatePromotion()">
+                            <span>Promote Student <i class="fas fa-arrow-right"></i> </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>

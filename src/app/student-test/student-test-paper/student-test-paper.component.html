@@ -1,0 +1,151 @@
+<div class="test-paper-container" *ngIf="isLoaded == true">
+   <div class="paper-heading text-center">
+      <div class="school-logo"><img alt="School Logo" [src]="clientLogo" />
+      </div>
+      <h2>{{testDetails.testName}}</h2>
+   </div>
+   <div class="exam-paper-wrap">
+      <div class="exam-detail d-flex justify-content-between">
+         <div class="exam-detail-left-col">
+            <p><strong>Subject:</strong> {{testDetails.subject}}</p>
+            <p><strong>Marks:</strong> {{testDetails.marks}}</p>
+         </div>
+         <div class="exam-detail-right-col text-right">
+            <p><strong>Grade:</strong> {{testDetails.grade}} </p>
+            <p><strong>Time:</strong> {{testDetails.duration}} (Minutes)</p>
+            <p><strong>Date:</strong> {{currentDate | date: dateFormat}}</p>
+         </div>
+      </div>
+
+      <form [formGroup]="testPaperForm" *ngIf="testPaperForm" #form="ngForm">
+         <div class="exam-instructions">
+            <strong class="d-block">General Instructions</strong>
+            <p>{{testDetails.instructions}}</p>
+         </div>
+         <div class="question-wrap" *ngFor="let question of questions; let i=index">
+            <div [ngSwitch]="true">
+               <div *ngSwitchCase="question.qb_question_type_id === 2">
+                  <div class="form-group" formGroupName="{{'q_' + question.test_paper_question_id}}">
+                     <div class="question-control d-flex justify-content-between">
+                        <div class="d-flex flex-row ques-row">
+                           <h5>({{question.position}}) </h5>
+                           <h5 class="d-block question-text"  [appMath]="question.question_text" (click)="openImage($event)"></h5>
+                        </div>
+                        <span>[{{question.actual_marks}} marks]</span>
+                     </div>
+                     <div class="answer-image" *ngIf="question.question_attachment !== null">
+                        <img alt="Answer Image" [src]="question.question_attachment[0].data" (click)="open(question.question_attachment[0].data)"
+                           *ngIf="question.question_attachment[0].type == 'image'">
+                        <a [href]="question.question_attachment[0].data"
+                           [download]="question.question_attachment[0].fileName"
+                           *ngIf="question.question_attachment[0].type == 'doc'">{{question.question_attachment[0].fileName}}</a>
+                     </div>
+                     <div class="custom-control custom-radio"
+                        *ngFor="let anwr of question.objective_answers; let a=index">
+                        <input type="radio" class="custom-control-input" id="q{{question.position}}_{{a}}"
+                           name="o{{question.position}}" value="{{a+1}}" formControlName="o{{question.position}}" />
+                        <label class="custom-control-label" for="q{{question.position}}_{{a}}">
+                          <span [appMath]="anwr"></span>
+                        </label>
+                     </div>
+                  </div>
+               </div>
+               <div *ngSwitchCase="question.qb_question_type_id === 3">
+                  <div class="form-group" formGroupName="{{'q_' + question.test_paper_question_id}}">
+                     <div class="question-control d-flex justify-content-between">
+                        <div class="d-flex flex-row ques-row">
+                           <h5>({{question.position}}) </h5>
+                           <h5 class="d-block question-text"  [appMath]="question.question_text" (click)="openImage($event)"></h5>
+                        </div>
+                        <span>[{{question.actual_marks}} marks]</span>
+                     </div>
+                     <div class="answer-image" *ngIf="question.question_attachment !== null">
+                        <img alt="Answer Image" [src]="question.question_attachment[0].data" (click)="open(question.question_attachment[0].data)"
+                           *ngIf="question.question_attachment[0].type == 'image'">
+                        <a [href]="question.question_attachment[0].data"
+                           [download]="question.question_attachment[0].fileName"
+                           *ngIf="question.question_attachment[0].type == 'doc'">{{question.question_attachment[0].fileName}}</a>
+                     </div>
+                     <div class="custom-control custom-checkbox"
+                        *ngFor="let anwr of question.objective_answers; let b=index">
+                        <input type="checkbox" class="custom-control-input" id="q{{question.position}}_{{b}}"
+                           value="{{b+1}}" formControlName="{{anwr}}" />
+                        <label class="custom-control-label" for="q{{question.position}}_{{b}}"><span [appMath]="anwr"></span> </label>
+                     </div>
+                  </div>
+               </div>
+               <div *ngSwitchCase="question.qb_question_type_id === 7">
+                  <div class="form-group" formGroupName="{{'q_' + question.test_paper_question_id}}">
+                     <div class="question-control d-flex justify-content-between">
+                        <div class="d-flex flex-row ques-row">
+                           <h5>({{question.position}}) </h5>
+                           <h5 class="d-block question-text"  [appMath]="question.question_text" (click)="openImage($event)"></h5>
+                        </div>
+                        <span>[{{question.actual_marks}} marks]</span>
+                     </div>
+                     <div class="answer-image" *ngIf="question.question_attachment !== null">
+                        <img alt="Answer Image" [src]="question.question_attachment[0].data" (click)="open(question.question_attachment[0].data)"
+                           *ngIf="question.question_attachment[0].type == 'image'">
+                        <a [href]="question.question_attachment[0].data"
+                           [download]="question.question_attachment[0].fileName"
+                           *ngIf="question.question_attachment[0].type == 'doc'">{{question.question_attachment[0].fileName}}</a>
+                     </div>
+                     <div class="fill-in-blank-answer" *ngFor="let anwr of question.objective_answers; let a=index">
+                        <div class="row">
+                           <mat-form-field class="col-lg-8">
+                              <mat-label>({{a+1}}) Please write your answer here</mat-label>
+                              <input matInput [specialCharacter]=5 formControlName='f{{a}}' id="q{{question.position}}_{{a}}" />
+                           </mat-form-field>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div
+                  *ngSwitchCase="question.qb_question_type_id === 4 || question.qb_question_type_id === 5 || question.qb_question_type_id === 6">
+                  <div class="form-group" formGroupName="{{'q_' + question.test_paper_question_id}}">
+                     <div class="question-control d-flex justify-content-between">
+                        <div class="d-flex flex-row ques-row">
+                           <h5>({{question.position}}) </h5>
+                           <h5 class="d-block question-text"  [appMath]="question.question_text" (click)="openImage($event)"></h5>
+                        </div>
+                        <span>[{{question.actual_marks}} marks]</span>
+                     </div>
+                     <div class="answer-image" *ngIf="question.question_attachment !== null">
+                        <img alt="Answer Image" [src]="question.question_attachment[0].data" (click)="open(question.question_attachment[0].data)"
+                           *ngIf="question.question_attachment[0].type == 'image'">
+                        <a [href]="question.question_attachment[0].data"
+                           [download]="question.question_attachment[0].fileName"
+                           *ngIf="question.question_attachment[0].type == 'doc'">{{question.question_attachment[0].fileName}}</a>
+                     </div>
+                     <div class="row">
+                        <mat-form-field class="col-lg-12">
+                           <mat-label>Please write your answer here...</mat-label>
+                           <textarea matInput placeholder="..."
+                              [rows]="getSubjectiveAnswerRows(question.qb_question_type_id)" id="comment"
+                              formControlName='answer'></textarea>
+                        </mat-form-field>
+                     </div>
+                     <app-file-upload formControlName="image" (change)="attachDocument($event, question)"
+                        MAX_FILE_COUNT="2" VALID_FILE_EXT=".png,.jpg,.jfif" MAX_FILE_SIZE="2084">
+                     </app-file-upload>
+                  </div>
+               </div>
+               <div *ngSwitchCaseDefault></div>
+            </div>
+         </div>
+      </form>
+      <div class="button-row text-center" *ngIf="isLoaded == true">
+         <button mat-raised-button color="blue" (click)="onSubmit()">Submit </button>
+         <!-- <button mat-raised-button mat-dialog-close color="blue" (click)="onSaveDraft()">Save Draft</button> -->
+      </div>
+   </div>
+</div>
+<div class="side-savedraft" (click)="onSaveDraft()" *ngIf="isLoaded == true">
+   <i class="fas fa-save"></i> Save Draft
+</div>
+
+<div class="side-timer">
+   <i class="fas fa-hourglass"></i> Remaining Time: <countdown #cd id="cd"
+   [config]="{demand: true, leftTime: testDetails.duration * 60, notify: [ (testDetails.duration - (testDetails.duration - 2)) * 60, (testDetails.duration - (testDetails.duration - 1)) * 60 ]}"
+   (event)="countDownEvent($event)"></countdown>
+</div>

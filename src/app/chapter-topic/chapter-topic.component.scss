@@ -1,0 +1,153 @@
+.blue-border-box{
+    border: 1px solid #0067E3;
+    border-radius: 16px;
+    padding-top: 20px;
+    margin: 0 30px 20px 30px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    min-height: 630px;
+    .head-node-label{
+        padding-top: 12px;
+        color:#0067E3;
+    }
+    
+}
+
+button+button{
+    margin-left: 15px;
+}
+
+.margin{
+    margin-top: 15px;
+}
+
+.mat-tree{
+    padding-left: 0px;
+}
+
+@media screen and (max-width:576px) {
+    .head-node-label{
+        width: calc(100vw - 260px);
+    }
+    .child-node-label{
+        width: calc(100vw - 300px);
+    }
+    mat-form-field{
+        width: 60px;
+        margin-right: 5px;
+    }
+    .head{
+        mat-form-field{
+            width: 140px;
+            margin-right: 5px;
+        }
+    }
+    .row-tree{
+        margin: 20px 0px;
+    }
+}
+
+@media screen and (min-width: 576px) and (max-width:768px) {
+    .head-node-label{
+        width: calc(100vw - 330px);
+    }
+    .child-node-label{
+        width: calc(100vw - 370px);
+    }
+    mat-form-field{
+        width: 160px;
+        margin-right: 10px;
+    }
+    .head{
+        mat-form-field{
+            width: 240px;
+            margin-right: 10px;
+        }
+    }
+    .row-tree{
+        margin: 20px 0px;
+        justify-content: center;
+    }
+    .subject{
+        margin-left: 50px;
+    }
+    .grade{
+        margin-left: 50px;
+    }
+}
+
+@media screen and (max-width: 991px) and (min-width:768px) {
+    .head-node-label{
+        width: calc(100vw - 330px);
+    }
+    .child-node-label{
+        width: calc(100vw - 370px);
+    }
+    mat-form-field{
+        width: 360px;
+        margin-right: 10px;
+    }
+    .head{
+        mat-form-field{
+            width: 440px;
+            margin-right: 10px;
+        }
+    }
+    .row-tree{
+        margin: 20px 0px;
+        justify-content: center;
+    }
+    .grade{
+        margin-left: 50px;
+    }
+}
+
+@media screen and (min-width: 991px) {
+    .head-node-label{
+        width: 500px;
+    }
+    .child-node-label{
+        width: 460px;
+    }
+
+    mat-form-field{
+        width: 460px;
+        margin-right: 10px;
+    }
+    .head{
+        mat-form-field{
+            width: 540px;
+            margin-right: 10px;
+        }
+    }
+    .row-tree{
+        margin: 20px 0px;
+        justify-content: center;
+    }
+    .grade{
+        margin-left: 50px;
+    }
+}
+
+@media screen and (max-width: 576px){
+    .button-view{
+        display:none;
+    }
+}
+
+@media screen and (min-width: 576px){
+    .icon-view{
+        display:none
+    }
+    .button-view{
+        height: 85%;
+        margin-left: 10px;
+    }
+}
+
+@media screen and (max-width:767px){
+    .buttons{
+        text-align: right;
+    }
+}

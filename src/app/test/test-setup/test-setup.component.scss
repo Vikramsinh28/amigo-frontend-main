@@ -1,0 +1,10 @@
+.setup-test-form{
+    min-height: 350px;
+    width: 760px;
+}
+
+@media only screen and (max-width: 992px){
+    .setup-test-form{
+        width: auto;
+    }
+}

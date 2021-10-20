@@ -1,0 +1,23 @@
+<div class="blue-border-box">
+    <mat-tab-group #tabGroup>
+        <mat-tab label="Upcoming Tests">
+            <app-test-list #testGrid (onOpenTestPaper)="displayTestPreview($event)" (onDone)="gotoActive($event)"></app-test-list>
+        </mat-tab>
+        <mat-tab label="Active Tests">
+            <app-test-list-active #active (onOpenTestPaper)="displayTestPreview($event)" (onDone)="onDone($event)"></app-test-list-active>
+        </mat-tab>
+        <mat-tab label="Completed Tests">
+            <app-test-list-completed #completed (onOpenTestPaper)="displayTestPreview($event)" (selected4Evaluate)="onSelectedForEvaluate($event)"
+            (selected4Report)="onSelectedForReport($event)" (selected4Graph)="onSelectedForGraph($event)"></app-test-list-completed>
+        </mat-tab>
+        <mat-tab label="Evaluation">
+            <app-evaluation #evaluation (onDone)="onDone($event)"></app-evaluation>
+        </mat-tab>
+        <mat-tab label="Report">
+            <app-test-chapter-topic-report #report (onDone)="onDone($event)"></app-test-chapter-topic-report>
+        </mat-tab>
+        <mat-tab label="Graph">
+            <app-test-chapter-topic-graph #graph (onDone)="onDone($event)" ></app-test-chapter-topic-graph>
+        </mat-tab>
+    </mat-tab-group>
+</div>

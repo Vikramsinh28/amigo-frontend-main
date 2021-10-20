@@ -1,0 +1,16 @@
+<app-common-grade-division [filterType]="'Add'" [config]="filterConfig" (subjectSelectionChanged)="filterSubjectChanged($event)" ></app-common-grade-division>
+<app-communication-content [communicationType]="communicationType" ></app-communication-content>
+<div class="row align-button">
+    <div class="col-12 col-sm-3 col-lg-2 reset">
+        <button mat-raised-button color="orange" *ngIf="!isForEdit" (click)="onCancel('')"
+            type="reset">Reset</button>
+        <button mat-raised-button color="orange" *ngIf="isForEdit" (click)="onCancel('Return')"
+            type="reset">Cancel</button>
+    </div>
+    <div class="col-12 col-sm-9 col-lg-10 buttons-row">
+        <button mat-raised-button color="blue" (click)="saveCommunicationDetails('Return')"
+            type="reset">{{submitBtnLabel}}</button>
+        <button mat-raised-button color="blue" *ngIf="!isForEdit" (click)="saveCommunicationDetails('Next')"
+            type="reset">Save & Next</button>
+    </div>
+</div>

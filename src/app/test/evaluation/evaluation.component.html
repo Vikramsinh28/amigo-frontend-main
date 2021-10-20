@@ -1,0 +1,31 @@
+<div class="system-evaluation">
+   <div class="button-row top-button">
+      <button mat-flat-button color="orange" (click)="onCancel()">Close</button>
+      <button mat-flat-button color="blue" (click) = "onReleaseScore()">Release Scores</button>
+   </div>
+   <div class="d-flex evalution-wrap">
+      <div class="student-tree">
+         <mat-tree #tree [dataSource]="treedataSource" [treeControl]="treeControl">
+            <!-- This is the tree node template for leaf nodes -->
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding class="tree-child-item"
+               (click)="activeNode = node" [ngClass]="{ 'active-child': activeNode === node }">
+               <!-- use a disabled button to provide padding for tree leaf -->
+               <div class="cursor" (click)='onTreeNodeClick(node, $event)'>
+                  <i class="fas fa-circle indicator" [ngClass]="node.cssClass"></i><strong>{{ node.rollNo }}/{{ node.name }}</strong>
+               </div>
+            </mat-tree-node>
+            <!-- This is the tree node template for expandable nodes -->
+            <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+               <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+                  <i *ngIf="treeControl.isExpanded(node)" class="fas fa-chevron-down"></i>
+                  <i *ngIf="!treeControl.isExpanded(node)" class="fas fa-chevron-right"></i>
+               </button>
+               <h5> {{ node.name }} </h5>
+            </mat-tree-node>
+         </mat-tree>
+      </div>
+      <div class="paper-question-list">
+         <app-evaluation-paper (updateDone)="refreshTree($event)"></app-evaluation-paper>
+      </div>
+   </div>
+</div>

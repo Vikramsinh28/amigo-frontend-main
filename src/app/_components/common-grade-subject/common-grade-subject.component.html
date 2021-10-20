@@ -1,0 +1,60 @@
+<ng-container [formGroup]="controlForm">
+    <div class="row margin-left">
+        <mat-form-field class="w-100" [ngClass]="{'col-sm-12': filterType==='Question-Add',
+         'col-sm-4 col-xl-2': filterType==='Question-List', 'col-sm-4 col-lg-2 col-xl-4': filterType==='Paper-Add',
+         'col-md-6': filterType==='Paper-List','col-sm-6 col-lg-12': filterType==='grade-performance-trend'}">
+            <mat-label>Grade <span class="text-red" *ngIf="config.isGradeRequired">*</span></mat-label>
+            <mat-select (selectionChange)="onGradeSelected()" #cntGrade id="cntGrade" formControlName="grade">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let grade of clientGrades" [value]="grade.id">
+                    {{ grade.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="config.isSubjectVisible" class="w-100" [ngClass]="{'col-sm-12': filterType==='Question-Add',
+         'col-sm-8 col-xl-3': filterType==='Question-List', 'col-sm-8 col-lg-3 col-xl-8': filterType==='Paper-Add',
+         'col-md-6': filterType==='Paper-List','col-sm-6 col-lg-12': filterType==='grade-performance-trend'}">
+            <mat-label>Subject <span class="text-red" *ngIf="config.isSubjectRequired">*</span></mat-label>
+            <mat-select #cntSubject  id ="cntSubject"  formControlName="subject" [multiple] = "config.isSubjectMultiple" (selectionChange)="onSubjectSelected()">
+                <mat-option *ngIf="!config.isSubjectMultiple"></mat-option>
+                <mat-option  *ngIf="config.isSubjectCombined" value="-1">Combined</mat-option>
+                <mat-option  *ngFor="let subject of clientSubjects" [value]="subject.id">
+                    {{subject.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="config.isChapterVisible" class="w-100" [ngClass]="{'col-xl-7': filterType==='Question-List',
+         'col-12 col-lg-7 col-xl-12': filterType==='Paper-Add', 'col-12': filterType==='Question-Add'}">
+            <mat-label>Chapter <span class="text-red" *ngIf="config.isChapterRequired">*</span></mat-label>
+            <mat-select #cntChapter  id ="cntChapter"  formControlName="chapter" (selectionChange)="onChapterSelected()">
+                <mat-option></mat-option>
+                <mat-option  *ngFor="let chapter of clientChapters" [value]="chapter.id">
+                    {{chapter.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="config.isTopicVisible" class="w-100" [ngClass]="{'col-sm-12': filterType==='Question-Add' || filterType==='Paper-Add',
+         'col-xl-7': filterType==='Question-List'}">
+            <mat-label>Topic <span class="text-red" *ngIf="config.isTopicRequired">*</span></mat-label>
+            <mat-select #cntTopic  id ="cntTopic"  formControlName="topic" (selectionChange)="onTopicSelected()">
+                <mat-option></mat-option>
+                <mat-option  *ngFor="let topic of clientTopics" [value]="topic.id">
+                    {{topic.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="config.isQTypeVisible" class="w-100" [ngClass]="{'col-sm-12': filterType==='Question-Add' || filterType==='Paper-Add',
+         'col-xl-5': filterType==='Question-List'}">
+            <mat-label>Question Type <span class="text-red" *ngIf="config.isQTypeRequired">*</span></mat-label>
+            <mat-select #cntQType  id ="cntQType"  formControlName="qtype" (selectionChange)="onQTypeSelected($event)">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let qType of clientQTypes; let i=index" [value]="qType.id">
+                    <div class="d-flex flex-row">
+                        <img class="ques-type-icon qtype-img-{{i}}" height="25" width="25">
+                        <span>{{qType.name}}</span>
+                    </div>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</ng-container>

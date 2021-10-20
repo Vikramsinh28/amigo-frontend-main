@@ -1,0 +1,242 @@
+<div class="blue-border-box">
+    <mat-tab-group #tabGroup>
+        <mat-tab label="Active Tests">
+            <button mat-mini-fab color="blue" (click)="loadExamData('2')"><i class="fas fa-sync-alt"></i></button>
+            <table #activeSort="matSort" mat-table [dataSource]="activeExamsDS" matSort class="common-table">
+                <!-- Start Date -->
+                <ng-container matColumnDef="startDate">
+                    <th mat-header-cell *matHeaderCellDef>Start Date</th>
+                    <td mat-cell *matCellDef="let element" data-title="Start Date">
+                        {{ element.start_date | date: dateFormat}}
+                    </td>
+                </ng-container>
+    
+                <!-- End Date -->
+                <ng-container matColumnDef="endDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+                    <td mat-cell *matCellDef="let element" data-title="End Date">
+                        {{ element.end_date | date: dateFormat}}
+                    </td>
+                </ng-container>
+    
+                <!-- Exam Name Column -->
+                <ng-container matColumnDef="examName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Exam Name</th>
+                    <td mat-cell *matCellDef="let element" data-title="Exam Name">
+                        {{ element.exam_name }}
+                    </td>
+                </ng-container>
+    
+                <!-- Subject Name Column -->
+                <ng-container matColumnDef="subjectName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+                    <td mat-cell *matCellDef="let element" data-title="Subject Name">
+                        {{ element.subject_name }}
+                    </td>
+                </ng-container>
+    
+                <!-- Chapter Column -->
+                <ng-container matColumnDef="chapter">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Chapter</th>
+                    <td mat-cell *matCellDef="let element" data-title="Chapter" class="word-wrap" matTooltip="{{ element.chapters }}">
+                        {{ element.chapters }}
+                    </td>
+                </ng-container>
+    
+                <!-- Total Marks Column -->
+                <ng-container matColumnDef="totalMarks">
+                    <th mat-header-cell *matHeaderCellDef>Total Marks</th>
+                    <td mat-cell *matCellDef="let element" data-title="Total Marks">
+                        {{ element.total_marks }}
+                    </td>
+                </ng-container>
+    
+                <!-- Test Duration Column -->
+                <ng-container matColumnDef="testDuration">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>Duration</th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="Test Duration">
+                        {{ element.exam_duration }}
+                    </td>
+                </ng-container>
+                <!-- Note Column -->
+                <ng-container matColumnDef="notes">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"
+                        >Note From Teacher</th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="notes">
+                        {{ element.notes }}
+                    </td>
+                </ng-container>
+    
+                <!-- Start Exam Column -->
+                <ng-container matColumnDef="startExam">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" matTooltip="Click to Start Exam">Start Exam</th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="Start Exam">
+                       <button mat-stroked-button (click)='startExam(element)' color="stroked-blue">Start Exam
+                            <!-- <a [routerLink]="['/student-test-paper', {element.testPaperId}]">Start Exam</a> -->
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedAEColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedAEColumns"></tr>
+            </table>
+            <mat-paginator #activePaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </mat-tab>
+        <mat-tab label="Upcoming Tests">
+            <button mat-mini-fab color="blue" (click)="loadExamData('1')"><i class="fas fa-sync-alt"></i></button>            
+            <table #upcomingSort="matSort" mat-table [dataSource]="upcomingExamDs" matSort class="common-table">
+                <!-- Start Date -->
+                <ng-container matColumnDef="startDate">
+                    <th mat-header-cell *matHeaderCellDef>Start Date</th>
+                    <td mat-cell *matCellDef="let element" data-title="Start Date">
+                        {{ element.start_date | date: dateFormat}}
+                    </td>
+                </ng-container>
+    
+                <!-- End Date -->
+                <ng-container matColumnDef="endDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+                    <td mat-cell *matCellDef="let element" data-title="End Date">
+                        {{ element.end_date | date: dateFormat}}
+                    </td>
+                </ng-container>
+    
+                <!-- Exam Name Column -->
+                <ng-container matColumnDef="examName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Exam Name</th>
+                    <td mat-cell *matCellDef="let element" data-title="Exam Name">
+                        {{ element.exam_name }}
+                    </td>
+                </ng-container>
+    
+                <!-- Subject Name Column -->
+                <ng-container matColumnDef="subjectName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+                    <td mat-cell *matCellDef="let element" data-title="Subject Name">
+                        {{ element.subject_name }}
+                    </td>
+                </ng-container>
+    
+                <!-- Total Marks Column -->
+                <ng-container matColumnDef="totalMarks">
+                    <th mat-header-cell *matHeaderCellDef>Total Marks</th>
+                    <td mat-cell *matCellDef="let element" data-title="Total Marks">
+                        {{ element.total_marks }}
+                    </td>
+                </ng-container>
+    
+                <!-- Test Duration Column -->
+                <ng-container matColumnDef="testDuration">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>Duration</th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="Test Duration">
+                        {{ element.exam_duration }}
+                    </td>
+                </ng-container>
+                <!-- Note Column -->
+                <ng-container matColumnDef="notes">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"
+                        >Note From Teacher</th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="notes">
+                        {{ element.notes }}
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedUEColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedUEColumns"></tr>
+            </table>
+            <mat-paginator #upcomingPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </mat-tab>
+        <mat-tab label="Completed Tests">
+            <button mat-mini-fab color="blue" (click)="loadExamData('3,4,5')"><i class="fas fa-sync-alt"></i></button>    
+            <table #completedSort="matSort" mat-table [dataSource]="completedExamDs" matSort class="common-table">
+                <!-- Start Date -->
+                <ng-container matColumnDef="startDate">
+                    <th mat-header-cell *matHeaderCellDef>Start Date</th>
+                    <td mat-cell *matCellDef="let element" data-title="Start Date">
+                        {{ element.start_date | date: dateFormat}}
+                    </td>
+                </ng-container>
+    
+                <!-- End Date -->
+                <ng-container matColumnDef="endDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+                    <td mat-cell *matCellDef="let element" data-title="End Date">
+                        {{ element.end_date | date: dateFormat}}
+                    </td>
+                </ng-container>
+    
+                <!-- Exam Name Column -->
+                <ng-container matColumnDef="examName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Exam Name</th>
+                    <td mat-cell *matCellDef="let element" data-title="Exam Name">
+                        {{ element.exam_name }}
+                    </td>
+                </ng-container>
+    
+                <!-- Subject Name Column -->
+                <ng-container matColumnDef="subjectName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+                    <td mat-cell *matCellDef="let element" data-title="Subject Name">
+                        {{ element.subject_name }}
+                    </td>
+                </ng-container>
+    
+                <!-- Total Marks Column -->
+                <ng-container matColumnDef="totalMarks">
+                    <th mat-header-cell *matHeaderCellDef>Total Marks</th>
+                    <td mat-cell *matCellDef="let element" data-title="Total Marks">
+                        {{ element.total_marks }}
+                    </td>
+                </ng-container>
+    
+                <!-- Test Duration Column -->
+                <ng-container matColumnDef="testDuration">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>Duration</th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="Test Duration">
+                        {{ element.exam_duration }}
+                    </td>
+                </ng-container>
+                <!-- Note Column -->
+                <ng-container matColumnDef="notes">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"
+                        >Note From Teacher</th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="notes">
+                        {{ element.notes }}
+                    </td>
+                </ng-container>
+                <!-- Marks Column -->
+                <ng-container matColumnDef="marks">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"
+                        >Obtained <br />Marks</th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="notes">
+                        {{ element.marks }}
+                    </td>
+                </ng-container>
+    
+                <!-- View Paper Column -->
+                <ng-container matColumnDef="viewPaper">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"
+                        ></th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="notes">
+                        <span *ngIf = "element.exam_status > 2">
+                            <button mat-stroked-button (click) = "onViewPaper(element)" color="blue-strok">View Paper</button>
+                        </span>
+                    </td>
+                </ng-container>
+    
+                <!-- View Report Column -->
+                <ng-container matColumnDef="viewReport">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"
+                        ></th>
+                    <td mat-cell *matCellDef="let element" class="text-center" data-title="report">
+                        <span *ngIf = "element.exam_status > 2">
+                            <button mat-icon-button (click) = "onViewReport(element)" matTooltip="View Report" color="stroked-blue" type="button"><i class="fas fa-chart-bar fa-lg"></i></button>
+                        </span>
+                    </td>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="displayedCEColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedCEColumns"></tr>
+            </table>
+            <mat-paginator #completedPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </mat-tab>
+    </mat-tab-group>
+</div>

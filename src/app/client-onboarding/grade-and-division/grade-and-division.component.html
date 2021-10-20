@@ -1,0 +1,56 @@
+<table mat-table [dataSource]="dataSource" matSort class="common-table">
+    <!-- Grade Column-->
+    <ng-container matColumnDef="grade">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Grade </th>
+        <td mat-cell *matCellDef="let element" data-title="Grade:">
+            <mat-form-field class="table-field">
+                <input
+                  type="text"
+                  matInput
+                  [(ngModel)]="element.grade"
+                  (focusout)="onFocusOutEvent($event)"
+                />
+              </mat-form-field>
+        </td>
+    </ng-container>
+
+    <!-- Division Column-->
+    <ng-container matColumnDef="division">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Division </th>
+        <td mat-cell *matCellDef="let element" data-title="Division:">
+            <mat-form-field class="table-field">
+                <input
+                  type="text"
+                  matInput
+                  [(ngModel)]="element.division"
+                  (focusout)="onFocusOutEvent($event)"
+                />
+              </mat-form-field>
+        </td>
+    </ng-container>
+
+    <!-- Save Column -->
+    <ng-container matColumnDef="save">
+        <th mat-header-cell *matHeaderCellDef>Save</th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-stroked-button color="blue-strok">Save</button>
+        </td>
+    </ng-container>
+
+    <!-- Delete Column -->
+    <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef class="tbl-col-delete">Delete</th>
+        <td mat-cell *matCellDef="let element" class="tbl-col-delete">
+            <button mat-icon-button aria-label="Delete Icon" (click)="delete(element)">
+                <i class="far fa-trash-alt"></i>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"  let i = "index"></tr>
+</table>
+<mat-paginator pageSize=10 showFirstLastButtons></mat-paginator>
+<button class="add-btn" mat-fab color="blue" (click)="addRow()" aria-label="Add Icon">
+    <mat-icon class="fas fa-plus"></mat-icon>
+</button>

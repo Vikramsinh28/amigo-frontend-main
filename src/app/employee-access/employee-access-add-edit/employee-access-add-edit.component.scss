@@ -1,0 +1,81 @@
+.white-box {
+    background-color: #fff;
+    position: relative;
+    padding: 18px;
+    border: 1px solid #A7A7A7;
+    border-radius: 16px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    margin: 0px 0px 20px 0px;
+}
+
+.margin{
+    margin-top: 5px;
+}
+
+.close-button{
+    float: right;
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+}
+
+.mat-icon-button ::ng-deep .mat-button-focus-overlay {
+    display: none;
+}
+
+.close-icon{
+    vertical-align: unset;
+}
+
+.empno{
+    margin-right: 20px;
+}
+
+.mat-dialog-content{
+    display: contents;
+}
+
+@media only screen and(min-width: 767px){
+
+    table th:nth-child(1),
+    table th:nth-child(2),
+    table th:nth-child(3),
+    table th:nth-child(4)
+    {
+        max-width: 100px;
+        width: 100px;
+    }
+
+    table th:nth-child(6){
+        max-width: 70px;
+        width: 70px;
+    }
+
+    .buttons{
+        display: flex;
+        flex-direction: column;
+        button+button{
+            margin-top: 25px;
+        }
+    }
+  }
+
+  @media only screen and (max-width: 767px){
+    .buttons{
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        button+button{
+            margin-right: 15px;
+        }
+    }
+  }
+
+  @media only screen and (max-width: 567px){
+    .empno{
+        display: none;
+    }
+}

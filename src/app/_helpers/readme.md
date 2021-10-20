@@ -1,0 +1,3 @@
+The _helpers folder will contain all the bits and pieces that don't really fit into other folders but don't justify having a folder of their own. 
+
+The underscore "_" prefix is used to easily differentiate between shared code (e.g. _services, _components, _helpers etc) and feature specific code (e.g. home, login, register), the prefix also groups shared component folders together at the top of the folder structure in VS Code.

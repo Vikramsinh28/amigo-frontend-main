@@ -1,0 +1,49 @@
+
+
+@media only screen and (max-width:767px){
+    .mat-dialog{
+        min-width: 200px !important;
+    }
+}
+
+@media only screen and (min-width: 767px) and (max-width:991px){
+    .mat-dialog{
+        min-width: 560px !important;
+    }
+}
+
+@media only screen and (min-width: 991px) and (max-width:1200px){
+    .mat-dialog{
+        min-width: 740px !important;
+    }
+}
+
+@media only screen and (min-width: 1200px) and (max-width:1600px){
+    .mat-dialog{
+        min-width: 905px !important;
+    }
+}
+
+@media only screen and (min-width:1600px) and (max-width:2500px){
+    .mat-dialog{
+        min-width: 1225px !important;
+    }
+}
+
+@media only screen and (min-width:2500px){
+    .mat-dialog{
+        min-width: 1900px !important;
+    }
+}
+
+@media only screen and (max-width:600px){
+    .d-flex{
+        flex-direction: column;
+    }
+    button{
+        margin-top: 10px;
+    }
+    mat-dialog-actions{
+        padding: 10px !important;
+    }
+}

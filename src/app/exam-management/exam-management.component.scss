@@ -1,0 +1,33 @@
+.table-filter{
+    background-color: #fff;
+    position: relative;
+    padding: 20px 20px 4px 20px;
+    border: 1px solid #A7A7A7;
+    border-radius: 16px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    margin-bottom: 30px;
+    ::ng-deep {
+        .mat-form-field-label .mat-icon{
+            margin-right: 5px;
+        }
+        .mat-form-field{
+            width: 100%;
+        }
+    }
+}
+
+.table-select{
+    padding-right: 15px;
+}
+.table-date{
+    max-width: 130px;
+    padding-right: 15px;
+}
+
+.add-btn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}

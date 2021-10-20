@@ -1,0 +1,191 @@
+<div *ngIf="!isAllDataFetch">
+   <mat-spinner [diameter]="60" mode="indeterminate"></mat-spinner>
+</div>
+<div *ngIf="isAllDataFetch">
+   <div class="paper-heading text-center">
+      <div class="school-logo">
+         <img alt="School Logo" [src]="clientLogo"/>
+      </div>
+      <h2 class="intent">{{schoolName}}</h2>
+      <h3 class="intent">{{selectedTestPaperName}}</h3>
+   </div>
+   <div class="margin d-flex justify-content-between">
+      <div class="exam-detail-left-col">
+         <p><strong>Grade:</strong> {{grade}}</p>
+      </div>
+      <div class="exam-detail-right-col text-right">
+         <p><strong>Subject:</strong> {{subject}}</p>
+      </div>
+   </div>
+   <div class="d-flex justify-content-between">
+      <div class="exam-detail-left-col">
+         <p><strong>Total Marks:</strong> {{totalMarks}}</p>
+      </div>
+   </div>
+   <div class="question-wrap" *ngFor="let question of questions; let i=index" id="worksheet" >
+      <div [ngSwitch]="true">
+         <div *ngSwitchCase="question.questionTypeId === 2">
+               <div class="question-control ques-display">
+                  <div class="ques">
+                     <h5 class="ques-no">{{question.position}})</h5>
+                     <h5 class="ques-text"><p class="d-block wrap"  [appMath]="question.questionText" (click)="openImage($event)"></p></h5>
+                  </div>
+                  <span *ngIf="withMarks" class="mark">[{{question.actualMarks}} marks]</span>
+               </div>
+               <div class="question-control ques-display">
+                  <div class="ques">
+                     <span class="ques-no"></span>
+                     <div class="ques-text">
+                        <div class="answer-image" *ngIf="question.questionAttachment !== null" >
+                           <img alt="Answer Image" [src]="question.questionAttachment[0].data" (click)="open(question.questionAttachment[0].data)"
+                              *ngIf="question.questionAttachment[0].type == 'image'">
+                           <a [href]="question.questionAttachment[0].data"
+                              [download]="question.questionAttachment[0].fileName"
+                              *ngIf="question.questionAttachment[0].type == 'doc'">{{question.questionAttachment[0].fileName}}</a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="custom-control custom-radio ques-display"
+                  *ngFor="let anwr of question.objectiveAnswer; let a=index;">
+                  <div class="ques">
+                     <span class="ques-no"></span>
+                     <div class="ques-text">
+                        <input type="radio" class="custom-control-input" id="q{{question.position}}_{{a}}" [checked] = "withAnswerKey===true?question.objectiveAnswerIsCorrect[a]:false" disabled/>
+                        <label class="custom-control-label" for="q{{question.position}}_{{a}}" [appMath]="anwr"></label>
+                     </div>
+                  </div>
+               </div>
+         </div>
+         <div *ngSwitchCase="question.questionTypeId === 3">
+               <div class="question-control ques-display">
+                  <div class="ques">
+                     <h5 class="ques-no">{{question.position}})</h5>
+                     <h5 class="ques-text"><p class="d-block wrap"  [appMath]="question.questionText" (click)="openImage($event)"></p></h5>
+                  </div>
+                  <span *ngIf="withMarks" class="mark">[{{question.actualMarks}} marks]</span>
+               </div>
+               <div class="question-control ques-display">
+                  <div class="ques">
+                     <span class="ques-no"></span>
+                     <div class="ques-text">
+                        <div class="answer-image" *ngIf="question.questionAttachment !== null">
+                           <img alt="Answer Image" [src]="question.questionAttachment[0].data" (click)="open(question.questionAttachment[0].data)"
+                              *ngIf="question.questionAttachment[0].type == 'image'">
+                           <a [href]="question.questionAttachment[0].data"
+                              [download]="question.questionAttachment[0].fileName"
+                              *ngIf="question.questionAttachment[0].type == 'doc'">{{question.questionAttachment[0].fileName}}</a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="custom-control custom-checkbox ques-display"
+                  *ngFor="let anwr of question.objectiveAnswer; let b=index">
+                  <div class="ques">
+                     <span class="ques-no"></span>
+                     <div class="ques-text">
+                        <input type="checkbox" class="custom-control-input" id="q{{question.position}}_{{b}}"
+                           value="{{b+1}}" [checked] = "withAnswerKey===true?question.objectiveAnswerIsCorrect[b]:false" disabled/>
+                        <label class="custom-control-label" for="q{{question.position}}_{{b}}" [appMath]="anwr"></label>
+                     </div>
+                  </div>
+               </div>
+         </div>
+         <div *ngSwitchCase="question.questionTypeId === 7">
+               <div class="question-control ques-display">
+                  <div class="ques">
+                     <h5 class="ques-no">{{question.position}})</h5>
+                     <h5 class="ques-text"><p class="d-block wrap"  [appMath]="question.questionText" (click)="openImage($event)"></p></h5>
+                  </div>
+                  <span *ngIf="withMarks" class="mark">[{{question.actualMarks}} marks]</span>
+               </div>
+               <div class="question-control ques-display">
+                  <div class="ques">
+                     <span class="ques-no"></span>
+                     <div class="ques-text">
+                        <div class="answer-image" *ngIf="question.questionAttachment !== null">
+                           <img alt="Answer Image" [src]="question.questionAttachment[0].data" (click)="open(question.questionAttachment[0].data)"
+                              *ngIf="question.questionAttachment[0].type == 'image'">
+                           <a [href]="question.questionAttachment[0].data"
+                              [download]="question.questionAttachment[0].fileName"
+                              *ngIf="question.questionAttachment[0].type == 'doc'">{{question.questionAttachment[0].fileName}}</a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="fill-in-blank-answer" *ngIf="withAnswerKey">
+               <div *ngFor="let anwr of question.objectiveAnswer; let a=index" >
+                     <div class="question-control d-flex ques-display">
+                           <div class="ques">
+                              <span class="ques-no"></span>
+                              <div class="ques-text">
+                                 <h5 [appMath]="'Answer ('+(a+1)+'): '+ anwr"></h5>
+                              </div>
+                           </div>
+                     </div>
+               </div>
+               </div>
+         </div>
+         <div *ngSwitchCase="question.questionTypeId === 4 || question.questionTypeId === 5 || question.questionTypeId === 6">
+               <div class="question-control ques-display">
+                  <div class="ques">
+                     <h5 class="ques-no">{{question.position}})</h5>
+                     <h5 class="ques-text"><p class="d-block wrap"  [appMath]="question.questionText" (click)="openImage($event)"></p></h5>
+                  </div>
+                  <span *ngIf="withMarks" class="mark">[{{question.actualMarks}} marks]</span>
+               </div>
+               <div class="answer-image question-control ques-display" *ngIf="question.questionAttachment !== null">
+                  <div class="ques">
+                     <span class="ques-no"></span>
+                     <div class="ques-text">
+                        <img alt="Answer Image" [src]="question.questionAttachment[0].data" (click)="open(question.questionAttachment[0].data)"
+                           *ngIf="question.questionAttachment[0].type == 'image'">
+                        <a [href]="question.questionAttachment[0].data"
+                           [download]="question.questionAttachment[0].fileName"
+                           *ngIf="question.questionAttachment[0].type == 'doc'">{{question.questionAttachment[0].fileName}}</a>
+                     </div>
+                  </div>
+               </div>
+               <div *ngIf="withAnswerKey" class="question-control ques-display">
+                  <div class="ques">
+                     <span class="ques-no"></span>
+                     <div class="ques-text">
+                        <mat-chip-list #chipList aria-label="Keywords selection">
+                           <h5 *ngIf="question.keyWords!==null" class="keyword">Keywords :</h5>
+                           <mat-chip *ngFor="let keyword of question.keyWords">
+                              {{ keyword }}
+                           </mat-chip>
+                        </mat-chip-list>
+                     </div>
+                  </div>
+               </div>
+               <br>
+               <div class="question-control ques-display" *ngIf="withAnswerKey">
+                  <div class="ques">
+                     <span class="ques-no"></span>
+                     <div class="ques-text">
+                        <div class="flex-row" *ngIf="question.subjectiveAnswer!==null">
+                           <h5>Answer : </h5>
+                           <p [appMath]="question.subjectiveAnswer" (click)="openImage($event)"></p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="answer-image question-control ques-display" *ngIf="question.answerAttachment!=null && withAnswerKey">
+                  <div class="ques">
+                     <span class="ques-no"></span>
+                     <div class="ques-text">
+                        <h5>Answer Attachment(s)</h5>
+                        <div *ngFor="let ansAttach of question.answerAttachment" class="pad">
+                           <img alt="Answer Image"  [src]="ansAttach.data" *ngIf="ansAttach.type == 'image'" (click)="open(ansAttach.data)">
+                           <a [href]="ansAttach.data" [download]="ansAttach.fileName" *ngIf="ansAttach.type == 'doc'">{{ansAttach.fileName}}</a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         <div *ngSwitchCaseDefault></div>
+      </div>
+   </div>
+ </div>

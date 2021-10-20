@@ -1,0 +1,63 @@
+<h5 mat-dialog-title>Test</h5>
+<mat-dialog-content class="setup-test-form">
+    <ng-container *ngIf="loaded">
+        <form [formGroup]="form">
+            <div class="row">
+                <mat-form-field class="col-md-12">
+                    <mat-label>Test Heading (Maximum 30 characters)</mat-label>
+                    <input matInput placeholder="Enter Test Heading" formControlName="examName" required/>
+                </mat-form-field>
+                <mat-form-field class="col-md-6">
+                    <mat-label class="date-label">Start Date</mat-label>
+                    <input matInput [matDatepicker]="startDate" formControlName="startDate" [min]="minStartDate" [max]="maxStartDate" (dateChange)="onStartDateChange($event)"/>
+                    <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                    <mat-datepicker #startDate color="primary"></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="col-md-6">
+                    <mat-label class="date-label">End Date</mat-label>
+                    <input matInput [matDatepicker]="endDate" [min]="minEndDate"[max]="maxEndDate" formControlName="endDate" />
+                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                    <mat-datepicker #endDate color="primary"></mat-datepicker>
+                </mat-form-field>
+
+                <app-common-grade-division class="col-12" [config]="config" [filterType]="'Test'" formControlName="gradeDivisionSubject"
+                (subjectSelectionChanged)="onSubjectSelection($event)"></app-common-grade-division>
+
+                <mat-form-field class="col-lg-6 col-md-6">
+                    <mat-label>Paper</mat-label>
+                    <mat-select formControlName="paper" (selectionChange)="onPaperSelection()" required>
+                        <mat-option *ngFor="let paper of papers" [value]="paper.testPaperId">
+                            {{ paper.testPaperName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-lg-2 col-md-3 col-sm-6">
+                    <mat-label>Total Marks</mat-label>
+                    <input matInput placeholder="Enter Marks" formControlName="totalMarks" required/>
+                </mat-form-field>
+                <mat-form-field class="col-lg-4 col-md-3 col-sm-6">
+                    <mat-label>Duration(In Minutes)</mat-label>
+                    <input matInput placeholder="Enter Duration" formControlName="examDuration" maxlength="3" integerOnly required>
+                </mat-form-field>
+                <mat-form-field class="col-md-12">
+                    <mat-label>Quick Note for Students</mat-label>
+                    <input matInput placeholder="Will be displayed in the exam list" formControlName="notes" />
+                </mat-form-field>
+
+                <mat-form-field class="col-md-12">
+                    <mat-label>Test Paper Detailed Instructions</mat-label>
+                    <textarea matInput placeholder="Detailed Instructions to be displayed in the paper" rows="5" formControlName="testInstructions"></textarea>
+                </mat-form-field>
+
+            </div>
+        </form>
+    </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-between">
+    <button mat-raised-button mat-dialog-close color="orange">Cancel</button>
+    <button mat-raised-button color="blue" [disabled]="!form.valid" (click)='onSubmit(form)'>
+        {{this.test4Edit ? 'Update' : 'Create Test'}}</button>
+</mat-dialog-actions>
+<ng-container *ngIf="!loaded">
+    <mat-spinner></mat-spinner>
+</ng-container>

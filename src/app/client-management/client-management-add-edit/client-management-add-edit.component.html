@@ -1,0 +1,50 @@
+<h5 mat-dialog-title>Add Edit Client</h5>
+<mat-dialog-content class="mat-form">
+    <div class="row">
+        <mat-form-field class="col-lg-12">
+            <mat-label>Client Name</mat-label>
+            <input matInput value="clientName">
+        </mat-form-field>
+        <mat-form-field class="col-lg-12">
+            <mat-label>Client Display Name</mat-label>
+            <input matInput value="displayName">
+        </mat-form-field>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <mat-label>Select Logo Image</mat-label>
+        </div>
+        <div class="col-lg-8">
+            <div class="fileuploadbtn">
+              <input type="file" id="file" id="fileUpload" multiple (change)="addDocument($event)" />
+              <button mat-flat-button color="orange">
+                <i class="fas fa-upload"></i> Upload
+              </button>
+            </div>
+          </div>
+    </div>
+    <div class="row">
+          <div class="col-lg-12 answer-attachement-list">
+            <pre style="display: none;">{{ myFiles | json }}</pre>
+            <mat-list class="attached-file-detail">
+              <mat-list-item *ngFor="let file of myFiles" class="d-flex flex-between">
+                <span class="file-name">{{ file.name }}</span>
+                <i class="far fa-trash-alt ml-auto" ></i>
+              </mat-list-item>
+            </mat-list>
+          </div>
+    </div>
+    <div class="row">
+      <mat-form-field class="col-lg-6">
+        <mat-label>Is Active</mat-label>
+        <mat-select>
+            <mat-option value="No">No</mat-option>
+            <mat-option value="Yes">Yes</mat-option>
+        </mat-select>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-between">
+    <button mat-raised-button mat-dialog-close color="orange">Cancel</button>
+    <button mat-raised-button [mat-dialog-close]="true" color="blue">Create</button>
+</mat-dialog-actions>

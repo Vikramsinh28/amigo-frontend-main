@@ -1,0 +1,17 @@
+.close-button{
+    float: right;
+}
+
+.mat-icon-button{
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+}
+
+.mat-icon-button ::ng-deep .mat-button-focus-overlay {
+    display: none;
+}
+
+.close-icon{
+    vertical-align: unset;
+}

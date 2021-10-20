@@ -1,0 +1,88 @@
+<table mat-table [dataSource]="remarkDataSource" multiTemplateDataRows class="common-table" matSort>
+        <ng-container matColumnDef = "isImportant">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+            <td mat-cell *matCellDef="let element" data-title="Important: ">
+                <i class="fas fa-star star"*ngIf="element.isImportant"></i>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef = "Shared Date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Shared Date</th>
+            <td mat-cell *matCellDef="let element" data-title="Shared Date: ">
+                {{ element['sharedDate']}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef = "Remark Type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Remark Type</th>
+            <td mat-cell *matCellDef="let element" data-title="Remark Type: ">
+                <button mat-icon-button *ngIf="element.remarkType == '0'" matTooltip="Neutral"><i class="far fa-meh neutral"></i></button>
+                <button mat-icon-button *ngIf="element.remarkType == '1'" matTooltip="Positive"><i class="far fa-smile positive"></i></button>
+                <button mat-icon-button *ngIf="element.remarkType == '-1'" matTooltip="Negative"><i class="far fa-frown negative"></i></button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef = "Headline">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Headline</th>
+            <td mat-cell *matCellDef="let element" data-title="Headline: ">
+                {{ (element['headline'].length > 70) ? (element['headline'] | slice:0:70) + '..' :
+                (element['headline']) }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef = "isShared">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element; let rowNo = dataIndex">
+                <button mat-button color="blue"
+                    *ngIf="element.sharedDate===null && remarkDataSource.data.length > 0">
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                </button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef = "expand_icon">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element" class="expand-icon">
+                <i class="fas fa-chevron-down"></i>
+            </td>
+        </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="remarkColumnsToDisplay.length">
+            <div class="element-detail" [@detailExpand]="element == expandedNotice ? 'expanded' : 'collapsed'">
+                <div class="element-diagram">
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">Headline :</mat-label>
+                        {{ element['headline'] }}
+                    </div>
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">Content :</mat-label>
+                        {{ element['communicationText'] }}
+                    </div>
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">Remark Type :</mat-label>
+                        <button mat-icon-button *ngIf="element.remarkType == '0'" matTooltip="Neutral"><i class="far fa-meh neutral"></i></button>
+                        <button mat-icon-button *ngIf="element.remarkType == '1'" matTooltip="Positive"><i class="far fa-smile positive"></i></button>
+                        <button mat-icon-button *ngIf="element.remarkType == '-1'" matTooltip="Negative"><i class="far fa-frown negative"></i></button>
+                    </div>
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">Shared Date :</mat-label>
+                        {{ element['sharedDate']}}
+                    </div>
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">Attachment :</mat-label>
+                        <span class="attachmentFile">{{
+                            element['attachmentFileName'] }}</span>
+                    </div>
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">Sent by:</mat-label>
+                        {{element['updateUserName'] }}
+                    </div>
+
+                </div>
+            </div>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="remarkColumnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let element; columns: remarkColumnsToDisplay; let row" class="element-row"
+        [class.expanded-row]="expandedNotice === element"
+        (click)="expandedNotice = expandedNotice === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+</table>

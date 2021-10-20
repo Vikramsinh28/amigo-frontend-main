@@ -1,0 +1,128 @@
+.mat-card {
+    height: 100%;
+    text-align: center;
+    background-color: #FFF;
+    border-radius: 15px;
+    position: relative;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    color: #686868;
+      &::before {
+        content: '';
+        background: url(/assets/images/dashbaord-bg-cards.svg) no-repeat;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        height: 124px;
+        width: 99px;
+    }
+    ::ng-deep .mat-card-header-text {
+        margin: 0;
+    }
+    .card-icon {
+        display: flex;
+        height: 66px;
+        width: 66px;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        justify-content: center;
+        .mat-card-image {
+            margin-top: 0;
+            align-self: center;
+        }
+    }
+    .mat-card-title {
+        font-size: 18px;
+        font-weight: 500;
+        position: relative;
+    }
+    .mat-card-content {
+        font-size: 12px;
+        line-height: 20px;
+        font-weight: normal;
+        position: relative;
+    }
+}
+
+.enabled{
+    cursor: pointer;
+    &:hover {
+        background-color: #E4E4E4;
+        &:before {
+            display: none;
+        }
+    }
+}
+
+.disabled{
+    cursor: not-allowed;
+}
+
+.smart-navigation .row:first-child .smart-menu-title {
+    margin-top: -15px;
+}
+
+.smart-menu-title {
+    background-color: transparent;
+}
+
+.card-col {
+    margin-bottom: 30px;
+}
+
+//==== 5 column custom CSS ===//
+.col-02,
+.col-sm-02,
+.col-md-02,
+.col-lg-02,
+.col-xl-02 {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-02 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+    max-width: 20%;
+}
+
+@media (min-width: 540px) {
+    .col-sm-02 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 20%;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+}
+
+@media (min-width: 720px) {
+    .col-md-02 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 20%;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+}
+
+@media (min-width: 960px) {
+    .col-lg-02 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 20%;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+}
+
+@media (min-width: 1140px) {
+    .col-xl-02 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 20%;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+}

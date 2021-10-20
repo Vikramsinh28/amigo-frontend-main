@@ -1,0 +1,64 @@
+<ng-container [formGroup]="commContentForm">
+    <div class="question-list">
+        <div class="question-detail row">
+            <div class="col-lg-7 col-xl-8">
+                <div class="white-box margin">
+                    <mat-form-field class="w-100">
+                        <mat-label>Headline</mat-label>
+                        <input matInput formControlName="headline" required maxlength="300" />
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <mat-label>{{contentLabel}}</mat-label>                        
+                        <textarea matInput formControlName="message" rows="10" required maxlength="5000"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-lg-5 col-xl-4 margin">
+                <div class="white-box">
+                    <div class="col-12 check">
+                        <mat-slide-toggle formControlName="shareWithStudents">
+                            <span>Share with students</span>
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="col-12 check" *ngIf="communicationType !=='Assignment'">
+                        <mat-slide-toggle formControlName="isImportant">
+                            <span>Mark as important</span>
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="col-12 check" *ngIf="communicationType==='Remark'">
+                        <label id="remark-type-label" class="remark-label">Remark Type</label>
+                        <mat-button-toggle-group aria-labelledby="remark-type-label" formControlName="remarkType">
+                            <mat-button-toggle value="0" matTooltip="Neutral"><i class="far fa-meh neutral"></i></mat-button-toggle>
+                            <mat-button-toggle value="1" matTooltip="Positive"><i class="far fa-smile positive"></i></mat-button-toggle>
+                            <mat-button-toggle value="-1" matTooltip="Negative"><i class="far fa-frown negative"></i></mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                    <mat-form-field class="col-sm-7 col-md-5 col-lg-12 col-xl-9" *ngIf="communicationType==='Assignment'">
+                        <mat-label>Choose Worksheet to share</mat-label>
+                        <mat-select formControlName="worksheet">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let testPaper of testPapers" [value]="testPaper.testPaperId">
+                                {{testPaper.testPaperName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="col-12 col-sm-6 col-lg-12 margin" *ngIf="communicationType==='Assignment' || communicationType==='UEvent' || communicationType==='Notice'">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{dateLabel}}<span class="text-red" *ngIf="communicationType==='UEvent'">*</span></mat-label>
+                            <input matInput [matDatepicker]="picker" [min]="minDate" [max]="maxDate" formControlName = "dueImpDate"
+                                #dateField readonly >
+                                <mat-icon matDatepickerToggleIcon (click)="clearDate($event)" *ngIf="dateField.value">clear</mat-icon>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <span>Share external document(s) :</span>
+                    <div class="col-md-7 col-lg-12 d-flex upload margin">
+                        <app-file-upload formControlName = "attachment" MAX_FILE_COUNT="1" VALID_FILE_EXT=".doc,.docx,.png,.jpg,.jfif,.pdf" [files]="attachmentFile" MAX_FILE_SIZE="2084" (downloadFileEvent) = "downloadFile($event)">
+                        </app-file-upload>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

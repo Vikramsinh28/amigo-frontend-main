@@ -1,0 +1,384 @@
+<div class="setup-paper">
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="row question-list-filter">
+                <div class="col-12">
+                    <div class="row white-box">
+                        <div class="col-12">
+                            <app-common-grade-subject [config]="config" [filterType]="'Paper-Add'"></app-common-grade-subject>
+                        </div>
+                        <div class="col-12 text-right">
+                            <button id='refresh' mat-button  (click)='loadQuestions()' color="blue">
+                                <i class="fas fa-search"></i> &nbsp; Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table mat-table [dataSource]="questionDataSource" #tblQuestion id="tblQuestion" multiTemplateDataRows
+                        class="common-table" #TableOneSort="matSort" matSort>
+
+                        <ng-container matColumnDef="order">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">#</th>
+                            <td mat-cell *matCellDef="let element;let row=dataIndex" data-title="#">
+                                {{this.paginator.pageIndex * this.paginator.pageSize + row + 1 }}.</td>
+                        </ng-container>
+                        <!-- Question Type Column -->
+                        <ng-container matColumnDef="question_type_name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+                            <td mat-cell *matCellDef="let row" data-title="Type: ">
+                                <img class="qt-type {{row.quesTypeCssClass}}" height="25" width="25"
+                                    matTooltip="{{ row.question_type_name }}"></td>
+                        </ng-container>
+
+                        <!-- Question Column -->
+                        <ng-container matColumnDef="question_text">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Question</th>
+                            <td mat-cell *matCellDef="let row" class="question-type" data-title="Question:">
+                                <p class="wrap" [appMath]="row.QuestionTextExtract"></p>
+                            </td>
+                        </ng-container>
+
+                        <!-- Difficulty Level Column -->
+                        <ng-container matColumnDef="Skill Assesed">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Skill Assesed</th>
+                            <td mat-cell *matCellDef="let row" data-title="Skill Assesed: " class="text-center">
+                                <span>{{ row.skill }}</span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Indicative Marks Column -->
+                        <ng-container matColumnDef="indicative_marks">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Marks</th>
+                            <td mat-cell *matCellDef="let row" data-title="Marks: ">{{ row.indicative_marks }}</td>
+                        </ng-container>
+
+                        <!-- Add Column -->
+                        <ng-container matColumnDef="add">
+                            <th mat-header-cell *matHeaderCellDef> Add To Paper</th>
+                            <td mat-cell *matCellDef="let row" class="mat-column-add" data-title="Add To Paper">
+                                <button mat-icon-button (click)="onRowAddClick(row, $event)"> <i class="fas fa-plus-square"></i>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                            <td mat-cell *matCellDef="let row" class="mat-column-delete">
+                                <button id='actionRow' mat-icon-button [matMenuTriggerFor]="menu1" aria-label="Action Icon"
+                                    (click)="$event.stopPropagation();">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <mat-menu #menu1="matMenu" class="menu-items">
+                                    <button mat-menu-item (click)="report(row)"><i class="fas fa-bug"></i> &nbsp; Report an
+                                        Issue</button>
+                                </mat-menu>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
+                        </ng-container>
+
+                        <!-- Expand Column -->
+                        <ng-container matColumnDef="expand_icon">
+                            <th mat-header-cell *matHeaderCellDef>View Details</th>
+                            <td mat-cell *matCellDef="let row; let index = dataIndex" class="expand-icon"
+                            (click)="onQuestionToggle(row, index)">
+                                <i class="fas fa-chevron-down"></i>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element" [attr.colspan]="questionColumnsToDisplay.length">
+                                <div class="element-detail" [@detailExpand]="
+                              element == expandedQuestion ? 'expanded' : 'collapsed'
+                            ">
+                                    <div class="element-diagram">
+                                        <div class="diagram-detail">
+                                            <mat-label class="diagram-label">
+                                                Chapter/Topic:
+                                            </mat-label>
+                                            {{ element.chapter_text }} / {{ element.topic_text }}
+                                        </div>
+                                        <div class="diagram-detail">
+                                            <mat-label class="diagram-label">Question (Full Text):
+                                            </mat-label>
+                                            <p class="d-block wrap" [appMath]="element['question_text']"></p>
+                                        </div>
+
+                                        <div
+                                            *ngIf="element['qb_question_type_id'] === 4 || element['qb_question_type_id'] === 5 || element['qb_question_type_id'] === 6">
+                                            <div class="diagram-detail">
+                                                <mat-label class="diagram-label">Answer: </mat-label>
+                                                <span *ngIf="element['subjective_answer']!==null" class="d-block" [appMath]="element['subjective_answer']"></span>
+                                            </div>
+                                        </div>
+                                        <div
+                                            *ngIf="element['qb_question_type_id'] === 1 || element['qb_question_type_id'] === 2 || element['qb_question_type_id'] === 3 || element['qb_question_type_id'] === 7">
+                                            <div class="diagram-detail">
+                                                <mat-label class="diagram-label">Answer: </mat-label>
+                                                <div *ngIf="element['objective_answers']!==null">
+                                                    <span class="d-block"
+                                                        *ngFor="let answ of element['objective_answers'];let a=index;">
+                                                        <div class="d-flex flex-column">
+                                                            <span class="option-no">({{a+1}})</span>
+                                                            <span [appMath]="answ.optionText +'  '"></span><i
+                                                            class="fas fa-check correct" *ngIf="answ.isCorrect===true"></i>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="diagram-grid">
+                                            <div class="diagram-detail">
+                                                <mat-label class="diagram-label">Difficulty Level:</mat-label>
+                                                <span class="dl-level {{element.difficultyCssClass}}">
+                                                    {{ element['difficulty_level_name'] }}</span>
+                                            </div>
+                                            <div class="diagram-detail">
+                                                <mat-label class="diagram-label">Indicative Marks:
+                                                </mat-label>
+                                                {{ element.indicative_marks }}
+                                            </div>
+                                            <div class="diagram-detail">
+                                                <mat-label class="diagram-label">Minutes To Solve:
+                                                </mat-label>
+                                                {{ element.average_minutes }}
+                                            </div>
+                                            <div class="diagram-detail" *ngIf="element.create_user && element.create_user!=' '">
+                                                <mat-label class="diagram-label">Created By: </mat-label>
+                                                {{ element.create_user }}
+                                            </div>
+                                            <div class="diagram-detail" *ngIf="element.update_user && element.update_user!=' '">
+                                                <mat-label class="diagram-label">Last Edited By:
+                                                </mat-label>
+                                                {{ element.update_user }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="questionColumnsToDisplay"></tr>
+                        <tr mat-row *matRowDef="let element; columns: questionColumnsToDisplay" class="element-row"
+                            [class.expanded-row]="expandedQuestion === element"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+                    </table>
+                    <mat-paginator #paginator [pageSize]=5></mat-paginator>
+                </div>
+            </div>
+            <div class="row horizontal-line">
+                <div class="col-12">
+                    <mat-divider></mat-divider>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 selected-table">
+            <div class="row white-box">
+                <div class="col-12">
+                    <div class="row justify-content-center" style="margin:10px;">
+                        <mat-form-field class="col">
+                            <mat-label>Paper Name</mat-label>
+                            <input matInput #testNameCnt id="testNameCnt" [specialCharacter]=4 [disabled]="disableButton"
+                                [(ngModel)]="testName" (keypress)="onKeyPress($event)" maxlength="300" required />
+                            <mat-hint *ngIf="isSpecialCharacterPress">You can only use ( A - Z , a - z , 0 - 1 , - , _ ).
+                            </mat-hint>
+                        </mat-form-field>
+                        <div class="col justify-content-center Composition">
+                             <button mat-icon-button [matMenuTriggerFor]="menuComposition" matTooltip="View Composition">
+                                    <i class="fas fa-ellipsis-v" ></i>
+                                </button>
+                            <mat-menu #menuComposition="matMenu">
+                                <button mat-menu-item (click)="displayQuestionTypeChart()">By Question-type</button>
+                                <button mat-menu-item (click)="displayCTWeightageChart()">By Chapter-topic Weightage</button>
+                            </mat-menu>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="question-for-paper">
+                        <table mat-table [dataSource]="selectedQuestionDataSource" multiTemplateDataRows class="common-table" matSort
+                            #TableTwoSort="matSort">
+                            <!-- Order Column -->
+                            <ng-container matColumnDef="order">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                                <td mat-cell *matCellDef="let row" data-title="#">{{ row.position }}.</td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <!-- Question Type Column -->
+                            <ng-container matColumnDef="question_type_name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+                                <td mat-cell *matCellDef="let row" data-title="Type">
+                                    <img class="qt-type {{row.quesTypeCssClass}}" height="25" width="25"
+                                            matTooltip="{{ row.question_type_name }}"></td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <!-- Question Column -->
+                            <ng-container matColumnDef="question_text">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Questions For Paper</th>
+                                <td mat-cell *matCellDef="let row" data-title="Question">
+                                    <p class="d-block wrap" [appMath]="row['QuestionTextExtract']"></p>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <!-- Skill Assesed Column -->
+                            <ng-container matColumnDef="Skill Assesed">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Skill Assesed</th>
+                                <td mat-cell *matCellDef="let row" data-title="Skill Assesed" class="text-center">
+                                    <span>{{ row.skill }}</span>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <!-- Actual Marks Column -->
+                            <ng-container matColumnDef="actual_marks">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Actual Marks</th>
+                                <td mat-cell *matCellDef="let row;" class="text-center" data-title="Actual Marks">
+                                    <input matInput name="actual_marks" (click)="$event.stopPropagation();"
+                                        (change)="checkIsGreaterThanZero(row.actual_marks, row.position)" [disabled]="disableButton"
+                                        [(ngModel)]="row.actual_marks" floatOnly maxlength="5"
+                                        style="border: 1px; border-color: black; background-color: lightgray; width: 50px;" />
+                                </td>
+                                <td mat-footer-cell floatOnly *matFooterCellDef class="total-cell">Total: {{total_actual_marks | number
+                                    : '1.2-2'}} </td>
+                            </ng-container>
+
+                            <!-- Delete Column -->
+                            <ng-container matColumnDef="delete">
+                                <th mat-header-cell *matHeaderCellDef>Remove From Paper</th>
+                                <td mat-cell *matCellDef="let row" class="mat-column-remove" data-title="Remove From Paper">
+                                    <button mat-icon-button (click)="onRowDeleteClick(row, $event)"><i
+                                            class="far fa-trash-alt"></i></button>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <!-- Action Column -->
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                <td mat-cell *matCellDef="let row" class="mat-column-delete">
+                                    <button id='actionRow' mat-icon-button [matMenuTriggerFor]="menu2" aria-label="Action Icon"
+                                        (click)="$event.stopPropagation();">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <mat-menu #menu2="matMenu" class="menu-items">
+                                        <button mat-menu-item (click)="report(row)"><i class="fas fa-bug"></i> &nbsp; Report an
+                                            Issue</button>
+                                    </mat-menu>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <!-- Expand Column -->
+                            <ng-container matColumnDef="expand_icon">
+                                <th mat-header-cell *matHeaderCellDef>View Details</th>
+                                <td mat-cell *matCellDef="let row; let index=dataIndex" class="expand-icon"
+                                (click)="onSelectedQuestionToggle(row, index)">
+                                    <i class="fas fa-chevron-down"></i>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="expandedDetail_2">
+                                <td mat-cell *matCellDef="let element" [attr.colspan]="selectedquestionsColumnsToDisplay.length">
+                                    <div class="element-detail" [@detailExpand]="
+                                    element == expandedQuestion_2 ? 'expanded' : 'collapsed'
+                                  ">
+                                        <div class="element-diagram">
+                                            <div class="diagram-detail">
+                                                <mat-label class="diagram-label">
+                                                    Chapter/Topic:
+                                                </mat-label>
+                                                {{ element.chapter_text }} / {{ element.topic_text }}
+                                            </div>
+                                            <div class="diagram-detail">
+                                                <mat-label class="diagram-label">Question (Full Text):
+                                                </mat-label>
+                                                <p class="d-block wrap" [appMath]="element['question_text']"></p>
+                                            </div>
+
+                                            <div
+                                                *ngIf="element['qb_question_type_id'] === 4 || element['qb_question_type_id'] === 5 || element['qb_question_type_id'] === 6">
+                                                <div class="diagram-detail">
+                                                    <mat-label class="diagram-label">Answer: </mat-label>
+                                                    <span *ngIf="element['subjective_answer']!==null" class="d-block" [appMath]="element['subjective_answer']"></span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                *ngIf="element['qb_question_type_id'] === 1 || element['qb_question_type_id'] === 2 || element['qb_question_type_id'] === 3 || element['qb_question_type_id'] === 7">
+                                                <div class="diagram-detail">
+                                                    <mat-label class="diagram-label">Answer: </mat-label>
+                                                    <div *ngIf="element['objective_answers']!==null">
+                                                        <span class="d-block"
+                                                            *ngFor="let answ of element['objective_answers'];let a=index;">
+                                                            <div class="d-flex flex-column">
+                                                                <span class="option-no">({{a+1}})</span>
+                                                                <span [appMath]="answ.optionText +'  '"></span><i
+                                                                class="fas fa-check correct" *ngIf="answ.isCorrect===true"></i>
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="diagram-grid">
+                                                <div class="diagram-detail">
+                                                    <mat-label class="diagram-label">Difficulty Level:</mat-label>
+                                                    <span class="dl-level {{element.difficultyCssClass}}">
+                                                        {{ element['difficulty_level_name'] }}</span>
+                                                </div>
+                                                <div class="diagram-detail">
+                                                    <mat-label class="diagram-label">Indicative Marks:
+                                                    </mat-label>
+                                                    {{ element.indicative_marks }}
+                                                </div>
+                                                <div class="diagram-detail">
+                                                    <mat-label class="diagram-label">Minutes To Solve:
+                                                    </mat-label>
+                                                    {{ element.average_minutes }}
+                                                </div>
+                                                <div class="diagram-detail" *ngIf="element.create_user && element.create_user!=' '">
+                                                    <mat-label class="diagram-label">Created By: </mat-label>
+                                                    {{ element.create_user }}
+                                                </div>
+                                                <div class="diagram-detail" *ngIf="element.update_user && element.update_user!=' '">
+                                                    <mat-label class="diagram-label">Last Edited By:
+                                                    </mat-label>
+                                                    {{ element.update_user }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="selectedquestionsColumnsToDisplay"></tr>
+                            <tr mat-row *matRowDef="let element; columns: selectedquestionsColumnsToDisplay" class="element-row"
+                                [class.expanded-row]="expandedQuestion_2 === element"></tr>
+                            <tr mat-row *matRowDef="let row; columns: ['expandedDetail_2']" let i="dataIndex;" class="detail-row"></tr>
+                            <tr mat-footer-row *matFooterRowDef="selectedquestionsColumnsToDisplay"></tr>
+                        </table>
+                        <mat-paginator #paginator2 [pageSize]=10 showFirstLastButtons></mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <mat-divider class="divider-end margin"></mat-divider>
+    <div class="button-row">
+        <div class="action-buttons">
+            <div>
+                <button mat-raised-button color="orange" (click)="onCancel()">Cancel/Return</button>
+            </div>
+            <div class="right-buttons">
+                <button mat-raised-button color="blue" (click)="confirmFreeze()"
+                    [disabled]="disableButton">Freeze</button>
+                <button mat-raised-button color="blue" (click)="checkPaperIsFrozenOrDraft()"
+                    [disabled]="disablePreviewButton">{{perviewButtonLabel}}</button>
+                <button mat-raised-button color="blue" (click)="savePaper(false, false)" [disabled]="disableButton">Save
+                    Draft</button>
+            </div>
+        </div>
+    </div>
+</div>

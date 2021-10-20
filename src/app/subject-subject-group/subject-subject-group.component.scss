@@ -1,0 +1,164 @@
+.blue-border-box {
+  border: 1px solid #0067e3;
+  padding: 20px 30px 30px 20px;
+  border-radius: 16px;
+  margin: 0 30px;
+  margin-bottom: 30px;
+  min-height: 630px;
+  -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+  -moz-box-shadow: -2px 2px 7px #e4e4e4;
+  box-shadow: -2px 2px 7px #e4e4e4;
+  .head-node-label {
+    padding-top: 12px;
+    color: #0067e3;
+  }
+}
+
+.container-fluid{
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.add-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+.add-subject{
+  float: right;
+}
+
+.label{
+  padding-top: 10px;
+  padding-left: 0px;
+}
+
+.subject-table{
+  margin-top: 15px;
+  max-height: 370px;
+  overflow: scroll;
+}
+
+.edit-save {
+  display: inline;
+}
+.icon{
+  margin-left: 20px;
+}
+
+.select-icon{
+  margin-right: 20px;
+}
+
+.table-select {
+  max-width: 150px;
+  padding-right: 15px;
+}
+.table-date {
+  max-width: 130px;
+  padding-right: 15px;
+}
+
+.mat-stroked-button {
+  line-height: 24px;
+}
+
+.yearChip{
+  display: inline;
+}
+
+.btn-visible{
+  visibility: visible;
+}
+
+.btn-hidden{
+  visibility: hidden;
+}
+.academic-year-round-label{
+  background-color: #056de4;
+  color: #ffffff;
+  border-radius: 25px;
+  padding: 3px;
+  margin-left: 10px;
+}
+
+.margin{
+  margin-top: 20px;
+}
+
+.center{
+  text-align: center;
+}
+
+.group-table tr.mat-row:hover {
+  background-color: unset;
+}
+
+.group-table .mat-cell:first-child,
+.group-table .mat-cell:nth-child(2),
+.group-table .mat-cell:last-child{
+  background-color: #e7ecf3;
+}
+
+.tbl-col-edit{
+  width: unset;
+}
+
+.chips{
+  padding-left: 10px;
+}
+
+.subject-group-col:hover{
+  background-color: lightyellow;
+}
+
+.mat-standard-chip {    
+  height: auto !important;
+}
+
+@media only screen and (max-width:767px){
+  .mat-row:last-child{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+  
+  .margin{
+    margin-top: 20px;
+  }
+  
+  .grade,.year-drop{
+    margin-top: 15px;
+  }
+
+  .btn-group{
+    margin-top: 40px;
+    margin-bottom: 10px;
+  }
+}
+
+@media only screen and (min-width:767px) and (max-width:991px){
+  .grade{
+    margin-top: 15px;
+  }
+}
+
+@media only screen and (max-width:495px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: column;
+  }
+
+  button + button{
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (min-width:495px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+  }
+}

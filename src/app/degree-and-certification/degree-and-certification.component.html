@@ -1,0 +1,55 @@
+
+    <table mat-table [dataSource]="dataSource" matSort class="common-table degree-table">
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-column"> Sr. No. </th>
+            <td mat-cell *matCellDef="let element" data-title="Sr. No.:"> {{element.student_degree_and_certification_id}} </td>
+        </ng-container>
+
+        <!-- Student Reg No -->
+        <ng-container matColumnDef="institute_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-column"> Institute Name </th>
+            <td mat-cell *matCellDef="let element" data-title="Institute Name:"> {{element.institute_name}} </td>
+        </ng-container>
+
+        <!-- Student Name -->
+        <ng-container matColumnDef="course_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-column"> Course Name </th>
+            <td mat-cell *matCellDef="let element" data-title="Course Name:"> {{element.course_name}} </td>
+        </ng-container>
+
+        <!-- Achievement Participation Column -->
+        <ng-container matColumnDef="start_date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-column"> Start Date </th>
+            <td mat-cell *matCellDef="let element" data-title="Start Date:"> {{element.start_date}} </td>
+        </ng-container>
+
+        <!-- Year Column -->
+        <ng-container matColumnDef="end_date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-column"> End Date </th>
+            <td mat-cell *matCellDef="let element" data-title="End Date:"> {{element.end_date}} </td>
+        </ng-container>
+
+        <!-- Month Column -->
+        <ng-container matColumnDef="major_subject">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-column"> Major Subject </th>
+            <td mat-cell *matCellDef="let element" data-title="Major Subject:"> {{element.major_subject}} </td>
+        </ng-container>
+
+        <!-- Tag Column -->
+        <ng-container matColumnDef="degree_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-column"> Degree Name </th>
+            <td mat-cell *matCellDef="let element" data-title="Degree Name:"> {{element.degree_name}} </td>
+        </ng-container>
+
+        <!-- Level Column -->
+        <ng-container matColumnDef="result">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-column"> Result </th>
+            <td mat-cell *matCellDef="let element" data-title="Result:"> <span class="result-tag">{{element.result}} {{(element.result_type)}}</span></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+
+    </table>
+    <mat-paginator pageSize=5 showFirstLastButtons></mat-paginator>

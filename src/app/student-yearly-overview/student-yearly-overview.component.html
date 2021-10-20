@@ -1,0 +1,57 @@
+<div class="student-profile container-fluid">
+  <div class="row">
+    <div class='col-lg-4 col-xl-3 left-col' *ngIf="userRole != 'Student' ">
+      <app-student-search (selectedStudentChanged)="onStudentSelection($event)" [mode]="'student'"></app-student-search>
+    </div>
+    <div [ngClass]="{'col-lg-12': userRole === 'Student','col-lg-8 col-xl-9': userRole !== 'Student' }">
+      <ng-container>
+        <div class="white-box">
+          <div class="container-fluid profile-info-box">
+            <div class="row">
+              <div class="col-lg-2 col-md-4 d-flex align-self-center">
+                <div class="profile-picture my-auto">
+                  <img *ngIf="!pictureUrl" src="assets/images/profile-picture.jpg" alt="Profile Picture" />
+                  <img *ngIf="pictureUrl" [src]="pictureUrl" alt="Profile Picture" />
+                </div>
+              </div>
+              <div class="col-lg-10 col-md-8">
+                <div class="student-profile-details">
+                  <div class="student-bio">
+                    <h2 *ngIf="dataLoaded">{{selectedStudent["firstName"]}} {{selectedStudent["lastName"]}}</h2>
+                  </div>
+                  <div class="row profile-info">
+                    <div class="col-lg-4 d-inline-flex">
+                      Grade-Division: {{selectedStudent["grade"]}}-{{selectedStudent["division"]}}
+                    </div>
+                    <div class="col-lg-5 d-inline-flex word-break">
+                      G.R. No.:{{selectedStudent["regNo"]}}
+                    </div>
+                    <div class="col-lg-3 d-inline-flex">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-tab-group (selectedTabChange)="changeTab($event)" #tabs>
+            <mat-tab label="Exams">
+              <app-student-yearly-exams #YearlyExams></app-student-yearly-exams>
+            </mat-tab>
+            <mat-tab label="Tests">
+              <app-student-yearly-tests #YearlyTests></app-student-yearly-tests>
+            </mat-tab>
+            <mat-tab label="Achievements/Participation">
+              <app-student-yearly-achievements-participation #YearlyAccomplishments></app-student-yearly-achievements-participation>
+            </mat-tab>
+            <mat-tab label="Degree/Certifications" #yearlyDC>
+              <app-student-yearly-degree-certifications></app-student-yearly-degree-certifications>
+            </mat-tab>
+            <mat-tab label="Remarks">
+              <app-student-yearly-remarks></app-student-yearly-remarks>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

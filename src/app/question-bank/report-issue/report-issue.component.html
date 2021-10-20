@@ -1,0 +1,9 @@
+<h5 mat-dialog-title>{{data.title}}</h5>
+<mat-form-field class="w-100">
+    <!-- <mat-label>Report</mat-label> -->
+    <textarea matInput cdkFocusInitial placeholder="Report an Issue" rows="5" [(ngModel)]="report"></textarea>
+</mat-form-field>
+<div mat-dialog-actions class="d-flex justify-content-center">
+  <button mat-raised-button color="orange" (click)="onClick(false)" *ngIf="data.no">{{data.no}}</button>
+  <button mat-raised-button color="blue" (click)="onClick(true)" *ngIf="data.yes">{{data.yes}}</button>
+</div>

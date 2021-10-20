@@ -1,0 +1,84 @@
+::ng-deep .col-left .mat-form-field{
+  width:100%;
+}
+
+.container-fluid{
+  padding-left: 45px;
+  padding-right: 45px;
+}
+.performance-trend-search{
+  padding: 25px;
+  border-radius: 16px;
+  border: 1px solid #A7A7A7;
+}
+
+.pt-graph{
+  .progress-bar{
+    margin: 0 16px;
+    ::ng-deep .mat-progress-bar-buffer {
+      background-color: #ffe9bf;
+    }
+    ::ng-deep .mat-progress-bar-fill::after{
+        background-color: #F1AB24;
+    }
+  }
+  .blue-border-box {
+    border: 1px solid #0067E3;
+    border-radius: 16px;
+    padding: 36px 36px 20px;
+    margin-bottom: 30px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    h5 {
+        color: #0067E3;
+    }
+  }
+}
+
+::ng-deep .bk-root>.bk {
+  width: 100% !important;
+  height: auto !important;
+  >.bk {
+      border: 1px solid #A7A7A7;
+      border-radius: 16px;
+      position: relative !important;
+      top: inherit !important;
+      margin-bottom: 30px;
+      -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+      -moz-box-shadow: -2px 2px 7px #e4e4e4;
+      box-shadow: -2px 2px 7px #e4e4e4;
+      /*>.bk {
+          transform: scale(0.95);
+      }*/
+  }
+}
+
+
+@media only screen and (max-width:992px){
+  .pt-graph{
+    margin-top: 30px;
+    .blue-border-box {
+      padding: 25px;
+    }
+  }
+}
+
+@media only screen and(max-width:767px){
+  .graph{
+    display: none;
+  }
+  .download{
+      display: block;
+      margin-bottom: 30px;
+  }
+}
+
+@media only screen and(min-width:767px){
+  .graph{
+      display: block;
+  }
+  .download{
+      display: none;
+  }
+}

@@ -1,0 +1,6 @@
+<h5 mat-dialog-title>{{data.title}}</h5>
+<mat-label>{{data.message}}</mat-label>
+<div mat-dialog-actions class="d-flex justify-content-center margin">
+  <button mat-raised-button color="blue" [mat-dialog-close]="true" cdkFocusInitial *ngIf="data.yes">{{data.yes}}</button>
+  <button mat-raised-button mat-dialog-close color="orange" *ngIf="data.no">{{data.no}}</button>
+</div>

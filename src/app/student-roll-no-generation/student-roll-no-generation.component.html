@@ -1,0 +1,133 @@
+<div class="container-fluid">
+    <div class="blue-border-box">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-11">
+                <div class="row">
+                    <div class="col-12 col-md-5 margin">
+                        <div class="row">
+                            <mat-form-field class="col-sm-6 col-xl-3">
+                                <mat-label>Year</mat-label>
+                                <mat-select [(ngModel)]="selectedYear" (selectionChange)="onYearSelected(selectedYear)" required>
+                                    <mat-option [value]="year" *ngFor="let year of clientYear">
+                                        {{ year.year }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="col-sm-6 col-xl-3">
+                                <mat-label>Grade</mat-label>
+                                <mat-select [(ngModel)]="selectedGrade" (selectionChange)="onGradeSelected()" required>
+                                    <mat-option [value]="grade" *ngFor="let grade of selectedYearGrade">
+                                        {{ grade.grade }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="col-sm-6 col-xl-4">
+                                <mat-label>Division</mat-label>
+                                <mat-select [(ngModel)]="selectedDivision" multiple required>
+                                    <mat-option [value]="div" *ngFor="let div of selectedYearDivision">
+                                        {{ div.division }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <div class="col-sm-6 col-xl-2">
+                                <button mat-mini-fab color="blue" (click)="showDetails()"><i
+                                    class="fas fa-sync-alt"></i></button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-sm-9 col-md-11 box" *ngIf="selectedYearOrder>=currentYearOrder">
+                                <div class="row">
+                                    <h3>Roll number generation method </h3>
+                                </div>
+                                <div class="row margin">
+                                    <mat-radio-button [checked]="true" (click)="changeSortType(true)">First Name + Last Name</mat-radio-button>
+                                </div>
+                                <div class="row margin">
+                                    <mat-radio-button [checked]="false" (click)="changeSortType(false)">Last Name + First Name</mat-radio-button>
+                                </div>
+                            </div>
+                            <div class="col-sm-9 col-md-11 margin">
+                                <div class="row justify-content-center">
+                                    <button mat-raised-button color="blue" (click)="generateStudentRollNo()"
+                                        *ngIf="selectedYearOrder>=currentYearOrder">Generate Roll Nos</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="offset-md-0 col-md-7 offset-xl-1 col-xl-6 margin">
+                        <div class="student-table">
+                            <table mat-table [dataSource]="studentDataSource" matSort class="common-table">
+                                <ng-container matColumnDef="regNo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>GR No</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="GR No: ">
+                                        {{element.regNo}}
+                                    </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="rollNo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Roll No.</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="Roll No: " class="text-center">
+                                        <mat-form-field *ngIf="element.openForEdit===false && selectedYearOrder>=currentYearOrder"
+                                            (keydown.enter)="saveRollNo(rowNo, element)" (keydown.esc)="discardRollNo(rowNo, element)">
+                                            <input type="text" matInput [(ngModel)]="element.rollNo" autoFocus maxlength="10" integerOnly/>
+                                        </mat-form-field>
+                                        <span *ngIf="element.openForEdit===true">
+                                            {{element.rollNo}}
+                                        </span>
+    
+                                    </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="edit-save">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index">
+                                        <div *ngIf="element.openForEdit===true && selectedYearOrder>=currentYearOrder">
+                                            <button mat-icon-button aria-label="Edit Icon" (click)="editRollNo(rowNo)" matTooltip="Edit">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                        </div>
+                                        <div *ngIf="element.openForEdit===false && selectedYearOrder>=currentYearOrder">
+                                            <button mat-icon-button (click)="saveRollNo(rowNo, element)" matTooltip="Save"><i
+                                                    class="far fa-save fa-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="division">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">Division</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="Division: " class="text-center">
+                                        {{element.division}}
+                                    </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="studentName">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Student Name</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index"
+                                        data-title="Student Name: ">
+                                        {{element.studentName}}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="studentDisplayColumn; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: studentDisplayColumn"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin">
+                    <div class="col-12">
+                        <span>
+                            <strong>Note:</strong><br>
+                            1) Roll numbers for other than current & future academic years are view only and cannot be changed.
+                        </span>
+                    </div>
+                    <div class="col-12 navigate-button">
+                        <div class="buttons">
+                            <button mat-raised-button color="blue" (click)="navigateStudentAssignment()"><i class="fas fa-arrow-left"></i> &nbsp; Subject Assignment</button>
+                            <button mat-raised-button color="blue" (click)="navigateChangeAcademicYear()">Change Academic Year &nbsp; <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

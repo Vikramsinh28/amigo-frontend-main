@@ -1,0 +1,38 @@
+.mat-form{
+    width: 500px;
+}
+.fileuploadbtn input[type="file"] {
+    position: absolute;
+    z-index: 999;
+    width: 105px;
+    height: 36px;
+    opacity: 0;
+    cursor: pointer;
+    .material-icons {
+        font-size: 20px;
+    }
+}
+
+.answer-attachement-list {
+    .attached-file-detail {
+        counter-reset: list-counter;
+        padding: 0;
+    }
+    .mat-list-item {
+        font-size: 14px;
+        &:before {
+            counter-increment: list-counter;
+            content: counter(list-counter) ".";
+            position: absolute;
+            top: 50%;
+            margin-top: -10px;
+            left: 16px;
+        }
+        .file-name {
+            padding-left: 20px;
+        }
+    }
+    .mat-list-item+.mat-list-item {
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+    }
+}

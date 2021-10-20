@@ -1,0 +1,108 @@
+::ng-deep .left-col .mat-form-field {
+    width: 100%;
+}
+
+::ng-deep .left-col .mat-form-field-infix {
+    width: 100% !important;
+}
+
+::ng-deep .left-col .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding-top: 0;
+}
+
+.container-fluid {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.progress-bar {
+    margin: 0 16px;
+    ::ng-deep .mat-progress-bar-buffer {
+        background-color: #ffe9bf;
+    }
+    ::ng-deep .mat-progress-bar-fill::after {
+        background-color: #F1AB24;
+    }
+}
+
+.graph-col {
+    .studentname {
+        display: block;
+        padding: 15px;
+        border-radius: 16px 16px 0 0;
+        background: #0067E3;
+        color: #FFF;
+    }
+    .blue-border-box {
+        border: 1px solid #A7A7A7;
+        border-radius: 0 0 16px 16px;
+        padding: 36px 36px 20px;
+        margin-bottom: 30px;
+        -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+        -moz-box-shadow: -2px 2px 7px #e4e4e4;
+        box-shadow: -2px 2px 7px #e4e4e4;
+    }
+}
+
+::ng-deep .bk-root>.bk {
+    display: grid !important;
+    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
+    width: 100% !important;
+    height: auto !important;
+    >.bk {
+        border: 1px solid #A7A7A7;
+        border-radius: 16px;
+        position: relative !important;
+        top: inherit !important;
+        -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+        -moz-box-shadow: -2px 2px 7px #e4e4e4;
+        box-shadow: -2px 2px 7px #e4e4e4;
+        >.bk {
+            .bk-canvas-events>.bk {
+                left: 95% !important;
+            }
+            .bk-canvas {
+                transform: scale(0.96);
+            }
+        }
+    }
+}
+       
+@media only screen and(max-width:767px) {
+    ::ng-deep {
+        .bk-root bk-canvas-overlays,
+        .bk-root .bk-canvas-underlays,
+        .bk-root>.bk>.bk,
+        .bk-root>.bk {
+            height: auto !important;
+            position: relative !important;
+        }
+    }
+    .graph-col .blue-border-box {
+        padding-bottom: 36px !important;
+        
+    }
+    .graph{
+        display: none;
+    }
+    .download{
+        display: block;
+        margin-bottom: 30px;
+    }
+}
+
+@media only screen and (max-width:576px) {
+    ::ng-deep .bk-root > .bk > .bk > .bk .bk-canvas-events > .bk{
+        left: 90% !important;
+    }
+}
+
+@media only screen and(min-width:767px){
+    .graph{
+        display: block;
+    }
+    .download{
+        display: none;
+    }
+}

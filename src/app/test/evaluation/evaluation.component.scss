@@ -1,0 +1,102 @@
+.system-evaluation{
+    overflow: hidden;
+    .mat-tree-node h5{
+        margin: 0;
+    }
+    .tree-child-item{
+        position: relative;
+        button:before{
+            content: "";
+            background-color: rgba(0, 0, 0, 0.87);
+            position: absolute;
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            top: 50%;
+            left: -10px;
+            margin-top: -4px;
+        }
+        .green_bg:before{
+            color: #00d200;
+        }
+        .red_bg:before{
+            color: #FF0000;
+        }
+        .orange_bg:before{
+            color: #EC8F71;
+        }
+    }
+    .student-tree{
+        width: 18%;
+        max-height:687px;
+        overflow: auto;
+    }
+    .paper-question-list{
+        width: 82%;
+        padding-left: 30px;
+    }
+    .paper-question-list{
+        border-left: 1px solid #A7A7A7;
+        position: relative;
+        min-height: 687px;
+    }
+}
+
+@media only screen and (max-width: 1200px){
+    .system-evaluation{
+        .student-tree{
+            width: 25%;
+        }
+        .paper-question-list{
+            width: 75%;           
+        } 
+    }
+}
+
+@media only screen and (max-width: 992px){
+    .system-evaluation{ 
+        .evalution-wrap{
+            flex-direction: column;
+            .student-tree{
+                width: 100%;
+                max-height: 300px;
+                margin-top: 20px;
+            }
+            .paper-question-list{
+                width: 100%;
+                padding: 30px 0 0 0;
+                border-left: none;           
+            }
+        }
+        .top-button{
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .button-row button + button{
+            margin-left:20px;
+        }
+        .blue-border-box .paper-for-student{
+            border-left:none;
+            border-top:1px solid #A7A7A7;
+        }
+    }
+}
+
+.indicator{
+    margin-right: 10px;
+}
+
+@media only screen and (min-width: 992px){
+    .top-button{
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        right: 30px;
+        top: 25px;
+        z-index: 9;
+    }
+    .button-row button + button{
+        margin-top:20px;
+        margin-bottom: 20px;
+    }
+}

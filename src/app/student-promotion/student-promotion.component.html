@@ -1,0 +1,202 @@
+<div class="container-fluid">
+    <div class="blue-border-box">
+        <div class="row justify-content-center">
+            <div class="col-xl-11">
+                <div class="row margin">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <mat-form-field class="col-3">
+                                <mat-label><strong>Year :</strong></mat-label>
+                                <mat-select [(ngModel)]="selectedYear" (selectionChange)="onYearSelected()">
+                                    <mat-option [value]="year" *ngFor="let year of clientYear">
+                                        {{ year.year }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="col-3">
+                                <mat-label><strong>Grade :</strong></mat-label>
+                                <mat-select [(ngModel)]="currentYearSelectedGrade"
+                                (selectionChange)="onGradeSelected()">
+                                <mat-option [value]="grade" *ngFor="let grade of currentYearGrade">
+                                    {{ grade.grade }}
+                                </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="col-3">
+                                <mat-label><strong>Division :</strong></mat-label>
+                                <mat-select [(ngModel)]="currentYearSelectedDivision" (selectionChange)="onCurrentDivisionSelected()">
+                                    <mat-option [value]="div" *ngFor="let div of currentYearDivision">
+                                        {{ div.division }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <div class="col-3">
+                                <button mat-mini-fab color="blue" (click)="displayStudentDetails()"><i
+                                    class="fas fa-sync-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="offset-md-1 col-md-5">
+                        <div class="row dropdown">
+                            <div class="col-3 year-label" *ngIf="nextYearLabel">
+                                <mat-label><strong>{{nextYearLabel}}</strong></mat-label>
+                            </div>
+                            <mat-form-field [ngClass]="{'col-3': nextYearLabel, 'col-4': !nextYearLabel}">
+                                <mat-label><strong>Grade :</strong></mat-label>
+                                <mat-select [(ngModel)]="nextYearSelectedGrade"
+                                    (selectionChange)="onNextYearGradeSelection()">
+                                    <mat-option [value]="grade" *ngFor="let grade of nextYearGrade">
+                                        {{ grade.grade }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                
+                            <mat-form-field [ngClass]="{'col-3': nextYearLabel, 'col-5': !nextYearLabel}">
+                                <mat-label><strong>Division :</strong></mat-label>
+                                <mat-select [(ngModel)]="nextYearSelectedDivision"
+                                    (selectionChange)="onNextYearDivisionSelection()">
+                                    <mat-option [value]="div" *ngFor="let div of nextYearDivision">
+                                        {{ div.division }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <div class="col-3">
+                                <button mat-mini-fab color="blue" (click)="displayNextYearStudentDetails()"><i
+                                    class="fas fa-sync-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row margin tables">
+                            <table mat-table [dataSource]="currentYearStudentDetailsDataSource" matSort
+                                class="common-table">
+                                <ng-container matColumnDef="studentName">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>Student Name</th>
+                                    <td mat-cell data-title="Student Name: " *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <mat-label>{{ element.studentName }}</mat-label>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef></td>
+                                </ng-container>
+                                <ng-container matColumnDef="regNo">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>Gr No.</th>
+                                    <td mat-cell data-title="Gr No: " *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <mat-label>{{ element.regNo }}</mat-label>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef></td>
+                                </ng-container>
+                                <ng-container matColumnDef="rollNo">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>Roll No.</th>
+                                    <td mat-cell data-title="Roll No: " *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <mat-label>{{ element.rollNo }}</mat-label>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef></td>
+                                </ng-container>
+                                <ng-container matColumnDef="newGrade">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">Next Grade</th>
+                                    <td mat-cell data-title="Next Grade: " *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <mat-label>{{ element.newGd }}</mat-label>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef>Total Students: </td>
+                                </ng-container>
+                                <ng-container matColumnDef="newDiv">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">Next Grade<br>Division</th>
+                                    <td mat-cell data-title="Next Grade Division: " *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <mat-label>{{ element.newDiv }}</mat-label>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef>{{currentYearStudentDetailsDataSource.data.length}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="checkbox">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                            [checked]="selection.hasValue() && isAllSelected()"
+                                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                            [aria-label]="checkboxLabel()">
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <div *ngIf="element.newStdGdId===null">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? selection.toggle(element) : null"
+                                                [checked]="selection.isSelected(element)"
+                                                [aria-label]="checkboxLabel(element)">
+                                            </mat-checkbox>
+                                        </div>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef></td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumn;  sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row = index; columns: displayColumn; let element" let
+                                    i="index"></tr>
+                                <tr mat-footer-row class="footer" *matFooterRowDef="displayColumn; sticky: true"></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-1 text-center">
+                        <button mat-raised-button color="blue" class="promote" (click)="duplicateStudentDetails()">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="row tables margin">
+                            <table mat-table [dataSource]="nextYearStudentDetailsDataSource" matSort
+                                class="common-table">
+                                <ng-container matColumnDef="studentName">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>Student Name</th>
+                                    <td mat-cell data-title="Student Name: " *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <mat-label>{{ element.studentName }}</mat-label>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef></td>
+                                </ng-container>
+                                <ng-container matColumnDef="regNo">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>Gr No.</th>
+                                    <td mat-cell data-title="Gr No: " *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <mat-label>{{ element.regNo }}</mat-label>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef>Total Students: </td>
+                                </ng-container>
+                                <ng-container matColumnDef="delete">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" class="tbl-col-edit">
+                                        <button id="deleteRow" mat-icon-button aria-label="Delete Icon"
+                                            (click)="deleteStudent(element)">
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef>{{nextYearStudentDetailsDataSource.data.length}}</td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="nextYearDisplayColumn; sticky: true"></tr>
+                                <tr mat-row
+                                    *matRowDef="let row = index; columns: nextYearDisplayColumn; let element" let
+                                    i="index" [ngClass]="{'make-blue': element.studentGradeId===-1 }"></tr>
+                                <tr mat-footer-row class="footer" *matFooterRowDef="nextYearDisplayColumn; sticky: true"></tr>
+                            </table>
+                        </div>
+                        <div class="row margin">
+                            <div class="col-12 center">
+                                <button mat-raised-button color="blue" (click)="promoteStudets()">Promote</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin">
+                    <div class="col-12">
+                        <span>
+                            <strong>Note:</strong><br>
+                            1) Only students whose promotion process is not yet completed, will have a <mat-checkbox [checked]="true"></mat-checkbox> against their name to undo the transfer.
+                            <br>
+                            2) Once student are promoted sucessfully, you may not be allowed to undo that transfer under many circumstances. We strongly advise to promote with utmost care.
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 navigate-button">
+                    <div class="buttons">
+                        <button mat-raised-button color="blue" (click)="navigateSubjectGroup()"><i class="fas fa-arrow-left"></i> Subject Groups</button>
+                        <button mat-raised-button color="blue" (click)="navigateStudentSubjectGroup()">Subject Assignment <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div>

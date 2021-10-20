@@ -1,0 +1,195 @@
+<div class="row">
+    <div class="col-sm-7 col-lg-4">
+        <div class="row white-box">
+            <div class="col-12">
+                <app-common-grade-division [config]="config" [filterType]="'List'"></app-common-grade-division>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-5 col-lg-3">
+        <div class="white-box">
+            <mat-form-field class="col-12">
+                <mat-label class="date-label">From {{dateLabel}} Date</mat-label>
+                <input matInput [matDatepicker]="fromDate" [min]="minFromDate" [max]="maxFromDate" [(ngModel)]="fromDateRef"
+                    (dateChange)="onFromDateChange($event)" readonly>
+                <mat-datepicker-toggle matSuffix (click)="clearDate('from')" *ngIf="fromDateRef">
+                    <mat-icon matDatepickerToggleIcon class="clear">clear</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                <mat-datepicker #fromDate color="primary"></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="col-12">
+                <mat-label class="date-label">To {{dateLabel}} Date</mat-label>
+                <input matInput [matDatepicker]="toDate" [min]="minToDate" [max]="maxToDate" [(ngModel)]="toDateRef"
+                (dateChange)="onToDateChange($event)" readonly/>
+                <mat-datepicker-toggle matSuffix *ngIf="toDateRef" (click)="clearDate('to')">
+                    <mat-icon matDatepickerToggleIcon class="clear">clear</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                <mat-datepicker #toDate color="primary"></mat-datepicker>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-5 col-lg-3">
+        <div class="white-box" *ngIf="userRole === 'Teacher'">
+            <mat-form-field class="col-12">
+                <mat-label>Sharing Status</mat-label>
+                <mat-select [(value)]="selectedIsShared">
+                    <mat-option></mat-option>
+                    <mat-option [value]="1" >Shared</mat-option>
+                    <mat-option [value]="0" >Not Shared</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-7 col-lg-2">
+        <div class="buttons">
+            <button mat-button (click)='searchAssignments()' color="blue"><i class="fas fa-search"></i> &nbsp; Search</button>
+            <button mat-button (click)='refresh()' color="orange"><i class="fas fa-undo"></i> &nbsp; Reset</button>
+        </div>
+    </div>
+</div>
+<table mat-table [dataSource]="homeWorkDataSource" multiTemplateDataRows class="common-table" matSort [ngClass]="{teacher: userRole === 'Teacher', student: userRole !== 'Teacher'}">
+    <ng-container matColumnDef="{{ column }}" *ngFor="let column of homeworkColumnsToDisplay">
+        <ng-container *ngIf="column == 'Update Date' && this.userRole != 'Student'" >
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Edit Date</th>
+            <td mat-cell *matCellDef="let element" data-title="Last Edit Date">
+                {{ element['updateDate']|date: dateFormat }}
+            </td>
+        </ng-container>
+        <ng-container *ngIf="column == 'Shared Date'">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Shared Date</th>
+            <td mat-cell *matCellDef="let element" data-title="Shared Date">
+                {{ element['sharedDate']|date: dateFormat }}
+            </td>
+        </ng-container>
+        <ng-container *ngIf="column == 'Due Date'">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
+            <td mat-cell *matCellDef="let element" data-title="Due Date" [ngClass]="{'text-red': element['eventCompleted']}">
+                {{ element['dueDate']|date: dateFormat }}
+            </td>
+        </ng-container>
+        <ng-container *ngIf="column == 'Subject'">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+            <td mat-cell *matCellDef="let element" data-title="Subject">
+                {{ element['subjectName'] }}
+            </td>
+        </ng-container>
+        <ng-container *ngIf="column == 'Division'">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Grade Division</th>
+            <td mat-cell *matCellDef="let element" data-title="Division" class="grade-division">
+                {{ element.gradeDivisionList }}
+            </td>
+        </ng-container>
+        <ng-container *ngIf="column == 'Headline'">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Headline</th>
+            <td mat-cell *matCellDef="let element" data-title="Headline">
+                {{ (element['headline'].length > 70) ? (element['headline'] | slice:0:70) + '..' :
+                (element['headline']) }}
+            </td>
+        </ng-container>
+        <ng-container *ngIf="column == 'isShared' && (userRole === 'Teacher' || userRole === 'Management')">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element; let rowNo = dataIndex">
+                <button mat-button *ngIf="element.sharedDate===null && homeWorkDataSource.data.length > 0 "
+                    (click)="shareWithStudent($event, element, rowNo)" color="blue">
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                </button>
+            </td>
+        </ng-container>
+        <ng-container *ngIf="column == 'edit'">
+            <th mat-header-cell *matHeaderCellDef class="text-center">Edit</th>
+            <td mat-cell *matCellDef="let element" class="tbl-col-edit">
+                <button id='editRow' mat-icon-button
+                    *ngIf="homeWorkDataSource.data.length > 0 && element.sharedDate === null"
+                    (click)="editAssignment($event, element)" aria-label="Edit Icon">
+                    <i class="far fa-edit"></i>
+                </button>
+            </td>
+        </ng-container>
+        <ng-container *ngIf="column == 'delete'">
+            <th mat-header-cell *matHeaderCellDef>Delete</th>
+            <td mat-cell *matCellDef="let element; let rowNo = dataIndex">
+                <button id='deleteRow' mat-icon-button
+                    *ngIf="homeWorkDataSource.data.length > 0 && element.sharedDate === null"
+                    (click)="deleteAssignment($event, element, rowNo)" aria-label="Delete Icon">
+                    <i class="far fa-trash-alt"></i>
+                </button>
+            </td>
+        </ng-container>
+        <ng-container *ngIf="column == 'expand_icon'">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element" class="expand-icon">
+                <i class="fas fa-chevron-down"></i>
+            </td>
+        </ng-container>
+        <ng-container>
+            <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
+            <td mat-cell *matCellDef="let element" data-title="{{ column }}">{{ element[column] }}</td>
+        </ng-container>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="homeworkColumnsToDisplay.length">
+            <div class="element-detail" [@detailExpand]="element == expandedHomework ? 'expanded' : 'collapsed'">
+                <div class="element-diagram">
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">Headline :</mat-label>
+                        {{ element['headline'] }}
+                    </div>
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">HomeWork Content :</mat-label>
+                        {{ element['communicationText'] }}
+                    </div>
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">Attachment :</mat-label>
+                        <span class="attachmentFile" (click)="downloadFile(element)">{{
+                            element['attachmentFileName'] }}</span>
+                    </div>
+                    <div class="diagram-grid">
+                        <div class="diagram-detail">
+                            <mat-label class="diagram-label">Subject :</mat-label>
+                            {{ element['subjectName'] }}
+                        </div>
+                        <div class="diagram-detail">
+                            <mat-label class="diagram-label">Worksheet :</mat-label>
+                            <span class="show-button"
+                                (click)="showPaper(element)">Show&nbsp;<i class="far fa-eye"></i></span>&nbsp;
+                            <span class="download-button"
+                                (click)="downloadPaper(element)">Download&nbsp;<i class="fas fa-download"></i></span>
+                        </div>
+
+                        <div class="diagram-detail">
+                            <mat-label class="diagram-label">Shared Date :</mat-label>
+                            {{ element['sharedDate']|date: dateFormat }}
+                        </div>
+                        <div class="diagram-detail">
+                            <mat-label class="diagram-label">Due Date :</mat-label>
+                            {{ element['dueDate']|date: dateFormat }}
+                        </div>
+
+
+
+
+                    <div class="diagram-detail">
+                        <mat-label class="diagram-label">Assigned by:</mat-label>
+                        {{element['updateUserName'] }}
+                    </div>
+                    <div class="diagram-detail" *ngIf = "this.userRole != 'Student'">
+                        <mat-label class="diagram-label">Created/Last updated on:</mat-label>
+                        {{element['updateDate']|date: dateFormat }}
+                    </div>
+                </div>
+                </div>
+            </div>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="homeworkColumnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let element; columns: homeworkColumnsToDisplay" class="element-row"
+        [class.expanded-row]="expandedHomework === element"
+        (click)="expandedHomework = expandedHomework === element ? null : element" let i="index">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row" let i="index"></tr>
+</table>
+<mat-paginator #assignmentPaginator pageSize=5 showFirstLastButtons></mat-paginator>

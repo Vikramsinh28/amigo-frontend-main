@@ -1,0 +1,84 @@
+<div class="container-fluid">
+    <div class='row'>
+        <div class='col-left col-lg-4 col-xl-3 filters'>
+            <div class="row">
+                <app-common-grade-division class="col-12" [config]="config" [filterType]="'grade-performance'"
+                (gradeSelectionChanged) = "onGradeSelection($event)"></app-common-grade-division>
+                <mat-form-field class="col-sm-6">
+                    <mat-label>Exam</mat-label>
+                    <mat-select #exam_label>
+                        <mat-option value="Yearly">Yearly</mat-option>
+                        <mat-option *ngFor="let exam_label of exam_labels" [value]="exam_label">
+                            {{exam_label}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-sm-6">
+                    <mat-label>Exam Type</mat-label>
+                    <mat-select  #exam_type>
+                        <mat-option value="all">All</mat-option>
+                        <mat-option *ngFor="let exam_type of exam_types" [value]="exam_type">
+                            {{exam_type}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div class="col-12 text-right">
+                    <button mat-flat-button color="blue" (click)="renderGraph()" matTooltip="show graph">
+                    <i class="far fa-chart-bar"></i>&nbsp; Show graph
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class='col-lg-8 col-xl-9'>
+            <div class="row">
+                <section id="target" class='col-md-6 graph'></section>
+                <section id="dataTable" class='col-md-6' (pieSelected)="onPieSelection($event)">
+                    <section [hidden]="dataSource.data.length < 1" class='table-container'>
+                        <table mat-table [dataSource]="dataSource" class="common-table" matSort>
+
+                            <!-- Sr No. Column -->
+                            <ng-container matColumnDef="srNo">
+                                <th mat-header-cell *matHeaderCellDef> # </th>
+                                <td mat-cell *matCellDef="let element; let row=index">  {{this.paginator.pageIndex * this.paginator.pageSize + row + 1 }} </td>
+                            </ng-container>
+
+                            <!-- G.R. No. Column -->
+                            <ng-container matColumnDef="regNo">
+                                <th mat-header-cell *matHeaderCellDef> G.R. No </th>
+                                <td mat-cell *matCellDef="let element"> {{element.regNo}} </td>
+                            </ng-container>
+
+                            <!-- First Name Column -->
+                            <ng-container matColumnDef="firstName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+                            </ng-container>
+
+                            <!-- Last Name Column -->
+                            <ng-container matColumnDef="lastName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+                            </ng-container>
+
+                            <!-- Percentage Column -->
+                            <ng-container matColumnDef="percentage">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Percentage</th>
+                                <td mat-cell *matCellDef="let element"> {{element.percentage}} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)" [ngClass]="{hovered: row.hovered, highlighted: selection.isSelected(row)}" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"></tr>
+                        </table>
+                        <mat-paginator pageSize=10 showFirstLastButtons></mat-paginator>
+                        <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+                    </section>
+                </section>
+
+            </div>
+
+            <div class="row justify-content-center">
+                <button mat-flat-button color="blue" class="download" (click)="onDownload()" *ngIf="graphLoaded">Download Graph</button>
+            </div>
+        </div>
+    </div>
+</div>

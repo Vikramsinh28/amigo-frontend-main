@@ -1,0 +1,83 @@
+.blue-border-box {
+    border: 1px solid #0067e3;
+    padding: 20px 30px 30px 20px;
+    border-radius: 16px;
+    margin: 0 30px;
+    margin-bottom: 30px;
+    min-height: 630px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+  }
+
+.container-fluid{
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.margin{
+  margin-top: 20px;
+}
+
+.white-box {
+  background-color: #fff;
+  position: relative;
+  padding: 18px;
+  border: 1px solid #A7A7A7;
+  border-radius: 16px;
+  -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+  -moz-box-shadow: -2px 2px 7px #e4e4e4;
+  box-shadow: -2px 2px 7px #e4e4e4;
+  margin: 0px 0px 20px 0px;
+}
+
+.mat-standard-chip{
+  padding: 7px 7px;
+  font-size: 12px;
+  min-height: 20px;
+  font-weight: 400;
+}
+
+@media only screen and (max-width: 991px){
+  .buttons{
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: flex-start;
+      button+button{
+          margin-right: 15px;
+      }
+  }
+}
+
+@media only screen and (min-width: 991px){
+  .buttons{
+      display: flex;
+      flex-direction: column;
+      button+button{
+          margin-top: 15px;
+      }
+  }
+}
+
+@media only screen and(min-width: 767px){
+
+  table th:first-child{
+      max-width: 100px;
+      width: 100px;
+  }
+
+  table th:nth-child(2){
+      max-width: 140px;
+      width: 140px;
+  }
+
+  table td:nth-child(4){
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  table th:nth-child(5){
+    max-width: 70px;
+    width: 70px;
+  } 
+}

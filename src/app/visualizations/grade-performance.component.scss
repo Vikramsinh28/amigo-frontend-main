@@ -1,0 +1,139 @@
+::ng-deep .col-left .mat-form-field {
+    width: 100%;
+}
+.container-fluid{
+    padding-left: 45px; 
+    padding-right: 45px;
+}
+.progress-bar{
+    margin: 0 16px;
+    ::ng-deep .mat-progress-bar-buffer {
+        background-color: #ffe9bf;
+    }
+    ::ng-deep .mat-progress-bar-fill::after{
+        background-color: #F1AB24;
+    }
+}
+
+.table-container
+{
+    position:fixed;
+    z-index: 2;
+    right: 50px;
+    top: 100px;
+}
+.filters {
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid #A7A7A7;
+    height: 250px;
+}
+
+.blue-border-box {
+    border: 1px solid #0067E3;
+    border-radius: 16px;
+    padding: 36px 36px 20px;
+    margin-bottom: 30px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    h5 {
+        color: #0067E3;
+    }
+    .subject-section {
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+        .subject-checkbox {
+            margin: 0 16px 16px 0;
+        }
+    }
+}
+
+.highlighted {
+    background-color: #EEE;
+}
+
+::ng-deep .bk-root>.bk {
+    width: 100% !important;
+    height: auto !important;
+    >.bk {
+        border: 1px solid #A7A7A7;
+        border-radius: 16px;
+        position: relative !important;
+        top: inherit !important;
+        -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+        -moz-box-shadow: -2px 2px 7px #e4e4e4;
+        box-shadow: -2px 2px 7px #e4e4e4;
+        >.bk {
+            transform: scale(0.95);
+        }
+    }
+}
+
+@media only screen and (max-width:767px){
+    .filters {
+    height: auto;
+}
+.table-container
+{
+    position:relative;
+    z-index: initial;
+    right: initial;
+    top: 10px;
+}
+
+    .class-search-details{
+        margin-top:30px;
+        .blue-border-box{
+            padding: 25px;
+        }
+    }
+    ::ng-deep {
+        .bk-root bk-canvas-overlays,
+        .bk-root .bk-canvas-underlays,
+        .bk-root>.bk>.bk,
+        .bk-root>.bk {
+            height: auto !important;
+            position: relative !important;
+            width: auto !important;
+        }
+        .bk-root > .bk > .bk > .bk {
+            transform: scale(0.85);
+        }
+        .bk-root>.bk>.bk{
+            min-height: 412px !important;
+        }
+        .bk-root > .bk > .bk > .bk, .bk-root .bk-canvas{
+            height: auto !important;
+            width: 100% !important;
+        }
+    }
+}
+
+@media only screen and (max-width:480px){
+    ::ng-deep {
+        .bk-root>.bk>.bk{
+        min-height: 250px !important;
+        }
+    }
+}
+
+@media only screen and(max-width:767px){
+    .graph{
+      display: none;
+    }
+    .download{
+        display: block;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+  }
+  
+  @media only screen and(min-width:767px){
+    .graph{
+        display: block;
+    }
+    .download{
+        display: none;
+    }
+  }

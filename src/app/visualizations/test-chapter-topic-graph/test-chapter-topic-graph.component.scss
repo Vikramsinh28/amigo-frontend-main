@@ -1,0 +1,28 @@
+.section{
+    margin-top: 60px;
+    overflow: scroll;
+}
+.row{
+    justify-content: center;
+}
+.graph{
+    width: 100%;
+}
+.download-button
+{
+    margin-left: 20px;
+}
+@media only screen and (max-width: 767px){
+    .graph{
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 767px){
+    .download-button{
+        display: none;
+
+        // float: right;
+        // margin-right: 40px;
+    }
+}

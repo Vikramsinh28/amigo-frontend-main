@@ -1,0 +1,23 @@
+.align-button{
+    margin-top: 20px;
+}
+
+.buttons-row button+button {
+    margin-left: 16px;
+}
+
+@media only screen and (max-width: 576px) {
+    .buttons-row {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .reset{
+        text-align: center;
+    }
+}
+@media only screen and (min-width: 576px) {
+    .buttons-row {
+        text-align: right;
+    }
+}

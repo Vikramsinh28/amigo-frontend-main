@@ -1,0 +1,127 @@
+<div class="table-margin">
+        <table #completedSort="matSort" mat-table [dataSource]="completedExamDs" class="common-table" matSort multiTemplateDataRows>
+            <!-- Test Date Column -->
+            <ng-container matColumnDef="start_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
+                <td mat-cell *matCellDef="let element" data-title="Date">
+                    {{ element.start_date | date: dateFormat}} - <br> {{ element.end_date | date: dateFormat}}
+                </td>
+            </ng-container>
+    
+            <!-- Test Name Column -->
+            <ng-container matColumnDef="exam_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Test Heading</th>
+                <td mat-cell *matCellDef="let element" data-title="Test Heading">
+                    {{ element.exam_name }}
+                </td>
+            </ng-container>
+    
+            <!-- Grade -->
+            <ng-container matColumnDef="grade">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Grade</th>
+                <td mat-cell *matCellDef="let element" data-title="Grade" class="text-center">
+                    {{ element.grade }} <br> {{ element.divisions }}
+                </td>
+            </ng-container>
+    
+            <!-- Total Marks Column -->
+            <ng-container matColumnDef="total_marks">
+                <th mat-header-cell *matHeaderCellDef class="text-center" mat-sort-header>Total Marks</th>
+                <td mat-cell *matCellDef="let element" class="text-center" data-title="Total Marks">
+                    {{ element.total_marks }}
+                </td>
+            </ng-container>
+    
+            <!-- Subject Name Column -->
+            <ng-container matColumnDef="subject_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+                <td mat-cell *matCellDef="let element" data-title="Subject Name">
+                    {{ element.subject_name }}
+                </td>
+            </ng-container>
+    
+            <!-- Chapter Column -->
+            <ng-container matColumnDef="chapters">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Chapter</th>
+                <td mat-cell *matCellDef="let element" data-title="Chapter" class="word-wrap" matTooltip="{{ element.chapters }}">
+                    {{ (element.chapters.length > 2) ? (element.chapters | slice:0:2)+' . . .' : (element.chapters)}} 
+                </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="testReport">
+                <th mat-header-cell *matHeaderCellDef class="text-center" matTooltip="Test Report"></th>
+                <td mat-cell *matCellDef="let element" class="text-center" data-title="Test Report">
+                    <button mat-icon-button #test aria-label="Report Icon" color="stroked-blue" (click)="openTestReport(element)" *ngIf="element.exam_status > 2" matTooltip="Report" type="button"><i class="fas fa-file-excel fa-lg"></i></button>
+                </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="testGraph">
+                <th mat-header-cell *matHeaderCellDef class="text-center" matTooltip="Test Graph"></th>
+                <td mat-cell *matCellDef="let element" class="text-center" data-title="Test Graph">
+                    <button mat-icon-button #test aria-label="Graph Icon" color="stroked-blue" (click)="openTestGraph(element)" *ngIf="element.exam_status > 2" matTooltip="Graph" type="button"><i class="fas fa-chart-bar fa-lg"></i></button>
+                </td>
+            </ng-container>
+    
+           <!-- Create User Column -->
+            <ng-container matColumnDef="create_user">
+                <th mat-header-cell *matHeaderCellDef class="text-center" matTooltip="Created By">Create User
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-center" data-title="Created By">
+                    {{element.create_user}}
+                </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="expand_icon">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element; let row=index;" class=" expand-icon   text-center" (click)="expandCETest(element,row)">
+                   <i class="fas fa-chevron-down" ></i>
+                </td>
+            </ng-container>
+    
+            <!-- Term -->
+            <ng-container matColumnDef="term">
+                <th mat-header-cell *matHeaderCellDef>Term</th>
+                <td mat-cell *matCellDef="let element" data-title="Term">
+                    {{ element.term_name }}
+                </td>
+            </ng-container>
+
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedCEColumns.length">
+                    <div class="element-detail" [@detailExpand]="element == expandedCETest ? 'expanded' : 'collapsed'">
+                        <div class="element-diagram">
+                            <div class="diagram-detail">
+                                <mat-label class="diagram-label">Year:</mat-label>
+                                {{element.client_year}}    
+                            </div>
+                            <div class="diagram-detail">
+                                <mat-label class="diagram-label">Paper:</mat-label>&nbsp;<span class="test-name" (click)="displayTestPreview(element)">{{element.test_paper_name}}</span>
+                                
+                            </div>
+                            <div class="diagram-detail">
+                            <mat-label class="diagram-label">Duration (In Minutes):</mat-label>
+                            &nbsp;<span  >{{ element.exam_duration }}</span>
+                            </div>
+                            <div class="diagram-detail">
+                            <mat-label class="diagram-label">Note:</mat-label>
+                            <p class="d-block wrap" [appMath]="element['notes']"></p>
+                            </div>
+                            <div class="diagram-detail">
+                            <mat-label class="diagram-label">Instruction:</mat-label>
+                            <p class="d-block wrap" [appMath]="element['test_instructions']"></p>
+                            </div>  
+                        </div> 
+                    </div>
+                </td>
+            </ng-container>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedCEColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedCEColumns" class="element-row" [class.expanded-row]="expandedCETest === row"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="detail-row"></tr>
+        </table>
+        <mat-paginator #completedPaginator pageSize=5 showFirstLastButtons></mat-paginator>
+    </div>

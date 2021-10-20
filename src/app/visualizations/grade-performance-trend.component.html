@@ -1,0 +1,25 @@
+<div class="container-fluid">
+  <div class='row'>
+    <div class='col-left col-lg-3'>
+      <div class="row performance-trend-search">
+        <app-common-grade-subject class="col-12 col-sm-8 col-md-9 col-lg-12" [filterType]="'grade-performance-trend'"
+         [config]="config"></app-common-grade-subject>
+        <div class="col-12 col-sm-4 col-md-3 col-lg-12 text-right">
+          <button mat-flat-button color="blue" matTooltip="show graph" (click)="renderGraph()">
+            <i class="far fa-chart-bar"></i>&nbsp; Show graph
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class='col-lg-9 pt-graph'>
+      <div *ngIf="loading == true" class='progress-bar'>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      <section id="target" class='graph'>
+      </section>
+      <div class="row justify-content-center">
+        <button mat-flat-button class="download" color="blue" *ngIf="graphLoaded" (click)="onDownload()">Download Graph</button>
+      </div>
+    </div>
+  </div>
+</div>

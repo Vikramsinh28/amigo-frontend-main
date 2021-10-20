@@ -1,0 +1,84 @@
+<ng-container [formGroup]="controlForm">
+<div class="row margin-left">
+    <mat-form-field [ngClass]="{'col-sm-6 col-md-3 col-xl-2': filterType==='Add',
+    'col-sm-6 col-md-3': filterType==='Test',
+    'col-12 col-sm-12': filterType==='student-search',
+    'col-12 col-sm-6': filterType==='grade-performance' || filterType==='List'}">
+        <mat-label>Year <span class="text-red" *ngIf="config.isYearRequired">*</span></mat-label>
+        <mat-select (selectionChange)="onYearSelected()" #cntYear id="cntYear" formControlName="year">
+            <mat-option *ngIf="filterType!=='Test'"></mat-option>
+            <mat-option *ngFor="let year of clientYears" [value]="year.id">
+                {{ year.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="config.isGradeVisible" [ngClass]="{'col-sm-6 col-md-3 col-xl-2': filterType==='Add',
+     'col-sm-6 col-md-3': filterType==='Test',
+    'col-12 col-sm-6': filterType==='student-search' || filterType==='grade-performance' || filterType==='List'}">
+        <mat-label>Grade <span class="text-red" *ngIf="config.isGradeRequired">*</span></mat-label>
+        <mat-select #cntGrade  id ="cntGrade"  formControlName="grade" [multiple] = "config.isMultiGrade" (selectionChange)="onGradeSelected($event)">
+            <div class="select-all" *ngIf="config.isMultiGrade">
+            <mat-checkbox #ckallSelectGrade [checked]="false" (change)="toggleAllSelection($event, cntGrade)">Select All
+            </mat-checkbox>
+            </div>
+            <mat-option  *ngIf="!config.isMultiGrade && filterType!=='Test'"></mat-option>
+            <mat-option (click)="optionClick($event, cntGrade, '#ckallSelectGrade')" *ngFor="let grd of clientGrades" [value]="grd.id">
+                {{grd.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="config.isDivisionVisible" [ngClass]="{'col-sm-6 col-md-3 col-xl-2': filterType==='Add',
+     'col-sm-6 col-md-3': filterType==='Test',
+     'col-12 col-sm-6': filterType==='student-search' || filterType==='grade-performance' || filterType==='List'}">
+        <mat-label>Division <span class="text-red" *ngIf="config.isDivisionRequired">*</span></mat-label>
+        <mat-select #cntDivision id="cntDivision" formControlName="division" [multiple] = "config.isMultiDivision" (selectionChange)="onDivisionSelected($event)">
+            <div class="select-all" *ngIf="config.isMultiDivision">
+                <mat-checkbox #ckallSelectDivision [checked]="false" (change)="toggleAllSelection($event, cntDivision)">Select All
+                </mat-checkbox>
+            </div>
+            <div *ngIf="config.isMultiGrade">
+                <mat-optgroup *ngFor="let grade of clientDivisions" [label]="'Grade - '+ grade.grade.name" >
+                    <mat-option  *ngIf="!config.isMultiDivision"></mat-option>
+                    <mat-option (click)="optionClick($event, cntDivision, '#ckallSelectDivision')" *ngFor="let division of grade.divisions" [value]="division.division.id" [disabled]="false">
+                        <span >{{ division.division.name }}</span>
+                    </mat-option>
+                </mat-optgroup>
+            </div>
+            <div *ngIf="!config.isMultiGrade">
+                <mat-option  *ngIf="!config.isMultiDivision"></mat-option>
+                <mat-option (click)="optionClick($event, cntDivision, '#ckallSelectDivision')" *ngFor="let d of clientDivisions" [value]="d.division.id" >
+                    <span> {{ d.division.name }}</span>
+                </mat-option>
+            </div>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="config.isSubjectVisible" [ngClass]="{'col-sm-6 col-md-3 col-xl-2': filterType==='Add',
+    'col-sm-6 col-md-3': filterType==='Test', 'col-12 col-sm-6': filterType==='grade-performance' || filterType==='List'}" class="w-100">
+        <mat-label>Subject <span class="text-red" *ngIf="config.isSubjectRequired">*</span></mat-label>
+        <mat-select #cntSubject id="cntSubject" formControlName="subject"  (selectionChange)="onSubjectSelected($event)" [multiple] = "config.isMultiSubject">
+            <div class="select-all" *ngIf="config.isMultiSubject">
+                <mat-checkbox id="ckallSelectSubject" #ckallSelectSubject [checked]="false" (change)="toggleAllSelection($event, cntSubject)">Select All
+                </mat-checkbox>
+            </div>
+            <mat-option  *ngIf="!config.isMultiSubject"></mat-option>
+            <mat-option  *ngIf="config.isSubjectCombined" value="-1">Combined</mat-option>
+            <mat-option (click)="optionClick($event, cntSubject, '#ckallSelectSubject')" *ngFor="let subject of clientSubjects" [value]="subject.id" >
+                <span> {{ subject.name }}</span>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="config.isStudentVisible" [ngClass]="{'col-sm-6 col-md-3 col-xl-2': filterType==='Add',  'col-sm-6': filterType==='List'}">
+        <mat-label>Student <span class="text-red" *ngIf="config.isStudentRequired">*</span></mat-label>
+        <mat-select #cntStudent id="cntStudent" formControlName="student" [multiple] = "config.isMultiStudent" (selectionChange)="onStudentSelected($event)">
+            <div class="select-all" *ngIf="config.isMultiStudent">
+                <mat-checkbox id="ckallSelectStudent" #ckallSelectStudent [checked]="false" (change)="toggleAllSelection($event, cntStudent)">Select All
+                </mat-checkbox>
+            </div>
+            <mat-option  *ngIf="!config.isMultiStudent"></mat-option>
+            <mat-option (click)="optionClick($event, cntStudent, '#ckallSelectStudent')" *ngFor="let std of clientStudents" [value]="std.studentGradeId">
+                {{std.rollNo}}-{{std.studentName}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+</ng-container>

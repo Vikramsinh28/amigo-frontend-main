@@ -1,0 +1,34 @@
+<div class="class-search-form">
+    <form [formGroup]="form" (ngSubmit)="searchClass(form.value)">
+        <mat-form-field>
+            <mat-label>Academic Year</mat-label>
+            <mat-select id="academicYear" formControlName="academicYear" (selectionChange)="filterGrades($event)" [(value)]="selectedYear" required>
+                <mat-option *ngFor="let year of years" [value]="year">
+                    {{year}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Grade</mat-label>
+            <mat-select id="grade" formControlName="grade" (selectionChange)="filterDivisions($event)" [(value)]="selectedGrade" required>
+                <mat-option *ngFor="let grade of grades" [value]="grade">
+                    {{grade}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Division</mat-label>
+            <mat-select #division formControlName="division">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let division of divisions" [value]="division">
+                    {{division}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="text-right">
+            <button mat-mini-fab color="blue" [disabled]="!form.valid">
+            <i class="far fa-chart-bar"></i>
+        </button>
+        </div>
+    </form>
+</div>

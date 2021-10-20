@@ -1,0 +1,200 @@
+<div class="container-fluid">
+    <div class="blue-border-box">
+        <div class="row justify-content-center">
+            <div class="col-xl-11">
+                <div class="row">
+                    <div class="col-xl-7">
+                        <div class="row">
+                            <mat-form-field class="col-sm-4 col-md-3 dropdown">
+                                <mat-label><strong>Year</strong></mat-label>
+                                <mat-select [(ngModel)]="selectedYear" (selectionChange)="onYearSelected(selectedYear)">
+                                    <mat-option [value]="year.clientYearId" *ngFor="let year of clientYear">
+                                        {{ year.year }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            
+                            <mat-form-field class="col-sm-4 col-md-3 dropdown">
+                                <mat-label><strong>Grade</strong></mat-label>
+                                <mat-select [(ngModel)]="selectedGrade" (selectionChange)="onGradeSelected()">
+                                    <mat-option [value]="grade.gradeId" *ngFor="let grade of selectedYearGrade">
+                                        {{ grade.grade }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            
+                            <mat-form-field class="col-sm-4 col-md-3 dropdown">
+                                <mat-label><strong>Divison</strong></mat-label>
+                                <mat-select [(ngModel)]="selectedDivision">
+                                    <mat-option [value]="div.gradeDivisionId" *ngFor="let div of selectedYearDivision">
+                                        {{ div.division }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            
+                            <div class="col-md-3 refresh">
+                                <button mat-mini-fab color="blue" (click)="showDetails()"><i
+                                    class="fas fa-sync-alt"></i></button>
+                            </div>
+                        </div>
+                        <div class="row student-table margin">
+                            <table mat-table [dataSource]="studentDataSource" matSort class="common-table">
+                                <ng-container matColumnDef="regNo">
+                                    <th mat-header-cell *matHeaderCellDef>GR No</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="GR No: ">
+                                        {{element.regNo}}
+                                    </td>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="studentName">
+                                    <th mat-header-cell *matHeaderCellDef>Student Name</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index"
+                                        data-title="Student Name: ">
+                                        {{element.studentName}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="division">
+                                    <th mat-header-cell *matHeaderCellDef>Division</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index" data-title="Division: " class="text-center">
+                                        {{element.division}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="mandatory">
+                                    <th mat-header-cell *matHeaderCellDef>Mandatory Group</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index"
+                                        data-title="Mandatory Group: ">
+                                        <mat-chip *ngIf="element.mandatoryGrpName!==null">
+                                            {{element.mandatoryGrpName}}
+                                            <mat-icon class="fas fa-times-circle" matChipRemove
+                                                *ngIf="selectedYearOrder>=currentYearOrder"
+                                                (click)="deleteStudentGroup(element, 'mandatory', rowNo)">
+                                            </mat-icon>
+                                        </mat-chip>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="optional">
+                                    <th mat-header-cell *matHeaderCellDef>Optional Group</th>
+                                    <td mat-cell *matCellDef="let element; let rowNo = index"
+                                        data-title="Optional Group: ">
+                                        <mat-chip *ngIf="element.optionalGrpName!==null">
+                                            {{element.optionalGrpName}}
+                                            <mat-icon class="fas fa-times-circle" matChipRemove
+                                                *ngIf="selectedYearOrder>=currentYearOrder"
+                                                (click)="deleteStudentGroup(element, 'optional', rowNo)"></mat-icon>
+                                        </mat-chip>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="select">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                            [checked]="selection.hasValue() && isAllSelected()"
+                                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                            [aria-label]="checkboxLabel()" *ngIf="selectedYearOrder>=currentYearOrder">
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let rowNo = index;" class="mat-column-delete">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                            (change)="$event ? selection.toggle(element) : null"
+                                            [checked]="selection.isSelected(element)"
+                                            [aria-label]="checkboxLabel(element)"
+                                            *ngIf="selectedYearOrder>=currentYearOrder">
+                                        </mat-checkbox>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="studentDisplayColumn; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: studentDisplayColumn"></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xl-5">
+                        <div class="row margin">
+                            <div class="col-md-6 col-xl-12 margin">
+                                <h5 class="text-center group-label">Mandatory Groups</h5>
+                                <table mat-table [dataSource]="mandatorySubjectGroupDataSource" matSort
+                                    class="common-table group-table">
+                                    <ng-container matColumnDef="assign">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td mat-cell *matCellDef="let element;let rowNo = index;" class="text-center">
+                                            <button matTooltip="Assign" mat-icon-button
+                                                *ngIf="selectedYearOrder>=currentYearOrder"
+                                                (click)="assignGroup(element, 'mandatoryTable')"><span
+                                                    class="material-icons add_group">person_add_alt</span></button>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="group">
+                                        <th mat-header-cell *matHeaderCellDef>Group Name</th>
+                                        <td mat-cell *matCellDef="let element; let rowNo = index"
+                                            data-title="Group Name: ">
+                                            {{element.groupCode}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="subjects">
+                                        <th mat-header-cell *matHeaderCellDef>Subjects</th>
+                                        <td mat-cell *matCellDef="let element; let rowNo = index"
+                                            data-title="Subjects: ">
+                                            {{ element.subjectName }}
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="groupDisplayColumn; sticky: true"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: groupDisplayColumn"></tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6 col-xl-12 margin">
+                                <h5 class="text-center group-label">Optional Groups</h5>
+                                <table mat-table [dataSource]="optionalSubjectGroupDataSource" matSort
+                                    class="common-table group-table">
+                                    <ng-container matColumnDef="assign">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td mat-cell *matCellDef="let element;let rowNo = index;">
+                                            <button matTooltip="Assign" mat-icon-button
+                                                *ngIf="selectedYearOrder>=currentYearOrder"
+                                                (click)="assignGroup(element, 'optionalTable')"><span
+                                                    class="material-icons add_group">person_add_alt</span></button>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="group">
+                                        <th mat-header-cell *matHeaderCellDef>Group Name</th>
+                                        <td mat-cell *matCellDef="let element; let rowNo = index"
+                                            data-title="Group Name: ">
+                                            {{element.groupCode}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="subjects">
+                                        <th mat-header-cell *matHeaderCellDef>Subjects</th>
+                                        <td mat-cell *matCellDef="let element; let rowNo = index"
+                                            data-title="Subjects: ">
+                                            {{ element.subjectName }}
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="groupDisplayColumn; sticky: true"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: groupDisplayColumn"></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin">
+                    <div class="col-12">
+                        <span>
+                            <strong>Note:</strong><br>
+                            1) Date for other than current & future academics years are view only and cannot be changed.
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 navigate-button">
+                    <div class="buttons">
+                        <button mat-raised-button color="blue" (click)="navigateStudentPrmotion()"><i class="fas fa-arrow-left"></i>
+                            &nbsp;Student Promotion</button>
+                        <button mat-raised-button color="blue" (click)="navigateRollNo()">Roll Number &nbsp;<i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

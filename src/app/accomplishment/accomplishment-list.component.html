@@ -1,0 +1,182 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table-filter" *ngIf="dataSource.data.length > 1">
+                <mat-form-field>
+                    <mat-label>
+                        <i class="fas fa-search"></i> &nbsp; Search
+                    </mat-label>
+                    <input matInput (keyup)="applyFilter($event)">
+                </mat-form-field>
+            </div>
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort class="common-table apboard">
+                <ng-container matColumnDef="{{ column }}" *ngFor="let column of displayedColumns;let a=index;">
+
+                    <!-- Student Reg No -->
+                    <ng-container *ngIf="column == 'regNo'">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-column"> G.R. No. </th>
+                        <td mat-cell *matCellDef="let element" data-title="G.R. No.:"> {{element.regNo}} </td>
+                    </ng-container>
+
+                    <!-- Student Name -->
+                    <ng-container *ngIf="column == 'name'">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name. </th>
+                        <td mat-cell *matCellDef="let element" data-title="Name:"> {{element.firstName}}
+                            {{element.lastName}} </td>
+                    </ng-container>
+
+                    <!-- Achievement Participation Column -->
+                    <ng-container *ngIf="column == 'type'">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="type-column"> Type </th>
+                        <td mat-cell *matCellDef="let element" data-title="Type:"
+                            [ngClass]="{'achievementrow': element.type == 'Achievement','participationrow': element.type == 'Participation'}">
+                            {{element.type}} </td>
+                    </ng-container>
+
+                    <!-- Year Column -->
+                    <ng-container *ngIf="column == 'year'">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="year-column"> Year </th>
+                        <td mat-cell *matCellDef="let element" data-title="Year:"> {{element.year}} </td>
+                    </ng-container>
+
+                    <!-- Month Column -->
+                    <ng-container *ngIf="column == 'month'">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="month-column"> Month </th>
+                        <td mat-cell *matCellDef="let element" data-title="Month:"> {{idx_month_map.get(element.month)}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Tag Column -->
+                    <ng-container *ngIf="column == 'tag'">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tag-column"> #Tag </th>
+                        <td mat-cell *matCellDef="let element" data-title="#Tag:"> {{element.tag}} </td>
+                    </ng-container>
+
+                    <!-- Level Column -->
+                    <ng-container *ngIf="column == 'level'">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="level-column"> Level </th>
+                        <td mat-cell *matCellDef="let element" data-title="Level:"> {{element.level}} </td>
+                    </ng-container>
+
+                    <!-- Title Column -->
+                    <ng-container *ngIf="column == 'title'">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+                        <td mat-cell *matCellDef="let element" data-title="Title:" class="title-column"> {{
+                            (element.title.length > 50) ? (element.title | slice:0:50) + '..' : (element.title) }} </td>
+                    </ng-container>
+
+                    <!-- Description Column -->
+                    <ng-container *ngIf="column == 'description'">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="description-column"> Description
+                        </th>
+                        <td mat-cell *matCellDef="let element" data-title="Description:"
+                            matTooltip={{element.description}}>
+                            {{ (element.description.length > 50) ? (element.description | slice:0:50) + '..' :
+                            (element.description) }} </td>
+                    </ng-container>
+
+                    <!-- Edit Column -->
+                    <ng-container *ngIf="column == 'edit'">
+                        <th mat-header-cell *matHeaderCellDef class="tbl-col-edit">Edit</th>
+                        <td mat-cell *matCellDef="let element" class="tbl-col-edit">
+                            <button id='editRow' mat-icon-button *ngIf="dataSource.data.length > 0"
+                                (click)='editAccomplishment(element)' aria-label="Edit Icon">
+                                <i class="far fa-edit"></i>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <!-- Delete Column -->
+                    <ng-container *ngIf="column == 'delete'">
+                        <th mat-header-cell *matHeaderCellDef class="tbl-col-delete">Delete</th>
+                        <td mat-cell *matCellDef="let element" class="tbl-col-delete">
+                            <button id='editRow' mat-icon-button *ngIf="dataSource.data.length > 0"
+                                (click)='deleteAccomplishment(element)' aria-label="Delete Icon">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container *ngIf="column == 'expand_icon'">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element" class="expand-icon text-right"
+                            (click)="expandedAccomplishment = expandedAccomplishment === element ? null : element">
+                            <i class="fas fa-chevron-down"></i>
+                        </td>
+                    </ng-container>
+
+                    <ng-container>
+                        <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
+                        <td mat-cell *matCellDef="let element" data-title="{{ column }}">{{ element[column] }}</td>
+                    </ng-container>
+
+                </ng-container>
+
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                        <div class="element-detail"
+                            [@detailExpand]="element == expandedAccomplishment ? 'expanded' : 'collapsed'">
+                            <div class="element-diagram">
+                                <div class="diagram-detail">
+                                    <mat-label class="diagram-label"> Month and Year : </mat-label>
+                                    {{ idx_month_map.get(element.month) }}, {{ element['year'] }}
+                                </div>
+
+                                <div class="diagram-grid">
+                                    <div class="diagram-detail">
+                                        <mat-label class="diagram-label">Level:</mat-label>
+                                        {{ element['level'] }}
+                                    </div>
+                                    <div class="diagram-detail">
+                                        <mat-label class="diagram-label">Type : </mat-label>
+                                        <span [ngClass]="{'achievementrow': element.type == 'Achievement',
+                                        'participationrow': element.type == 'Participation'}">{{ element['type']
+                                            }}</span>
+                                    </div>
+                                    <div class="diagram-detail">
+                                        <mat-label class="diagram-label">#Tag :</mat-label>
+                                        {{ element['tag'] }}
+                                    </div>
+                                </div>
+
+                                <div class="diagram-grid" *ngIf="mode == 2">
+                                    <div class="diagram-detail">
+                                        <mat-label class="diagram-label">G.R.No. : </mat-label>
+                                        {{ element['regNo'] }}
+                                    </div>
+                                    <div class="diagram-detail">
+                                        <mat-label class="diagram-label">Name : </mat-label>
+                                        {{ element['firstName'] }} {{ element['lastName'] }}
+                                    </div>
+                                </div>
+                                <div class="diagram-detail">
+                                    <mat-label class="diagram-label">Title:</mat-label>
+                                    {{ element['title'] }}
+                                </div> 
+                                <div class="diagram-detail">
+                                    <mat-label class="diagram-label">Description:</mat-label>
+                                    {{ element['description'] }}
+                                </div>
+                                <div class="diagram-detail">
+                                    <mat-label class="diagram-label">Attachment:</mat-label>
+                                    <span class="attachmentFile" *ngFor="let document of element['documents']" (click)="downloadFile(document)">{{document.file_name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                <tr class="element-row" mat-row *matRowDef="let element; columns: displayedColumns;"
+                    [class.expanded-row]="expandedAccomplishment === element"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" let i="dataIndex;" class="detail-row">
+                </tr>
+            </table>
+            <mat-paginator pageSize=10 showFirstLastButtons></mat-paginator>
+            <button class="add-btn" mat-fab color="blue" aria-label="Add Icon" (click)="addAccomplishment()"
+                *ngIf="mode == m.STUDENT">
+                <mat-icon class="fas fa-plus"></mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

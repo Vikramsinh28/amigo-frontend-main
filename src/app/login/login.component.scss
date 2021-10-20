@@ -1,0 +1,111 @@
+.responsive-center{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    .login-wrapper{
+        padding: 40px 50px;
+        background-color: #FFF;
+        border:1px solid #0067E3;;
+        border-radius: 26px;
+        width: 25%;
+        margin: 0 auto 10px;
+        .logo img{max-width: 80%; margin-bottom: 10px;} 
+        .login-form{
+            padding: 30px;
+            background-color: #FFF;
+            border:1px solid #E1E1E1;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            input{
+                height: 30px;
+            }
+            .row{
+                position: relative;
+                .col-lg-12{
+                    padding-left: 40px;
+                }
+            }
+            .password-row{
+                margin-top: 20px;
+            }   
+            i{
+                color: #C1C1C1;
+                position: absolute;
+                top: 50%;
+                left: 10px;
+                margin-top: -10px;
+            }
+            
+        }
+        .forgot-link{
+            margin-top: 20px;
+            p{
+                color: #0067E3;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        }
+        .mat-blue{
+            width: 50%;
+            font-size: 18px;
+            border-radius: 6px;
+        }
+    }
+    .poewered-by span{
+        display: inline-flex;
+        line-height: 24px;
+        padding-left: 36px;
+        line-height: 24px;
+        font-weight: 500;
+        background: url("./../../assets/images/powered-by-logo.png") no-repeat;
+    }
+}
+@media only screen and(max-width: 1200px){
+    .responsive-center{
+        .login-wrapper{
+            padding: 30px;
+            width: 40%;
+        }
+    }
+}
+
+@media only screen and(max-width: 992px){
+    .responsive-center{
+        padding: 20px;
+        .login-wrapper{
+            width: 100%;
+        }
+    }
+}
+
+@media only screen and(max-width: 767px){
+    .responsive-center{    
+        .login-wrapper{
+            padding: 25px 15px 15px;
+            margin: 15px 0;
+            .logo img{
+                margin-bottom: 15px;
+            }
+            .login-form{
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 10px;
+            }
+        }
+    }
+}
+@media only screen and(max-height: 480px){
+    .responsive-center{
+        height: auto;
+    }
+}
+
+.placeholder
+{
+    position:absolute;
+    top: 20px;
+    right: 25px;
+    cursor: pointer;
+}

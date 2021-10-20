@@ -1,0 +1,159 @@
+<div class="container-fluid">
+  <div class="blue-border-box">
+    <div class="row justify-content-center">
+      <div class="col-11 col-md-10 col-lg-7 col-xl-6">
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <app-common-grade-subject [config]="config" [filterType]="'Paper-List'">
+            </app-common-grade-subject>
+          </div>
+          <div class="col-12 col-md-6 buttons">
+            <button mat-button color="blue" (click)="refreshData()"><i class="fas fa-search"></i> &nbsp; Search</button>
+            <button mat-button (click)='clearData()' color="orange"><i class="fas fa-undo"></i> &nbsp; Reset</button>
+          </div>
+        </div>
+        <div class="row margin">
+          <div class="col-12 text-center">
+            <button mat-stroked-button [disabled]="isNodeEditable" color="black-outline-strok" (click)="addChapterNode()"><i
+                class="fas fa-plus"></i> &nbsp; New Chapter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Has no child node -->
+    <div class="row justify-content-center row-tree">
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="col-lg-8 col-xl-6">
+        <mat-tree-node *matTreeNodeDef="let node;" matTreeNodeToggle matTreeNodePadding>
+          <button mat-icon-button disabled></button>
+          <div *ngIf="!editNodeItemData && !isNodeEditable">
+            <div class="d-flex">
+              <label class="child-node-label">{{node.topicName}}</label>
+              <button mat-icon-button (click)="editNode(node)"><i class="fas fa-pencil-alt"></i></button>
+              <!-- <button mat-icon-button (click)="deleteChapterTopicNode(node)"><i class="far fa-trash-alt"></i></button> -->
+            </div>
+          </div>
+          <div *ngIf="editNodeItemData">
+            <div *ngIf="editNodeItemData.chapterTopicId !== node.chapterTopicId">
+              <div class="d-flex">
+                <label class="child-node-label">{{node.topicName}}</label>
+                <button mat-icon-button (click)="editNode(node)"><i class="fas fa-pencil-alt"></i></button>
+                <!-- <button mat-icon-button (click)="deleteChapterTopicNode(node)"><i class="far fa-trash-alt"></i></button> -->
+              </div>
+            </div>
+            <div *ngIf="editNodeItemData.chapterTopicId === node.chapterTopicId">
+              <div *ngIf="isNodeEditable" (keydown.enter)="saveEditedNode(node, itemValue.value)"
+                (keydown.escape)="closeNode()">
+                <mat-form-field>
+                  <mat-label>New item... </mat-label>
+                  <input matInput #itemValue placeholder="Enter topic name" [value]="node.topicName" maxlength="200"
+                    autofocus>
+                </mat-form-field>
+                <button mat-icon-button aria-label="Undo Icon" matTooltip="Undo" type="button"><i
+                    class="fas fa-undo"></i></button>
+                <button mat-icon-button (click)="saveEditedNode(node, itemValue.value)" *ngIf="node.topicName.length>0"
+                  matTooltip="Save" type="button"><i class="far fa-save fa-lg"></i></button>
+              </div>
+              <div *ngIf="!isNodeEditable">
+                <div class="d-flex">
+                  <label class="child-node-label">{{node.topicName}}</label>
+                  <button mat-icon-button (click)="editNode(node)"><i class="fas fa-pencil-alt"></i></button>
+                  <!-- <button mat-icon-button (click)="deleteChapterTopicNode(node)"><i class="far fa-trash-alt"></i></button> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tree-node>
+
+        <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
+          <button mat-icon-button disabled></button>
+          <mat-form-field (keydown.enter)="saveChapterTopicNode(node, itemValue.value)" (keydown.escape)="closeNode()">
+            <mat-label>New item...</mat-label>
+            <input matInput #itemValue placeholder="Enter Name" maxlength="200" autoFocus>
+          </mat-form-field>
+          <button mat-icon-button aria-label="Undo Icon" matTooltip="Undo" type="button"><i
+              class="fas fa-undo"></i></button>
+          <button mat-icon-button aria-label="Save Icon" (click)="saveChapterTopicNode(node, itemValue.value)"
+            matTooltip="Save" type="button"><i class="far fa-save fa-lg"></i></button>
+        </mat-tree-node>
+
+        <!-- Has child node -->
+        <mat-tree-node *matTreeNodeDef="let node; when: hasChild;" matTreeNodePadding>
+          <div *ngIf="!editNodeItemData" class="d-flex">
+            <div class="d-flex">
+              <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.topicName">
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}</mat-icon>
+              </button>
+              <label class="head-node-label">{{node.topicName}}</label>
+              <div class="d-flex">
+                <button mat-icon-button (click)="editNode(node)"><i class="fas fa-pencil-alt"></i></button>
+                <!-- <button mat-icon-button (click)="deleteChapterTopicNode(node)"><i class="far fa-trash-alt"></i></button> -->
+                <button class="icon-view" [disabled]="isNodeEditable" mat-icon-button (click)="addTopicNode(node)"><i
+                    class="fas fa-plus"></i></button>
+                <button class="button-view" [disabled]="isNodeEditable" mat-stroked-button color="black-outline-strok"
+                  (click)="addTopicNode(node)" matTooltip="Add New Topic"><i class="fas fa-plus"></i> &nbsp;
+                  Topic</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="editNodeItemData" class="d-flex">
+            <div *ngIf="editNodeItemData.chapterTopicId !== node.chapterTopicId" class="d-flex">
+              <div class="d-flex">
+                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.topicName">
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}</mat-icon>
+                </button>
+
+                <label class="head-node-label">{{node.topicName}}</label>
+                <div class="d-flex">
+                  <button mat-icon-button (click)="editNode(node)"><i class="fas fa-pencil-alt"></i></button>
+                  <!-- <button mat-icon-button (click)="deleteChapterTopicNode(node)"><i class="far fa-trash-alt"></i></button> -->
+                  <button class="icon-view" [disabled]="isNodeEditable" mat-icon-button (click)="addTopicNode(node)"><i
+                      class="fas fa-plus"></i></button>
+                  <button class="button-view" [disabled]="isNodeEditable" mat-stroked-button color="black-outline-strok"
+                    (click)="addTopicNode(node)" matTooltip="Add New Topic"><i class="fas fa-plus"></i> &nbsp;
+                    Topic</button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="editNodeItemData.chapterTopicId === node.chapterTopicId" class="d-flex">
+              <div *ngIf="isNodeEditable" class="head">
+                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.topicName">
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}</mat-icon>
+                </button>
+                <mat-form-field (keydown.enter)="saveEditedNode(node, itemValue.value)" (keydown.escape)="closeNode()">
+                  <mat-label>New item... </mat-label>
+                  <input matInput #itemValue placeholder="Enter topic name" [value]="node.topicName" maxlength="200">
+                </mat-form-field>
+                <button mat-icon-button aria-label="Undo Icon" matTooltip="Undo" type="button"><i
+                    class="fas fa-undo"></i></button>
+                <button mat-icon-button (click)="saveEditedNode(node, itemValue.value)" *ngIf="node.topicName.length>0"
+                  matTooltip="Save" type="button"><i class="far fa-save fa-lg"></i></button>
+              </div>
+              <div *ngIf="!isNodeEditable">
+                <div class="d-flex">
+                  <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.topicName">
+                    <mat-icon class="mat-icon-rtl-mirror">
+                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}</mat-icon>
+                  </button>
+
+                  <label class="head-node-label">{{node.topicName}}</label>
+                  <div class="d-flex">
+                    <button mat-icon-button (click)="editNode(node)"><i class="fas fa-pencil-alt"></i></button>
+                    <!-- <button mat-icon-button (click)="deleteChapterTopicNode(node)"><i class="far fa-trash-alt"></i></button> -->
+                    <button class="icon-view" [disabled]="isNodeEditable" mat-icon-button
+                      (click)="addTopicNode(node)"><i class="fas fa-plus"></i></button>
+                    <button class="button-view" [disabled]="isNodeEditable" mat-stroked-button color="black-outline-strok"
+                      (click)="addTopicNode(node)"><i class="fas fa-plus" matTooltip="Add New Topic"></i> &nbsp;
+                      Topic</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tree-node>
+      </mat-tree>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,129 @@
+.blue-border-box {
+  border: 1px solid #0067e3;
+  padding: 20px 30px 30px 20px;
+  border-radius: 16px;
+  margin: 0 30px;
+  margin-bottom: 30px;
+  min-height: 630px;
+  -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+  -moz-box-shadow: -2px 2px 7px #e4e4e4;
+  box-shadow: -2px 2px 7px #e4e4e4;
+  .head-node-label {
+    padding-top: 12px;
+    color: #0067e3;
+  }
+}
+
+.navigate-button{
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.container-fluid{
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.setYear{
+  margin-top: 18px;
+}
+
+.add-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+.edit-save {
+  display: inline;
+}
+
+.table-select {
+  max-width: 100px;
+  padding-right: 15px;
+}
+.table-date {
+  max-width: 130px;
+  padding-right: 15px;
+}
+
+.mat-stroked-button {
+  line-height: 24px;
+}
+
+.yearChip{
+  display: inline;
+}
+
+.btn-visible{
+  display: block;
+}
+
+.btn-hidden{
+  display: none;
+}
+
+.button{
+  float: right;
+}
+
+.year_label{
+  margin-left: 10px;
+}
+
+th{
+  position: unset !important;
+}
+
+.highlighted {
+  background-color: #EEE;
+}
+
+@media only screen and (max-width:430px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: column;
+  }
+
+  button + button{
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (min-width:430px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+  }
+}
+
+@media only screen and (max-width:767px){
+  .mat-row:last-child{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+  
+  .margin{
+    margin-top: 20px;
+  }
+
+  .text{
+    display: block;
+  }
+  .icon{
+    display: none;
+  }
+}
+
+@media only screen and (min-width:767px){
+  .margin{
+    margin-top: 30px;
+  }
+  .text{
+    display: none;
+  }
+  .icon{
+    display: block;
+  }
+}

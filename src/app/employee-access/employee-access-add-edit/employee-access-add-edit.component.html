@@ -1,0 +1,80 @@
+<!-- <h5 mat-dialog-title>Employee Access Configuration</h5> -->
+<h5 mat-dialog-title>
+  <span class="empno">Emp No: {{data.clientEmployeeNo}}</span>
+  <span> {{data.name}}</span>
+  <button mat-icon-button class="close-button" (click)="close()">
+    <mat-icon class="close-icon">close</mat-icon>
+  </button>
+</h5>
+<mat-dialog-content class="setup-test-form">
+  <ng-container>
+    <div class="row">
+      <div class="col-md-9 col-lg-8 col-xl-7">
+      </div>
+    </div>
+    <div class="row margin">
+      <div class="col-md-9 col-lg-8 col-xl-7">
+        <div class="row white-box">
+          <div class="col-12">
+            <app-common-grade-division [config]="config" [filterType]="'List'"></app-common-grade-division>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 offset-lg-1 offset-xl-2 col-xl-3">
+        <div class="buttons">
+          <button mat-button (click)="addEmployeeAccess()" color="blue">
+            <i class="fas fa-plus"></i> &nbsp; Add
+          </button>
+          <button mat-button (click)="reset()" color="orange">
+            <i class="fas fa-undo"></i> &nbsp; Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <table mat-table [dataSource]="employeeAccessDataSource" matSort class="common-table">
+    <!-- Sr No Column -->
+    <ng-container matColumnDef="srNo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr No. </th>
+      <td mat-cell *matCellDef="let element; let rowNo = index;" data-title="Sr No.: "> {{this.paginator.pageIndex *
+        this.paginator.pageSize + rowNo + 1}}</td>
+    </ng-container>
+
+    <!-- Sr No Column -->
+    <ng-container matColumnDef="year">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Year </th>
+      <td mat-cell *matCellDef="let element" data-title="Year: "> {{data.yearLabel}} </td>
+    </ng-container>
+
+    <!-- Grade Column -->
+    <ng-container matColumnDef="grade">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Grade </th>
+      <td mat-cell *matCellDef="let element" data-title="Grade: "> {{element.grade}} </td>
+    </ng-container>
+
+    <!-- Divisioin Column -->
+    <ng-container matColumnDef="division">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Division </th>
+      <td mat-cell *matCellDef="let element" data-title="Division: "> {{element.division}} </td>
+    </ng-container>
+
+    <!-- Subject Column -->
+    <ng-container matColumnDef="subject">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject </th>
+      <td mat-cell *matCellDef="let element" data-title="Subject: "> {{element.subject}} </td>
+    </ng-container>
+    <!-- Delete Column-->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let element; let rowNo = index;" class="mat-column-delete">
+        <button mat-icon-button aria-label="Delete Icon" (click)="deleteEmployeeAccess(element, rowNo)">
+          <i class="far fa-trash-alt"></i>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="employeeColumnsToDisplay; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: employeeColumnsToDisplay;" let i="dataIndex;"></tr>
+  </table>
+  <mat-paginator #Paginator pageSize=5 showFirstLastButtons></mat-paginator>
+</mat-dialog-content>

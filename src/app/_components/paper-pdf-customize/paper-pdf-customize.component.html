@@ -1,0 +1,44 @@
+<h5 mat-dialog-title>PDF Configuration</h5>
+<mat-dialog-content class="setup-test-form">
+    <ng-container>
+        <form [formGroup]="form">
+            <h3 class="blue">Header</h3>
+            <mat-form-field class="w-100">
+                <mat-label>Paper Name</mat-label>
+                <input matInput placeholder="Enter Paper Name" formControlName="paper" required/>
+            </mat-form-field>
+            <mat-form-field class="w-100">
+                <mat-label class="date-label">Date</mat-label>
+                <input matInput [matDatepicker]="paperDate" formControlName="paperDate" (dateChange)="onDateChange($event)"/>
+                <mat-datepicker-toggle matSuffix [for]="paperDate"></mat-datepicker-toggle>
+                <mat-datepicker #paperDate color="primary"></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="w-100">
+                <mat-label>Duration(In Minutes)</mat-label>
+                <input matInput maxlength="3" placeholder="Enter Duration" formControlName="examDuration" integerOnly>
+            </mat-form-field>
+            <mat-form-field class="w-100">
+                <mat-label>Instructions</mat-label>
+                <textarea matInput rows="3" formControlName="testInstructions" maxlength="2000"></textarea>
+            </mat-form-field>
+            <h3 class="blue">Footer</h3>
+            <mat-form-field class="w-100">
+                <mat-label>Footer Text</mat-label>
+                <input matInput placeholder="Footer Text" formControlName="footerText" />
+            </mat-form-field>
+            <mat-form-field class="w-100">
+                <mat-label>Does this test paper have other ? If yes, then please select it</mat-label>
+                <mat-select formControlName="language">
+                    <mat-option *ngFor="let lang of languages" [value]="lang">
+                        {{ lang }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+    </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions class="button-group">
+    <button mat-raised-button mat-dialog-close color="orange">Cancel</button>
+    <button mat-raised-button color="blue" [disabled]="!form.valid" (click)='downloadpdf(true)'>Download Answer Key</button>
+    <button mat-raised-button color="blue" [disabled]="!form.valid" (click)="downloadpdf(false)">Download Paper</button>
+</mat-dialog-actions>

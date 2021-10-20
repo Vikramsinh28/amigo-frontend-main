@@ -1,0 +1,11 @@
+
+.mat-dialog-content{
+     width: 700px;
+ }
+
+ @media only screen and (max-width: 767px){
+    .mat-dialog-content{
+        width: auto;
+        max-width: 700px;
+    }   
+ }

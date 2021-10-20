@@ -1,0 +1,42 @@
+<h5 mat-dialog-title>Set Profile Picture</h5>
+
+<mat-dialog-content class="crop-wrapper">
+  <!-- Image Upload -->
+  <div class="image-cropper">
+    <input type="file" (change)="fileChangeEvent($event)" />
+    <span
+      >Click Here<br />
+      to Upload</span
+    >
+    <image-cropper
+      class="original-image"
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="4 / 4"
+      [resizeToWidth]="180"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (loadImageFailed)="loadImageFailed()"
+      [autoCrop]="true"
+      outputType="base64"
+    >
+    </image-cropper>
+    <!-- Image Cropper -->
+  </div>
+  <div class="text-center">
+    <div *ngIf="cropCompleted">Crop Complete</div>
+    <a [href]="croppedImage" download><img [src]="croppedImage" /></a>
+  </div>
+  <!-- Image Preview -->
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-between">
+  <button mat-flat-button mat-dialog-close color="orange">Cancel</button>
+  <button
+    mat-flat-button
+    cdkFocusInitial
+    color="blue"
+    (click)='onSubmit()'
+  >
+    Save
+  </button>
+</mat-dialog-actions>

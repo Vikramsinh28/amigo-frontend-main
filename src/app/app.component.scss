@@ -1,0 +1,138 @@
+.menu-bar {
+    background: transparent;
+    /*color: white;*/
+    z-index: 9999;
+    top: 0;
+    h1 {
+        font-size: 28px !important;
+    }
+    .logo{
+        margin-left: 50px;
+        -webkit-transition: all 0.5s;
+        -moz-transition: all 0.5s;
+        -ms-transition: all 0.5s;
+        transition: all 0.5s;
+    }
+    .toolbar-user-info {
+        .user-name,
+        .last-login {
+            display: block;
+            line-height: 1.5;
+            text-align: right;
+        }
+        .user-name {
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .last-login {
+            font-size: 12px;
+            font-weight: 400;
+        }
+    }
+    .ml-auto .mat-blue {
+        margin-left: 15px;
+    }
+}
+
+.profile-pic{
+    height: 45px;
+    width: 45px;
+    margin-left: 15px;
+    margin-right: 25px;
+    border-radius: 25px;
+}
+
+.side-navigation{
+    width: 220px !important;
+}
+.full-container .menu-bar h1 {
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    transition: all 0.5s;
+    margin-left: 50px;
+}
+
+.logo{
+    margin-left: 24px;
+    margin-top: 10px;
+}
+
+.toggle-menu{
+    margin: 0px 0px 0px 82px !important;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.d-none{
+    display: none;
+}
+
+.menu-icon-bg {
+    position: fixed;
+    width: 70px;
+    text-align: center;
+    height: 64px;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    &.icon-white-bg{
+        color: #686868 !important;
+    }
+    &.icon-blue-bg {
+        color: #FFF !important;
+    }
+    .menu-icon{
+        margin-top: 15px;
+    }
+}
+
+.router-container {
+    position: relative;
+    height: calc(100% - 94px);
+    overflow: auto;
+    margin: 30px 0 0;
+}
+
+.footer {
+    height: 20%;
+}
+
+.mat-drawer-container {
+    height: 100%;
+    background: transparent;
+}
+
+::ng-deep .mat-drawer-inner-container {
+    overflow: visible!important;
+}
+
+.nomenubar .menu-icon-bg, .nomenubar .menu-bar, .nomenubar .side-navigation, .login .side-navigation {
+    display: none !important;
+}
+
+.nomenubar .mat-drawer-content, .login .mat-drawer-content {
+    margin-left: 0 !important;
+}
+
+@media only screen and (max-width:767px) {
+    .menu-bar .ml-auto .mat-blue {
+        display: none;
+    }
+    .menu-bar h1 {
+        font-size: 20px !important;
+    }
+}
+
+@media only screen and (max-width:660px) {
+    .menu-icon-bg {
+        height: 58px;
+    }
+    .menu-bar .ml-auto {
+        display: none;
+    }
+    
+}

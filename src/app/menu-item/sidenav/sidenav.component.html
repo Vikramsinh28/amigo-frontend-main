@@ -1,0 +1,38 @@
+<mat-nav-list class="sidenav-menu">
+    <mat-list-item (click)="routeToHome()" class="main-list">
+        <img mat-card-image src="assets/icons/smart-menu-icons-blue/home.svg" height="30" width="30" alt="Home icon">
+        <mat-label class="nav-label">Home</mat-label>
+    </mat-list-item>
+    <mat-expansion-panel *ngFor="let card of menu" [ngClass]="{'no-child': !card.children}">
+        <mat-expansion-panel-header [ngClass]="{disabled: card.licensed =='False', enabled: card.licensed !='False'}">
+            <mat-list-item (click)="route(card)" class="main-list">
+                <img mat-card-image src="assets/icons/smart-menu-icons-blue/{{card.smart_icon}}" height="30" width="30" alt="Menu icon">
+                <mat-label class="nav-label">{{card.label}}</mat-label>
+            </mat-list-item>
+        </mat-expansion-panel-header>
+        <hr *ngIf="card.children">
+        <ng-container *ngFor="let section of card.children">
+            <mat-list-item *ngFor="let sub of section.children" class="sub-list" (click)="route(sub)"
+            [ngClass]="{disabled: sub.licensed =='False', enabled: sub.licensed !='False'}">
+                <img mat-card-image src="assets/icons/smart-menu-icons-blue/{{sub.smart_icon}}" height="20" width="20" alt="Menu icon">
+                <mat-label class="sub-nav-label">{{sub.label}}</mat-label>
+            </mat-list-item>
+        </ng-container>
+        <hr *ngIf="card.children">
+    </mat-expansion-panel>
+    <mat-list-item (click)="changePassword()" class="sidenav-logout main-list">
+        <img mat-card-image src="assets/icons/smart-menu-icons-blue/change-password.svg" height="32" width="32" alt="Home icon">
+        <mat-label class="nav-label">Change Password</mat-label>
+    </mat-list-item>
+    <mat-list-item (click)="logout()" class="sidenav-logout main-list">
+        <img mat-card-image src="assets/icons/smart-menu-icons-blue/logout.svg" height="32" width="32" alt="Logout icon">
+        <mat-label class="nav-label">Logout</mat-label>
+    </mat-list-item>
+    <mat-list-item class="sidenav-logout profile main-list">
+        <img mat-card-image [src]="pictureSrc" height="30" width="30" alt="Profile">
+            <mat-label class="nav-label">
+                <span class="profile-name">{{userIdentity.firstName}} {{userIdentity.lastName}}</span><br>
+                <span class="login-time">{{userIdentity.lastLoginDate}}</span>
+            </mat-label>
+    </mat-list-item>
+</mat-nav-list>

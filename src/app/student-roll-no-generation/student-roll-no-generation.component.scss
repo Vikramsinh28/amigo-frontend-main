@@ -1,0 +1,107 @@
+.blue-border-box {
+    border: 1px solid #0067e3;
+    padding: 30px;
+    border-radius: 16px;
+    margin: 0 30px;
+    margin-bottom: 15px;
+    min-height: 630px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    .head-node-label {
+      padding-top: 12px;
+      color: #0067e3;
+    }
+  }
+
+  .container-fluid{
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+  .pad{
+    justify-content: center;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .box{
+    border: 1px solid #A7A7A7;
+    padding: 30px 30px 30px 50px;
+    border-radius: 16px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    margin-top: 30px;
+  }
+
+  .dropdown {
+    width: 100px;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .navigate-button{
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+  
+  .edit-save {
+    display: inline;
+  }
+
+  th{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  @media only screen and (max-width:767px){
+    .mat-row:last-child{
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+    
+    .margin{
+      margin-top: 20px;
+    }
+  }
+  
+  @media only screen and (min-width:767px){
+    .margin{
+      margin-top: 30px;
+    }
+    .student-table{
+      max-height: 400px;
+      overflow: scroll;
+    }
+
+    table th:nth-child(2)
+    {
+      max-width: 70px;
+      width: 70px;
+    }
+    .mat-form-field-infix, mat-form-field{
+      width: 40px !important;
+    }
+  }
+
+  @media only screen and (max-width:558px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: column;
+  }
+
+  button + button{
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (min-width:558px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+  }
+}

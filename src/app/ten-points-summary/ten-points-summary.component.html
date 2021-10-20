@@ -1,0 +1,225 @@
+<ng-container *ngIf="dataLoaded">
+    <div class="white-box">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="title-row text-center"><span>{{tenPointsSummary.exam_year}}, {{tenPointsSummary.exam_term}}, {{tenPointsSummary.exam_name}}</span></h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-xl-6 color-purpal">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="summary-title">Overall Result</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentage</h4>
+                                <mat-label class="box-no">01</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item><span>Your Score : </span> <span>{{appendPerSign(tenPointsSummary.your_percentage)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.your_percentage_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.your_percentage_diff)}} </span>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <span>Division Avg: </span> <span>{{appendPerSign(tenPointsSummary.percentage_division)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_division_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_division_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <span>Grade Avg: </span> <span>{{appendPerSign(tenPointsSummary.percentage_grade)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_grade_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_grade_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentile</h4>
+                                <mat-label class="box-no">02</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item>
+                                        <span>Division Score: </span> <span>{{appendPerSign(tenPointsSummary.percentile_division)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_division_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_division_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <span>Grade Score: </span> <span>{{appendPerSign(tenPointsSummary.percentile_division)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_division_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_division_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 color-yellow">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="summary-title">Top 2</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentage</h4>
+                                <mat-label class="box-no">03</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item><span>{{tenPointsSummary.percentage_strength_sname_1}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentage_strength_score_1)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_strength_1_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_strength_1_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item><span>{{tenPointsSummary.percentage_strength_sname_2}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentage_strength_score_2)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_strength_2_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_strength_2_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentile</h4>
+                                <mat-label class="box-no">04</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item><span>{{tenPointsSummary.percentile_strength_sname_1}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentile_strength_score_1)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_strength_1_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_strength_1_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item><span>{{tenPointsSummary.percentile_strength_sname_2}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentile_strength_score_2)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_strength_2_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_strength_2_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 color-blue">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="summary-title">Bottom 2</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentage</h4>
+                                <mat-label class="box-no">05</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item><span>{{tenPointsSummary.percentage_weakness_sname_1}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentage_weakness_score_1)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_weakness_1_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_weakness_1_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item><span>{{tenPointsSummary.percentage_weakness_sname_2}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentage_weakness_score_2)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_weakness_2_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_weakness_2_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentile</h4>
+                                <mat-label class="box-no">06</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item><span>{{tenPointsSummary.percentile_weakness_sname_1}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentile_weakness_score_1)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_weakness_1_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_weakness_1_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item><span>{{tenPointsSummary.percentile_weakness_sname_2}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentile_weakness_score_2)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_weakness_2_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_weakness_2_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 color-light-purple">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="summary-title">Most Improvement</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentage</h4>
+                                <mat-label class="box-no">07</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item><span>{{tenPointsSummary.percentage_improvement_sname_1}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentage_improvement_score_1)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_improvement_1_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_improvement_1_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item><span>{{tenPointsSummary.percentage_improvement_sname_2}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentage_improvement_score_2)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_improvement_2_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_improvement_2_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentile</h4>
+                                <mat-label class="box-no">08</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item><span>{{tenPointsSummary.percentile_improvement_sname_1}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentile_improvement_score_1)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_improvement_1_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_improvement_1_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item><span>{{tenPointsSummary.percentile_improvement_sname_2}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentile_improvement_score_2)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_improvement_2_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_improvement_2_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 color-orange">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="summary-title">Attention Required</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-tab-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentage</h4>
+                                <mat-label class="box-no">09</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item><span>{{tenPointsSummary.percentage_decline_sname_1}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentage_decline_score_1)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_decline_1_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_decline_1_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item><span>{{tenPointsSummary.percentage_decline_sname_2}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentage_decline_score_2)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentage_decline_2_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentage_decline_2_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-tab-mb">
+                            <div class="summary-box d-flex">
+                                <h4 class="summary-box-title">Percentile</h4>
+                                <mat-label class="box-no">10</mat-label>
+                                <mat-list class="summary-list">
+                                    <mat-list-item><span>{{tenPointsSummary.percentile_decline_sname_1}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentile_decline_score_1)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_decline_1_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_decline_1_diff)}}</span>
+                                    </mat-list-item>
+                                    <mat-list-item><span>{{tenPointsSummary.percentile_decline_sname_2}}</span>
+                                        <span>{{appendPerSign(tenPointsSummary.percentile_decline_score_2)}}</span>
+                                        <span [ngClass]="(tenPointsSummary.percentile_decline_2_diff > 0)?'text-blue':'text-red'">{{formatData(tenPointsSummary.percentile_decline_2_diff)}}</span>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

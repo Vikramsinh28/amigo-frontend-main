@@ -1,0 +1,124 @@
+.blue-border-box {
+    border: 1px solid #0067e3;
+    padding: 20px 30px 30px 20px;
+    border-radius: 16px;
+    margin: 0 30px;
+    margin-bottom: 30px;
+    min-height: 630px;
+    -webkit-box-shadow: -2px 2px 7px #e4e4e4;
+    -moz-box-shadow: -2px 2px 7px #e4e4e4;
+    box-shadow: -2px 2px 7px #e4e4e4;
+    .head-node-label {
+      padding-top: 12px;
+      color: #0067e3;
+    }
+  }
+
+  .container-fluid{
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+
+  .navigate-button{
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .edit-save {
+    display: inline;
+  }
+
+  .add_group{
+    color: #0067e3;
+  }
+
+  th{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .dropdown, .refresh{
+    margin-top: 15px;
+  }
+
+  td.mat-cell:first-of-type,
+  th.mat-header-cell:first-of-type{
+    padding: 0px 12px;
+  }
+
+  .mat-standard-chip {
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+    padding: 7px 8px 7px 12px;
+    border-radius: 16px;
+    align-items: center;
+    cursor: default;
+    min-height: 32px;
+    height: 1px;
+}
+
+.group-label{
+  margin-top: 10px;
+}
+.group-table{
+  margin-bottom: 60px;
+}
+
+  @media only screen and (max-width:767px){
+    .mat-row:last-child{
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .margin{
+      margin-top: 20px;
+    }
+  }
+  
+  @media only screen and (min-width:767px){
+    .margin{
+      margin-top: 30px;
+    }
+
+    .student-table{
+      max-height: 390px;
+      overflow: scroll;
+    }
+    .group-table th:first-child{
+      width: 70px;
+      min-width: 70px;
+      max-width: 70px;
+    }
+    .group-table th:nth-child(2){
+      width: 150px;
+      min-width: 150px;
+      max-width: 150px;
+    }
+  }
+
+  @media only screen and (max-width:576px){
+    .dropdown{
+      margin-top: 15px;
+    }
+  }
+
+  @media only screen and (max-width:555px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: column;
+  }
+
+  button + button{
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (min-width:555px)
+{
+  .buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+  }
+}

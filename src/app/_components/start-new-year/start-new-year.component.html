@@ -1,0 +1,80 @@
+<div class="container-fluid" *ngIf="loaded">
+    <div class="blue-border-box">
+        <div class="row justify-content-center">
+            <div class="col-xl-11">
+                <div class="row justify-content-center">
+                    <div class="col-lg-5 margin">
+                        <h5>{{label1}}: {{startNewYearDetails.left.yrLabel}}</h5>
+                        <!-- Current Year Details -->
+                        <table mat-table [dataSource]="leftDS" matSort class="common-table margin">
+                            <!-- Grade Column -->
+                            <ng-container matColumnDef="grade">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> Grade </th>
+                                <td mat-cell *matCellDef="let element" data-title="Grade: " class="text-center"> {{element.grade}} </td>
+                            </ng-container>
+        
+                            <!-- Total Students Column -->
+                            <ng-container matColumnDef="totalCnt">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> Total Students </th>
+                                <td mat-cell *matCellDef="let element" data-title="Total Students: " class="text-center"> {{element.totalCnt}} </td>
+                            </ng-container>
+        
+                            <!-- Promoted Students Column -->
+                            <ng-container matColumnDef="promotedCnt">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> Promoted Students </th>
+                                <td mat-cell *matCellDef="let element" data-title="Promoted Students: " class="text-center"> {{element.promotedCnt}} </td>
+                            </ng-container>
+
+                            <!-- Left Students Column -->
+                            <ng-container matColumnDef="lcCnt">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> Left Students </th>
+                                <td mat-cell *matCellDef="let element" data-title="Left Students: " class="text-center"> {{element.lcCnt}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="closeSession">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> Session Status </th>
+                                <td mat-cell *matCellDef="let element" class="text-center" data-title="Session Status: ">
+                                    <span *ngIf="!element.inSession">Closed</span>
+                                    <button mat-icon-button *ngIf="element.inSession" (click)="closeSession(element)" matTooltip="Close Session">
+                                        <i class="far fa-stop-circle icon"></i>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="leftDisplayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: leftDisplayedColumns;" let i="dataIndex;"></tr>
+                        </table>
+                    </div>
+                    <div class="col-lg-5 offset-lg-2 margin" *ngIf="rightDS.data.length>0">
+                        <!-- Current Year Details -->
+                        <h5>{{label2}}: {{startNewYearDetails.right.yrLabel}}</h5>
+                        <table mat-table [dataSource]="rightDS" matSort class="common-table margin">
+                            <!-- Grade Column -->
+                            <ng-container matColumnDef="grade">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> Grade </th>
+                                <td mat-cell *matCellDef="let element" data-title="Grade: " class="text-center"> {{element.grade}} </td>
+                            </ng-container>
+    
+                            <!-- Total Students Column -->
+                            <ng-container matColumnDef="totalCnt">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> Total Students </th>
+                                <td mat-cell *matCellDef="let element" data-title="Total Students: " class="text-center"> {{element.totalCnt}} </td>
+                            </ng-container>
+    
+                            <tr mat-header-row *matHeaderRowDef="rightDisplayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: rightDisplayedColumns;" let i="dataIndex;"></tr>
+                        </table>
+                        <div class="text-center">
+                            <button class="startNewYear" *ngIf="startNewYearDetails.futureYearPresent" mat-raised-button color="blue" (click)="startNewYear()"><i class="far fa-play-circle"></i> &nbsp; Start New Year</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 navigate-button">
+                    <div class="buttons">
+                        <button mat-raised-button color="blue" (click)="navigateRollNo()"><i class="fas fa-arrow-left"></i> &nbsp; Roll Number</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

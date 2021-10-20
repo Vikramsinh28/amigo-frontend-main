@@ -1,0 +1,12 @@
+::ng-deep .degree-table tbody{
+    .result-tag, .mat-row .mat-cell:first-child{
+        color: #0068E3;
+        font-weight: 500;
+    }
+    .result-tag{
+        background-color: #AED8FF;
+        padding: 6px 10px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+}

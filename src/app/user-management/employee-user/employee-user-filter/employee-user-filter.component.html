@@ -1,0 +1,98 @@
+<form [formGroup]="form" (keydown.enter)="toggleAction()">
+    <div class="row" [ngClass]="{viewCss: filterType==='View'}">
+        <div class="col-12 profile-picture" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">
+            <img *ngIf="!pictureUrl && filterType!=='View'" src="assets/images/profile-picture.jpg" matTooltip="Add"
+                alt="Profile Picture" (click)="imageCropper('logoGraphic')" />
+            <img *ngIf="pictureUrl && filterType==='View'" [src]="pictureUrl" alt="Profile Picture" class="view-image"/>
+            <img *ngIf="pictureUrl && filterType!=='View'" [src]="pictureUrl" alt="Profile Picture" class="view-image" matTooltip="Edit"
+            (click)="imageCropper('logoGraphic')" />
+            <img *ngIf="!pictureUrl && filterType==='View'" src="assets/images/profile-picture.png"
+                alt="Profile Picture" class="view-image" />
+            <button mat-mini-fab color="white" aria-label="Photo Edit" (click)="pictureUrl=''"
+                *ngIf="pictureUrl && filterType==='Edit'">
+                <mat-icon class="fas fa-trash-alt"></mat-icon>
+            </button>
+        </div>
+        <div [ngClass]="{'col-12': filterType==='Create' || filterType==='Edit' || filterType==='View', 'col-lg-10': filterType==='Search'}">
+            <mat-form-field [ngClass]="{'col-lg-6 col-xl-6': filterType==='Create' || filterType==='Edit' || filterType==='View', 'col-lg-3 col-xl-3': filterType==='Search', 'col-sm-6 col-md-6': true}">
+                <mat-label>Emp No. <span class="text-red" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">*</span></mat-label>
+                <input matInput formControlName="empNo" />
+            </mat-form-field>
+
+            <mat-form-field [ngClass]="{'col-lg-6 col-xl-6': filterType==='Create' || filterType==='Edit' || filterType==='View', 'col-lg-3 col-xl-3': filterType==='Search', 'col-sm-6 col-md-6': true}">
+                <mat-label>Employee Role <span class="text-red" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">*</span></mat-label>
+                <mat-select formControlName="clientRoleId" class="table-select">
+                    <mat-option [value]='0' *ngIf="filterType==='Search'">All</mat-option>
+                    <mat-option [value]="clientRole.clientRoleId" *ngFor="let clientRole of clientRoleList"
+                        [disabled]="clientRole.activeState === 0">
+                        {{ clientRole.roleName }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-sm-6" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">
+                <mat-label>Title <span class="text-red" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">*</span></mat-label>
+                <input matInput formControlName="title" />
+            </mat-form-field>
+            <mat-form-field [ngClass]="{'col-lg-6 col-xl-6': filterType==='Create' || filterType==='Edit' || filterType==='View', 'col-lg-3 col-xl-3': filterType==='Search', 'col-sm-6 col-md-6': true}">
+                <mat-label>First Name <span class="text-red" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">*</span></mat-label>
+                <input matInput formControlName="fName" />
+            </mat-form-field>
+    
+            <mat-form-field class="col-sm-6" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">
+                <mat-label>Middle Name</mat-label>
+                <input matInput formControlName="mName" />
+            </mat-form-field>
+    
+    
+            <mat-form-field [ngClass]="{'col-lg-6 col-xl-6': filterType==='Create' || filterType==='Edit' || filterType==='View', 'col-lg-3 col-xl-3': filterType==='Search', 'col-sm-6 col-md-6': true}">
+                <mat-label>Last Name <span class="text-red" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">*</span></mat-label>
+                <input matInput formControlName="lName" />
+            </mat-form-field>
+    
+            <mat-form-field class="col-sm-6" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">
+                <mat-label>Gender <span class="text-red" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">*</span></mat-label>
+                <mat-select formControlName="gendr">
+                    <mat-option [value]='1'>M</mat-option>
+                    <mat-option [value]='2'>F</mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field class="col-sm-6" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">
+                <mat-label>Birth Date <span class="text-red" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">*</span></mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="birthDate" readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+    
+            <mat-form-field [ngClass]="{'col-lg-6 col-xl-6': filterType==='Create' || filterType==='Edit' || filterType==='View', 'col-lg-3 col-xl-3': filterType==='Search', 'col-sm-6 col-md-6': true}">
+                <mat-label>Email <span class="text-red" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">*</span></mat-label>
+                <input matInput formControlName='email' />
+            </mat-form-field>
+    
+            <mat-form-field [ngClass]="{'col-md-6 col-lg-6 col-xl-6': filterType==='Create' || filterType==='Edit' || filterType==='View', 'col-md-4 col-lg-3 col-xl-3': filterType==='Search', 'col-sm-6': true}">
+                <mat-label>Phone <span class="text-red" *ngIf="filterType==='Create' || filterType==='Edit' || filterType==='View'">*</span></mat-label>
+                <input matInput [specialCharacter]=2 maxlength="15" formControlName="phone" />
+            </mat-form-field>
+    
+            <mat-form-field class="col-sm-6 col-md-2" *ngIf="filterType==='Search'">
+                <mat-label>Active Status</mat-label>
+                <mat-select formControlName="activeStatus">
+                    <mat-option [value]="1">Both</mat-option>
+                    <mat-option [value]="2">Yes</mat-option>
+                    <mat-option [value]="3">No</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div [ngClass]="{'col-12 d-button': filterType==='Create' || filterType==='Edit', 
+        'col-lg-2 d-flex justify-content-center buttons': filterType==='Search'}" *ngIf="filterType!=='View'">
+            <button mat-raised-button color="orange" (click)="reset()" *ngIf="filterType==='Create' || filterType==='Search'"><i class="fas fa-undo"></i> &nbsp; Reset</button>
+            <button mat-raised-button color="blue" class="margin" *ngIf="filterType==='Create' || filterType==='Edit'"
+                [disabled]="!form.valid"
+                (click)="insertOrUpdateemployeeData('return')"><i class="far fa-save fa-lg"></i> &nbsp; {{filterType==='Create'?'Create':'Save'}}</button>
+                <button mat-raised-button color="blue" class="margin" *ngIf="filterType==='Create'"
+                [disabled]="!form.valid"
+                (click)="insertOrUpdateemployeeData('next')"><i class="far fa-save fa-lg"></i> &nbsp; Create & Next</button>
+            <button mat-raised-button color="blue" class="margin" *ngIf="filterType==='Search'" (click)="onSearchBtnClick()"><i class="fas fa-search"></i> &nbsp; Search</button>
+        </div>
+    </div>
+</form>

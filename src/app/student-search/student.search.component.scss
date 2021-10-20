@@ -1,0 +1,37 @@
+.student-search-form {
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid #A7A7A7;
+}
+
+.table-container {
+    .mat-cell {
+        font-size: 12px;
+    }
+    .mat-header-cell {
+        font-size: 12px;
+    }
+}
+
+.hovered,
+.highlighted {
+    background-color: #EEE;
+}
+
+@media screen and (max-width: 767px){
+    .table-container{
+        margin-top: 30px;
+    }
+}
+
+@media screen and (min-width: 991px){
+    .table-container{
+        margin-top: 30px;
+    }
+}
+
+@media screen and (min-width: 767px) and (max-width:991px){
+    .filter{
+        margin-bottom: 20px;
+    }
+}

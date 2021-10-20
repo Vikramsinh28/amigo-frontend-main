@@ -1,0 +1,11 @@
+<div class="blue-border-box">
+    <mat-tab-group #tabGroup dynamicHeight>
+        <mat-tab label="Notice Board">
+            <app-notice-board-list (onEdit) = "editNotice($event)"></app-notice-board-list>
+
+        </mat-tab>
+        <mat-tab [label]="tab1LabelName" *ngIf = "this.userRole != 'Student' && this.userRole != 'Teacher' && this.userRole != 'Grade-Supervisor'">
+            <app-communication-add-edit communicationType ="Notice" [filterConfig]="config" (updationDone)="onUpdateDone($event)"></app-communication-add-edit>
+        </mat-tab>
+    </mat-tab-group>
+</div>

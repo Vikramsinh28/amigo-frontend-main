@@ -1,0 +1,106 @@
+<div class="container-fluid">
+    <div class="blue-border-box">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-xl-7">
+                <div class="row">
+                    <div class="setYear col-12">
+                        <h5>Current Academic Year: {{currentYear}}</h5>
+                    </div>
+                    <div class="col-md-6 margin">
+                        <table mat-table [dataSource]="yearDataSource" matSort class="common-table">
+                            <ng-container matColumnDef="AcademicYear">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Year </th>
+                                <td mat-cell *matCellDef="let element;let rowNo = index;" data-title="Year:"
+                                    (click)="onYearSelected(element)">
+                                    <mat-label class="year-space" [ngClass]="(element.isCurrentYear===1)?'table-year' : ''">{{element.year}}</mat-label>
+                                    <span class="current-label" *ngIf="element.isCurrentYear===1">
+                                        <label>Current</label>
+                                    </span>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="yearDisplayColumn; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: yearDisplayColumn;" let i="index" (click)="selection.toggle(row)" [ngClass]="{hovered: row.hovered, highlighted: selection.isSelected(row)}" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"></tr>
+                        </table>
+                        <div class="col-12 margin">
+                            <button mat-mini-fab color="blue" class="button icon" (click)="addYear()" aria-label="Add Year">
+                                <mat-icon class="fas fa-plus"></mat-icon>
+                            </button>
+                            <button mat-raised-button color="blue" class="button text" (click)="addYear()">Add New Year</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 margin">
+                        <table mat-table [dataSource]="termDataSource" matSort class="common-table" #term>
+                            <!-- Term Name Column-->
+                            <ng-container matColumnDef="termName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Term Name </th>
+                                <td mat-cell *matCellDef="let element;let rowNo = index;" data-title="Term Name:">
+                                    <div *ngIf="element.openForEdit===false">
+                                        <mat-form-field class="table-field-edit">
+                                            <input type="text" matInput [(ngModel)]="element.termName" autoFocus (keydown.enter)="saveTerm(rowNo, element)" 
+                                            (keydown.escape)="escpTermName(rowNo)" maxlength="30"/>
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="element.openForEdit===true">
+                                        <mat-label>{{element.termName}}</mat-label>
+                                    </div>
+                                </td>
+                            </ng-container>
+            
+                            <!-- Edit  Column -->
+                            <ng-container matColumnDef="edit">
+                                <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                <td mat-cell *matCellDef="let element;let rowNo = index;" class="tbl-col-edit">
+                                    <div *ngIf="element.openForEdit===true">
+                                        <button mat-icon-button aria-label="Edit Icon" (click)="editTerm(rowNo, element)"
+                                            *ngIf="element.yearOrder>=currentYearOrder">
+                                            <i class="far fa-edit"></i>
+                                        </button>
+                                    </div>
+                                    <div *ngIf="element.openForEdit===false">
+                                        <button mat-icon-button color="blue-strok" (click)="saveTerm(rowNo, element)"
+                                            *ngIf="element.yearOrder>=currentYearOrder">
+                                            <i class="far fa-save"></i>
+                                        </button>
+                                    </div>
+            
+                                </td>
+                            </ng-container>
+            
+                            <!-- Delete  Column -->
+                            <ng-container matColumnDef="delete">
+                                <th mat-header-cell *matHeaderCellDef class="text-center"></th>
+                                <td mat-cell *matCellDef="let element;let rowNo = index;" class="tbl-col-edit">
+                                    <button id='deleteRow' mat-icon-button (click)="deleteTerm(element)" aria-label="Delete Icon"
+                                        *ngIf="element.countTermUsedInExam===0 && (element.yearOrder>=currentYearOrder)">
+                                        <i class="far fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </ng-container>
+            
+                            <tr mat-header-row *matHeaderRowDef="termDisplayColumn; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: termDisplayColumn;" let i="index"></tr>
+                        </table>
+                        <div class="col-12 margin">
+                            <button mat-mini-fab color="blue" class="button icon" (click)="addTerm()" [ngClass]="(showTermBtn===true)?'btn-visible' : 'btn-hidden'" aria-label="Add Term">
+                                <mat-icon class="fas fa-plus"></mat-icon>
+                            </button>
+                            <button mat-raised-button color="blue" class="button text" (click)="addTerm()">Add New Term</button>
+                        </div>
+                    </div>
+                    <div class="col-12 margin">
+                        <span>
+                            <strong>Note:</strong><br>
+                            1) Terms for current and future academic year can be changed.<br>
+                            2) Terms for which test or exams are created cannot be deleted.
+                        </span>
+                    </div>
+                    <div class="col-12 navigate-button">
+                        <button class="button" mat-raised-button color="blue" (click)="navigateGradeDivision()">
+                            <span>Grade & Division <i class="fas fa-arrow-right"></i> </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div>

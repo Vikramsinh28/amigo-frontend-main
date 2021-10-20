@@ -1,0 +1,19 @@
+.mat-form{
+    width: 800px;
+    height: 400px;
+    
+    td.mat-cell{
+        padding: 0 !important;
+    }
+    .add-btn{
+        text-align: right;
+        padding-bottom: 10px;
+    }
+}
+
+@media only screen and (max-width: 992px){
+    .mat-form{
+        width: auto;
+        height: auto;
+    }
+}

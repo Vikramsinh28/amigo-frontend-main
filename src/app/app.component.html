@@ -1,0 +1,60 @@
+<ng-container>
+    <div class="menu-icon-bg d-flex icon-white-bg" *ngIf='currentUser'>
+        <img class="logo" alt="Logo" [ngClass]="status ? '' : 'd-none'" [src]="clientLogo" height="50px" width="50px">
+        <div [ngClass]="status ? 'toggle-menu' : ''">
+            <button type="button" mat-button (click)="sidenav.toggle();clickEvent()" class="menu-icon">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-sidenav-container class="sidenav-container" (backdropClick)="sidenav.toggle();clickEvent()">
+        <mat-sidenav #sidenav class="side-navigation" [mode]="mobileQuery.matches ? 'over' : 'side'"
+            [fixedInViewport]="mobileQuery.matches">
+            <app-sidenav *ngIf="currentUser" (close)="sidenav.toggle();clickEvent();" (clearTitle)="clearTitle()"
+                [userIdentity]="userIdentity"></app-sidenav>
+        </mat-sidenav>
+        <mat-sidenav-content [ngClass]="sidenav.opened ? 'sidenav-container' : 'full-container'">
+            <mat-toolbar class="menu-bar" *ngIf="currentUser">
+                <button mat-button routerLink="home" *ngIf="!smartNavigation">
+                    <mat-icon>home</mat-icon>
+                    <span>Home</span>
+                </button>
+                <span *ngFor="let item of navItems">
+                    <!-- Handle branch node buttons here -->
+                    <span *ngIf="item.children && item.children.length > 0">
+                        <button mat-button [matMenuTriggerFor]="menu.childMenu">
+                            <mat-icon>{{item.icon}}</mat-icon>
+                            <span>{{item.label}}</span>
+                        </button>
+                        <app-menu-item #menu [items]="item.children"></app-menu-item>
+                    </span>
+                    <!-- Leaf node buttons here -->
+                    <span *ngIf="!item.children || item.children.length === 0">
+                        <button mat-button [routerLink]="item.route" [disabled]="item.licensed == 'False'">
+                            <mat-icon>{{item.icon}}</mat-icon>
+                            <span>{{item.label}}</span>
+                        </button>
+                    </span>
+                </span>
+                <h1>{{title}}</h1>
+                <div class="d-flex ml-auto">
+                    <div class="toolbar-user-info align-self-center">
+                        <mat-label class="user-name">{{userIdentity.firstName}} {{userIdentity.lastName}}
+                            ({{userIdentity.userTitle}}{{gradeDivDetails}})</mat-label>
+                        <mat-label class="last-login">{{userIdentity.lastLoginDate}}</mat-label>
+                    </div>
+                    <img [src]="pictureSrc" #picture class="profile-pic" [matMenuTriggerFor]="menu">
+                    <mat-menu #menu="matMenu" class="menu-items">
+                        <button mat-menu-item (click)="changePassword()"><i class="fas fa-key"></i> &nbsp; Change
+                            Password</button>
+                        <button mat-menu-item (click)="logout()"><i class="fas fa-sign-out-alt"></i> &nbsp;
+                            Logout</button>
+                    </mat-menu>
+                </div>
+            </mat-toolbar>
+            <div class="router-container">
+                <router-outlet></router-outlet>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</ng-container>
